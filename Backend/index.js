@@ -39,16 +39,49 @@ import errorMiddleware from './middleware/error.middleware.js';
 dotenv.config()
 validateEnv();
 
-// // Log CORS configuration
-// if (process.env.CORS_ORIGINS) {
-//   console.log('✅ CORS Origins from env:', process.env.CORS_ORIGINS.split(',').map(o => o.trim()));
-// } else {
-//   console.log('⚠️ CORS Origins: Using default development origins');
-// }
+// Log CORS configuration
+if (process.env.CORS_ORIGINS) {
+  console.log('✅ CORS Origins from env:', process.env.CORS_ORIGINS.split(',').map(o => o.trim()));
+} else {
+  console.log('⚠️ CORS Origins: Using default development origins');
+}
 
 const app = express();
 const server = createServer(app);
 initializeSocketIO(server);
+
+// Important: CORS must be before rate limiters and other middleware that might send responses
+app.use(cors({
+  origin: function(origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    // Check against env origins or default development origins
+    const allowedOrigins = process.env.CORS_ORIGINS ? 
+      process.env.CORS_ORIGINS.split(',').map(o => o.trim()) : 
+      [
+        "http://localhost:5173",
+        "http://localhost:5174", 
+        "https://k23-dx.vercel.app",
+        "https://ment2be.arshchouhan.me"
+      ];
+      
+    if (allowedOrigins.indexOf(origin) !== -1 || process.env.NODE_ENV === 'development') {
+      // In development, we can be more permissive if needed, or stick to the list.
+      // For debugging, let's log specifically when we match
+      if (process.env.NODE_ENV === 'development') {
+         // console.log(`🔍 CORS Allowed: ${origin}`);
+      }
+      callback(null, true);
+    } else {
+      console.log(`❌ CORS Blocked: ${origin}`);
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "Accept"]
+}));
 
 const PORT = process.env.PORT || 4000;
 const NODE_ENV = process.env.NODE_ENV || 'development';
@@ -95,19 +128,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(cors({
-  origin: process.env.CORS_ORIGINS ? 
-    process.env.CORS_ORIGINS.split(',').map(origin => origin.trim()) : 
-    [
-      "http://localhost:5173",
-      "http://localhost:5174",
-      "https://k23-dx.vercel.app",
-      "https://ment2be.arshchouhan.me"
-    ],
-  credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization", "Accept"]
-}));
+
 
 
 // Request size middleware with route-specific limits

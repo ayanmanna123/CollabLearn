@@ -17,6 +17,16 @@ const getAuthHeader = () => {
   };
 };
 
+// Helper logging function with backend context (simplified)
+const log = (msg, data = '') => {
+  console.log(`[AVAILABILITY] ${msg}`, data);
+};
+
+// Error logging helper
+const logError = (msg, error) => {
+  console.error(`❌ [AVAILABILITY] ${msg}`, error);
+};
+
 /**
  * Save mentor availability
  * @param {Object} availabilityData - { date, timeSlots, duration }
@@ -24,7 +34,7 @@ const getAuthHeader = () => {
  */
 export const saveAvailability = async (availabilityData) => {
   try {
-    console.log(`📤 [${ACTIVE_BACKEND.toUpperCase()}] Saving availability:`, availabilityData);
+    log('Saving availability:', availabilityData);
     
     const response = await fetch(API_URL, {
       method: 'POST',
@@ -38,10 +48,10 @@ export const saveAvailability = async (availabilityData) => {
       throw new Error(data.message || 'Failed to save availability');
     }
 
-    console.log(`✅ [${ACTIVE_BACKEND.toUpperCase()}] Availability saved successfully`);
+    log('Availability saved successfully');
     return data;
   } catch (error) {
-    console.error(`❌ [${ACTIVE_BACKEND.toUpperCase()}] Error saving availability:`, error);
+    logError('Error saving availability:', error);
     throw error;
   }
 };
@@ -54,7 +64,7 @@ export const saveAvailability = async (availabilityData) => {
  */
 export const getAvailableSlots = async (mentorId, date) => {
   try {
-    console.log(`📥 [${ACTIVE_BACKEND.toUpperCase()}] Fetching available slots for mentor ${mentorId} on ${date}`);
+    log(`Fetching available slots for mentor ${mentorId} on ${date}`);
     
     const response = await fetch(`${API_URL}/mentor/${mentorId}?date=${date}`, {
       method: 'GET',
@@ -67,10 +77,10 @@ export const getAvailableSlots = async (mentorId, date) => {
       throw new Error(data.message || 'Failed to fetch available slots');
     }
 
-    console.log(`✅ [${ACTIVE_BACKEND.toUpperCase()}] Found ${data.availableSlots?.length || 0} available slots`);
+    log(`Found ${data.availableSlots?.length || 0} available slots`);
     return data;
   } catch (error) {
-    console.error(`❌ [${ACTIVE_BACKEND.toUpperCase()}] Error fetching available slots:`, error);
+    logError('Error fetching available slots:', error);
     throw error;
   }
 };
@@ -81,7 +91,7 @@ export const getAvailableSlots = async (mentorId, date) => {
  */
 export const getAllAvailability = async () => {
   try {
-    console.log(`📥 [${ACTIVE_BACKEND.toUpperCase()}] Fetching all availability for logged-in mentor`);
+    log('Fetching all availability for logged-in mentor');
     
     const response = await fetch(`${API_URL}/my-availability`, {
       method: 'GET',
@@ -94,10 +104,10 @@ export const getAllAvailability = async () => {
       throw new Error(data.message || 'Failed to fetch availability');
     }
 
-    console.log(`✅ [${ACTIVE_BACKEND.toUpperCase()}] Retrieved ${data.data?.length || 0} availability records`);
+    log(`Retrieved ${data.data?.length || 0} availability records`);
     return data;
   } catch (error) {
-    console.error(`❌ [${ACTIVE_BACKEND.toUpperCase()}] Error fetching availability:`, error);
+    logError('Error fetching availability:', error);
     throw error;
   }
 };
@@ -109,7 +119,7 @@ export const getAllAvailability = async () => {
  */
 export const deleteAvailability = async (availabilityId) => {
   try {
-    console.log(`🗑️ [${ACTIVE_BACKEND.toUpperCase()}] Deleting availability ${availabilityId}`);
+    log(`Deleting availability ${availabilityId}`);
     
     const response = await fetch(`${API_URL}/${availabilityId}`, {
       method: 'DELETE',
@@ -122,20 +132,12 @@ export const deleteAvailability = async (availabilityId) => {
       throw new Error(data.message || 'Failed to delete availability');
     }
 
-    console.log(`✅ [${ACTIVE_BACKEND.toUpperCase()}] Availability deleted successfully`);
+    log('Availability deleted successfully');
     return data;
   } catch (error) {
-    console.error(`❌ [${ACTIVE_BACKEND.toUpperCase()}] Error deleting availability:`, error);
+    logError('Error deleting availability:', error);
     throw error;
   }
-};
-
-/**
- * Get current active backend
- * @returns {string} 'nodejs' or 'java'
- */
-export const getActiveBackend = () => {
-  return ACTIVE_BACKEND;
 };
 
 /**
@@ -143,26 +145,12 @@ export const getActiveBackend = () => {
  * @returns {string} Full API URL
  */
 // Re-exported from apiUrl.js above
-
-/**
- * Switch backend (for testing purposes)
- * @param {string} backend - 'nodejs' or 'java'
- */
-export const switchBackend = (backend) => {
-  if (!BACKEND_URLS[backend]) {
-    console.error(`Invalid backend: ${backend}. Use 'nodejs' or 'java'`);
-    return;
-  }
-  console.log(`🔄 Switched to ${backend.toUpperCase()} backend`);
-  console.log(`  API URL: ${BACKEND_URLS[backend]}/api/mentor-availability`);
-};
+// Re-exported from apiUrl.js above
 
 export default {
   saveAvailability,
   getAvailableSlots,
   getAllAvailability,
   deleteAvailability,
-  getActiveBackend,
-  getApiUrl,
-  switchBackend
+  getApiUrl
 };

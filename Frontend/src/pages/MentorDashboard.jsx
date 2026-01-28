@@ -419,7 +419,7 @@ const MentorDashboard = () => {
       const payload = buildProfilePayload(overrides);
       console.log('Saving profile with payload:', payload);
 
-      const apiUrl = getApiUrl().replace(/\/$/, '');
+      const apiUrl = API_BASE_URL.replace(/\/$/, '');
       
       const response = await fetch(`${apiUrl}/mentors/profile`, {
         method: "POST",

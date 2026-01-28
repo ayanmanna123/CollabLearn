@@ -30,15 +30,24 @@ export async function CreateOrUpdateMentorProfile(req, res) {
       isProfileComplete = true
     } = req.body;
     const userId = req.user.id;
+    console.log(`[Profile Update] Processing for user ${userId}`);
+    console.log('[Profile Update] Payload:', JSON.stringify(req.body, null, 2));
 
     let normalizedSkills;
-    if (Array.isArray(skills)) {
-      normalizedSkills = skills.map((skill) => skill.trim()).filter(Boolean);
-    } else if (typeof skills === 'string') {
-      normalizedSkills = skills
-        .split(',')
-        .map((skill) => skill.trim())
-        .filter(Boolean);
+    try {
+      if (Array.isArray(skills)) {
+        normalizedSkills = skills.map((skill) => skill.trim()).filter(Boolean);
+      } else if (typeof skills === 'string') {
+        normalizedSkills = skills
+          .split(',')
+          .map((skill) => skill.trim())
+          .filter(Boolean);
+      }
+      console.log('[Profile Update] Normalized skills:', normalizedSkills);
+    } catch (skillError) {
+      console.error('[Profile Update] Error parsing skills:', skillError);
+      // Fallback
+      normalizedSkills = [];
     }
 
     // Check if profile already exists
@@ -117,6 +126,19 @@ export async function CreateOrUpdateMentorProfile(req, res) {
 
   } catch (error) {
     console.error('Error saving mentor profile:', error);
+    // Log the full stack trace for debugging
+    console.error(error.stack);
+    
+    // Check for Mongoose validation errors
+    if (error.name === 'ValidationError') {
+      const messages = Object.values(error.errors).map(val => val.message);
+      return res.status(400).json({
+        success: false,
+        message: 'Validation Error',
+        errors: messages
+      });
+    }
+
     res.status(500).json({
       success: false,
       message: 'Error saving mentor profile',
