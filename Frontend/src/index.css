@@ -1,0 +1,135 @@
+.home-page .form label
+{
+    display:block;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@keyframes scroll-up {
+  0% { 
+    transform: translateY(0); 
+  }
+  100% { 
+    transform: translateY(-50%); 
+  }
+}
+
+@keyframes scroll-down {
+  0% { 
+    transform: translateY(0); 
+  }
+  100% { 
+    transform: translateY(50%); 
+  }
+}
+
+.animate-scroll-up {
+  animation: scroll-up 70s linear infinite;
+  padding-top: 50%;
+  margin-top: -50%;
+}
+
+.animate-scroll-down {
+  animation: scroll-down 70s linear infinite;
+  padding-bottom: 50%;
+  margin-bottom: -50%;
+}
+
+/* Add smooth animation */
+.animate-scroll-up, .animate-scroll-down {
+  animation-iteration-count: infinite;
+  animation-play-state: running;
+  will-change: transform;
+}
+
+/* Hide scrollbar utility */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+  scrollbar-width: none;  /* Firefox */
+  /* For WebKit browsers (Chrome, Safari) */
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Custom scrollbar for MentorDashboard */
+.custom-scroll {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  /* WebKit (Chrome, Safari) */
+  &::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+  
+  /* Ensure scrolling still works */
+  -webkit-overflow-scrolling: touch;
+  overflow: -moz-scrollbars-none;
+}
+
+/* Target the Recent Messages scrollbar specifically */
+.max-h-32.overflow-y-auto {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+.max-h-32.overflow-y-auto::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+/* Ensure all scrollable areas in MentorDashboard hide their scrollbars */
+.bg-[\#121212] .overflow-y-auto,
+.bg-[\#121212] .overflow-auto {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+.bg-[\#121212] .overflow-y-auto::-webkit-scrollbar,
+.bg-[\#121212] .overflow-auto::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+/* Add these styles to your index.css */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.content-wrapper {
+  flex: 1;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.content-wrapper.fadeIn {
+  opacity: 1;
+}
+
+.content-wrapper.fadeOut {
+  opacity: 0.3;
+}
+
+/* Ensure the loading bar is above the content */
+.loading-bar {
+  position: relative;
+  z-index: 1000;
+}
+
+/* Hide scrollbar but keep scrolling functionality */
+.hide-scrollbar {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+  width: 0;
+  height: 0;
+}

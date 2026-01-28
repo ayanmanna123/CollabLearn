@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <!-- Dark background -->
+  <rect width="200" height="200" fill="#1a1a2e"/>
+  
+  <!-- White graduation cap -->
+  <g transform="translate(100, 100)">
+    <!-- Cap brim (flat base) -->
+    <ellipse cx="0" cy="15" rx="50" ry="8" fill="#FFFFFF"/>
+    
+    <!-- Cap crown (square mortarboard shape) -->
+    <rect x="-45" y="-5" width="90" height="20" fill="#FFFFFF" rx="2"/>
+    
+    <!-- Cap top (rounded) -->
+    <circle cx="0" cy="-5" r="8" fill="#FFFFFF"/>
+    
+    <!-- Tassel string -->
+    <line x1="0" y1="3" x2="0" y2="35" stroke="#FFFFFF" stroke-width="2"/>
+    
+    <!-- Tassel ball -->
+    <circle cx="0" cy="40" r="5" fill="#FFFFFF"/>
+  </g>
+</svg>
