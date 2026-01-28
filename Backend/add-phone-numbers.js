@@ -6,7 +6,7 @@ dotenv.config();
 
 const addPhoneNumbers = async () => {
   try {
-    await mongoose.connect(process.env.MONGO_URI || 'mongodb+srv://arshchouhan004_db_user:vY8GmuRFFOL0dnS1@myclusture.wckjr3r.mongodb.net/Uploom');
+    await mongoose.connect(process.env.MONGO_URI);
     
     console.log('Connected to MongoDB');
     
