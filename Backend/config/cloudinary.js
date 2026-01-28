@@ -15,10 +15,13 @@ const missingVars = Object.entries(requiredEnvVars)
   .map(([key]) => key);
 
 if (missingVars.length > 0) {
-  console.error('❌ Missing required Cloudinary environment variables:', missingVars.join(', '));
+  console.error('❌ cloudinary.js: FAILED - Missing required Cloudinary environment variables:', missingVars.join(', '));
   console.error('Please add these variables to your .env file. Check .env.example for reference.');
+} else {
+  console.log('✅ cloudinary.js: SUCCESS - Cloudinary configured');
 }
 
+// Configure Cloudinary
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,

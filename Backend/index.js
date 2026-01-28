@@ -39,12 +39,12 @@ import errorMiddleware from './middleware/error.middleware.js';
 dotenv.config()
 validateEnv();
 
-// Log CORS configuration
-if (process.env.CORS_ORIGINS) {
-  console.log('✅ CORS Origins from env:', process.env.CORS_ORIGINS.split(',').map(o => o.trim()));
-} else {
-  console.log('⚠️ CORS Origins: Using default development origins');
-}
+// // Log CORS configuration
+// if (process.env.CORS_ORIGINS) {
+//   console.log('✅ CORS Origins from env:', process.env.CORS_ORIGINS.split(',').map(o => o.trim()));
+// } else {
+//   console.log('⚠️ CORS Origins: Using default development origins');
+// }
 
 const app = express();
 const server = createServer(app);

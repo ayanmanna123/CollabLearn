@@ -2,6 +2,8 @@ import { Server } from 'socket.io';
 import { handleSocketConnection, getRoomCount, getTotalParticipants } from '../socket/socketHandlers.js';
 import { handleChatConnection, getActiveConversationCount, getTotalChatParticipants } from '../socket/chatSocketHandlers.js';
 
+console.log('🔄 socket.js: LOADING - Socket.IO configuration module');
+
 /**
  * Initialize Socket.IO server with CORS configuration
  * @param {http.Server} server - HTTP server instance
@@ -27,22 +29,35 @@ export const initializeSocketIO = (server) => {
   handleChatConnection(io);
 
   _io = io;
+  console.log('✅ socket.js: SUCCESS - Socket.IO initialized');
   return io;
 };
 
 let _io;
-export const getIO = () => _io;
+export const getIO = () => {
+  if (!_io) {
+    console.warn('⚠️ socket.js: WARNING - Socket.IO not initialized yet');
+  }
+  return _io;
+};
 
 /**
  * Get Socket.IO statistics
  * @returns {Object} Socket.IO stats object
  */
 export const getSocketStats = () => {
-  return {
-    activeRooms: getRoomCount(),
-    totalParticipants: getTotalParticipants(),
-    activeConversations: getActiveConversationCount(),
-    totalChatParticipants: getTotalChatParticipants(),
-    timestamp: new Date().toISOString()
-  };
+  try {
+    const stats = {
+      activeRooms: getRoomCount(),
+      totalParticipants: getTotalParticipants(),
+      activeConversations: getActiveConversationCount(),
+      totalChatParticipants: getTotalChatParticipants(),
+      timestamp: new Date().toISOString()
+    };
+    console.log('✅ socket.js: SUCCESS - Socket stats retrieved');
+    return stats;
+  } catch (error) {
+    console.error('❌ socket.js: FAILED - Error getting socket stats:', error.message);
+    return null;
+  }
 };

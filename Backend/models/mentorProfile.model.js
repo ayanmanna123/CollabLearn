@@ -88,7 +88,7 @@ const mentorProfileSchema = new mongoose.Schema(
 );
 
 // Index for faster querying
-mentorProfileSchema.index({ user: 1 });
+// user index is automatically created due to unique: true
 mentorProfileSchema.index({ skills: 1 });
 
 // Add a method to check if profile is complete
