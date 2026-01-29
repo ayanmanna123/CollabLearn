@@ -20,7 +20,7 @@ const TopOfferings = () => {
   };
 
   return (
-    <div className="bg-transparent rounded-2xl border border-gray-700/30 p-5 w-[270px]">
+    <div className="w-full">
       <div className="flex items-center gap-3 mb-4">
         <div className="p-2 rounded-xl bg-gradient-to-br from-green-500 to-emerald-500">
           <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -30,12 +30,12 @@ const TopOfferings = () => {
         <h3 className="text-lg font-bold text-white bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">Top Offerings</h3>
       </div>
       
-      <div class="grid grid-cols-2 gap-3">
+      <div class="grid grid-cols-1 gap-3">
         {offerings.map((offering) => (
           <button
             key={offering.id}
             onClick={() => handleOfferingClick(offering)}
-            className="text-white text-xs font-bold py-3 px-3 rounded-xl hover:opacity-90 transition-all duration-300 text-center whitespace-nowrap border border-green-500/30 w-[120px] cursor-pointer bg-gradient-to-r from-green-600/20 to-emerald-600/20 hover:from-green-700/30 hover:to-emerald-700/30"
+            className="text-white text-xs font-bold py-3 px-3 rounded-xl hover:opacity-90 transition-all duration-300 text-center border border-green-500/30 w-full cursor-pointer bg-gradient-to-r from-green-600/20 to-emerald-600/20 hover:from-green-700/30 hover:to-emerald-700/30"
           >
             {offering.name}
           </button>

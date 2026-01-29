@@ -83,7 +83,7 @@ const TopExperts = () => {
   };
 
   return (
-    <div className="bg-transparent rounded-2xl border border-gray-700/30 overflow-hidden flex flex-col h-[350px] w-[270px]">
+    <div className="w-full flex flex-col h-[350px]">
       <div className="p-4 border-b border-gray-700/50 flex-shrink-0">
         <h3 className="text-lg font-bold text-white bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">Top Experts</h3>
       </div>

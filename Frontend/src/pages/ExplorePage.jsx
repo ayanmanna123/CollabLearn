@@ -187,7 +187,7 @@ const ExplorePage = () => {
             </div>
 
             {/* Main Content - Middle Column */}
-            <div className="col-span-8 flex flex-col h-full overflow-hidden">
+            <div className="col-span-7 flex flex-col h-full overflow-hidden">
               {/* Search Bar */}
               <div className="relative mb-5 flex-shrink-0">
                 <div className="glass-card rounded-2xl p-1 border border-gray-700/30 hover-lift">
@@ -218,14 +218,14 @@ const ExplorePage = () => {
 
               {/* Filters and Sort */}
               <div className="flex items-center justify-between mb-6 flex-shrink-0">
-                <div className="glass-card rounded-2xl p-4 border border-gray-700/30 hover-lift">
+                <div className="glass-card rounded-2xl p-4 border border-gray-700/30 hover-lift relative z-50">
                   <MentorFilters
                     filters={filters}
                     onFiltersChange={setFilters}
                     availableSkills={availableSkills}
                   />
                 </div>
-                <div className="glass-card rounded-2xl p-4 border border-gray-700/30 hover-lift">
+                <div className="glass-card rounded-2xl p-4 border border-gray-700/30 hover-lift relative z-40">
                   <MentorSort
                     sortBy={sortBy}
                     onSortChange={setSortBy}
@@ -272,7 +272,7 @@ const ExplorePage = () => {
             </div>
 
             {/* Right Sidebar - Column 3 */}
-            <div className="col-span-2 space-y-6">
+            <div className="col-span-3 space-y-6">
               <div className="glass-card rounded-2xl p-5 border border-gray-700/30 hover-lift">
                 <TopExperts />
               </div>

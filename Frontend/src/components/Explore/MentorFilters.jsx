@@ -64,7 +64,7 @@ const MentorFilters = ({ filters, onFiltersChange, availableSkills }) => {
       </button>
 
       {isOpen && (
-        <div className="absolute top-full left-0 mt-3 w-96 glass-card rounded-2xl border border-gray-700/30 shadow-2xl z-50 hover-lift">
+        <div className="absolute top-full left-0 mt-3 w-96 bg-[#151921] border border-gray-700/50 rounded-2xl shadow-2xl z-50 hover-lift max-h-[60vh] overflow-y-auto custom-scroll">
           <div class="p-5 space-y-5">
             <div className="flex items-center justify-between pb-3 border-b border-gray-700/30">
               <h3 className="text-white font-bold text-lg bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">Filters</h3>
