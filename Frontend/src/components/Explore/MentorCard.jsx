@@ -60,17 +60,17 @@ const MentorCard = ({ mentor }) => {
 
   return (
     <div 
-      className="bg-[#121212] rounded-lg border border-gray-700 overflow-hidden hover:border-white transition-all duration-300 cursor-pointer w-full"
+      className="glass-card rounded-2xl border border-gray-700/30 overflow-hidden hover:border-white transition-all duration-300 cursor-pointer w-full hover-lift"
       onClick={handleCardClick}
     >
-      <div className="p-6">
+      <div class="p-6">
         <div className="flex items-start">
           {/* Mentor Image */}
-          <div className="relative mr-4">
-            <div className="h-20 w-20 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center overflow-hidden">
+          <div className="relative mr-5">
+            <div className="h-24 w-24 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center overflow-hidden neumorphic">
               {mentor.image ? (
                 <img
-                  className="h-20 w-20 rounded-full object-cover"
+                  className="h-24 w-24 rounded-2xl object-cover"
                   src={mentor.image}
                   alt={mentor.name}
                   onError={(e) => {
@@ -83,13 +83,13 @@ const MentorCard = ({ mentor }) => {
               ) : null}
               <span 
                 style={{ display: mentor.image ? 'none' : 'flex' }}
-                className="h-20 w-20 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white font-bold text-lg"
+                className="h-24 w-24 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white font-bold text-xl"
               >
                 {mentor.name?.charAt(0).toUpperCase() || 'M'}
               </span>
             </div>
             {mentor.isOnline && (
-              <div className="absolute bottom-0 right-0 h-4 w-4 bg-green-500 rounded-full border-2 border-white"></div>
+              <div className="absolute -bottom-1 -right-1 h-5 w-5 bg-green-500 rounded-full border-3 border-gray-900 animate-pulse"></div>
             )}
           </div>
 
@@ -97,24 +97,24 @@ const MentorCard = ({ mentor }) => {
           <div className="flex-1">
             <div className="flex justify-between items-start">
               <div>
-                <h3 className="text-lg font-semibold text-white">{mentor.name}</h3>
-                <p className="text-sm text-white">{mentor.title}</p>
-                <p className="text-sm text-gray-400">{mentor.companies}</p>
-                <p className="text-xs text-gray-500 mt-1">{mentor.experience}</p>
+                <h3 className="text-xl font-bold text-white bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">{mentor.name}</h3>
+                <p className="text-base font-medium text-white mt-1">{mentor.title}</p>
+                <p className="text-sm text-gray-400 mt-1">{mentor.companies}</p>
+                <p className="text-xs text-gray-500 mt-2">{mentor.experience}</p>
               </div>
-              <div className="flex items-center bg-[#535353] text-white text-sm font-medium px-2 py-1 rounded">
-                <FiStar className="text-white mr-1" />
-                {Number(mentor.rating || mentor.averageRating || 0).toFixed(1)} ({mentor.ratedCount || mentor.totalReviews || 0})
+              <div className="flex items-center bg-gradient-to-r from-yellow-500/20 to-yellow-600/20 text-yellow-300 text-sm font-bold px-3 py-1.5 rounded-full border border-yellow-500/30">
+                <FiStar className="text-yellow-400 mr-1.5" size={16} />
+                {Number(mentor.rating || mentor.averageRating || 0).toFixed(1)} <span className="text-gray-400 ml-1">({mentor.ratedCount || mentor.totalReviews || 0})</span>
               </div>
             </div>
 
-            <p className="mt-2 text-sm text-gray-300 line-clamp-2">{mentor.bio}</p>
+            <p className="mt-3 text-sm text-gray-300 line-clamp-2 bg-gray-800/30 rounded-xl p-3">{mentor.bio}</p>
 
-            <div className="mt-3 flex flex-wrap gap-2">
+            <div className="mt-4 flex flex-wrap gap-2">
               {mentor.tags.map((tag, index) => (
                 <span
                   key={index}
-                  className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#535353] text-white border-cyan-400/30"
+                  className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-gradient-to-r from-blue-500/20 to-indigo-500/20 text-blue-300 border border-blue-500/30 hover:border-blue-400/50 transition-all duration-300"
                 >
                   {tag}
                 </span>
@@ -122,23 +122,27 @@ const MentorCard = ({ mentor }) => {
             </div>
 
             {/* Mentor Stats */}
-            <div className="mt-3 flex items-center gap-4 text-xs text-gray-300">
-              <div className="flex items-center gap-1">
-                <span>👥</span>
+            <div className="mt-4 flex items-center gap-5 text-xs text-gray-300 bg-gray-800/30 rounded-xl p-3">
+              <div className="flex items-center gap-2">
+                <div className="p-1 rounded-lg bg-green-500/10">
+                  <span className="text-green-400">👥</span>
+                </div>
                 <span>Mentored {mentorStats.mentoredStudents} students</span>
               </div>
-              <div className="flex items-center gap-1">
-                <span>⏱️</span>
+              <div className="flex items-center gap-2">
+                <div className="p-1 rounded-lg bg-purple-500/10">
+                  <span className="text-purple-400">⏱️</span>
+                </div>
                 <span>{mentorStats.totalSessions} sessions</span>
               </div>
             </div>
 
-            <div className="mt-4 flex justify-between items-center">
-              <button className="flex items-center gap-1 px-3 py-1 bg-[#535353] hover:bg-[#6b7280] text-white rounded text-xs font-medium transition-colors">
-                <FiGift className="text-white" size={14} />
+            <div className="mt-5 flex justify-between items-center pt-4 border-t border-gray-700/50">
+              <button className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white rounded-xl text-xs font-bold transition-all duration-300 shadow-lg hover:shadow-xl">
+                <FiGift className="text-white" size={16} />
                 <span>Free Trial</span>
               </button>
-              <div className="text-lg font-bold text-[#535353]">
+              <div className="text-xl font-bold text-white">
                 ${mentor.price}<span className="text-sm font-normal text-gray-400">/{mentor.priceUnit}</span>
               </div>
             </div>

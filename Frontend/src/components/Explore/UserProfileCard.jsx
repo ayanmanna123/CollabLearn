@@ -48,30 +48,30 @@ const UserProfileCard = ({ user }) => {
   };
 
   return (
-    <div className="bg-[#121212] rounded-lg border border-gray-700 overflow-hidden h-[120px] flex flex-col">
+    <div className="glass-card rounded-2xl border border-gray-700/30 overflow-hidden h-[140px] flex flex-col hover-lift">
  
-      <div className="p-3 flex-1 flex flex-col">
+      <div class="p-4 flex-1 flex flex-col">
         <div className="flex items-center">
-          <div className="h-10 w-10 rounded-full bg-gray-700 flex items-center justify-center flex-shrink-0 overflow-hidden">
+          <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center flex-shrink-0 overflow-hidden neumorphic pulse-glow">
             {user?.profilePicture ? (
-              <img src={user.profilePicture} alt={user.name} className="w-full h-full object-cover" />
+              <img src={user.profilePicture} alt={user.name} className="w-full h-full object-cover rounded-2xl" />
             ) : (
-              <span className="text-xs font-semibold text-gray-300">{getInitials(user?.name)}</span>
+              <span className="text-sm font-bold text-white">{getInitials(user?.name)}</span>
             )}
           </div>
-          <div className="ml-3 min-w-0">
-            <p className="text-sm font-medium text-white truncate">
+          <div className="ml-4 min-w-0">
+            <p className="text-base font-bold text-white truncate bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
               {user?.name || 'Guest User'}
             </p>
-            <p className="text-xs text-gray-400 truncate">
+            <p className="text-xs text-gray-400 truncate mt-1">
               @{user?.name?.toLowerCase().replace(/\s+/g, '') || 'username'}
             </p>
           </div>
         </div>
-        <div className="mt-3 flex justify-center text-center">
+        <div className="mt-4 flex justify-center text-center pt-3 border-t border-gray-700/30">
           <div>
-            <p className="text-lg font-bold text-white">{connectedMentorsLoading ? '...' : connectedMentorsCount}</p>
-            <p className="text-xs text-gray-400">Connections</p>
+            <p className="text-xl font-bold text-white">{connectedMentorsLoading ? '...' : connectedMentorsCount}</p>
+            <p className="text-xs text-gray-400 font-medium">Connections</p>
           </div>
         </div>
         

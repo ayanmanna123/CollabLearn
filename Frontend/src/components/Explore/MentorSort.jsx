@@ -11,15 +11,15 @@ const MentorSort = ({ sortBy, onSortChange }) => {
   ];
 
   return (
-    <div className="flex items-center space-x-2">
-      <span className="text-gray-300 text-sm">Sort by:</span>
+    <div className="flex items-center space-x-3">
+      <span className="text-gray-300 text-sm font-bold">Sort by:</span>
       <select
         value={sortBy}
         onChange={(e) => onSortChange(e.target.value)}
-        className="px-3 py-1 bg-[#2a2d31] border border-gray-600 rounded-md text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className="px-4 py-2 bg-gray-800/50 border border-gray-700/50 rounded-xl text-white text-sm font-medium focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-transparent transition-all duration-300"
       >
         {sortOptions.map(option => (
-          <option key={option.value} value={option.value}>
+          <option key={option.value} value={option.value} className="bg-gray-800 text-white">
             {option.label}
           </option>
         ))}

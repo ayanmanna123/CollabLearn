@@ -14,24 +14,26 @@ const categories = [
 
 const CategoryList = ({ activeCategory, onCategoryClick }) => {
   return (
-    <div className="bg-[#121212] rounded-lg border border-gray-700 overflow-hidden flex flex-col h-[450px]">
-      <div className="p-2 border-b border-gray-700 flex-shrink-0">
-        <h3 className="text-md font-semibold text-white">Categories</h3>
+    <div className="bg-transparent rounded-2xl border border-gray-700/30 overflow-hidden flex flex-col h-[450px]">
+      <div className="p-4 border-b border-gray-700/50 flex-shrink-0">
+        <h3 className="text-lg font-bold text-white bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">Categories</h3>
       </div>
-      <div className="divide-y divide-gray-700 overflow-y-auto flex-1 scrollbar-hide">
+      <div className="divide-y divide-gray-700/30 overflow-y-auto flex-1 custom-scroll">
         {categories.map((category) => (
           <div
             key={category.name}
-            className={`flex items-center justify-between p-3 cursor-pointer transition-colors ${
-              activeCategory === category.name ? 'bg-[#121212] text-white' : 'text-gray-300 hover:bg-gray-700/50'
+            className={`flex items-center justify-between p-4 cursor-pointer transition-all duration-300 rounded-lg mx-2 my-1 ${
+              activeCategory === category.name 
+                ? 'bg-gradient-to-r from-blue-600/20 to-indigo-600/20 text-white border border-blue-500/30' 
+                : 'text-gray-300 hover:bg-gray-800/50 hover:border hover:border-gray-600/30'
             }`}
             onClick={() => onCategoryClick(category.name)}
           >
             <div className="flex items-center">
               {category.icon}
-              <span className="text-sm font-medium">{category.name}</span>
+              <span className="text-sm font-bold">{category.name}</span>
             </div>
-            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium text-gray-300" style={{ backgroundColor: '#202327' }}>
+            <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-gradient-to-r from-gray-700/50 to-gray-800/50 text-gray-300 border border-gray-600/30">
               {category.count}
             </span>
           </div>

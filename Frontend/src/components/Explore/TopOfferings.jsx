@@ -20,21 +20,22 @@ const TopOfferings = () => {
   };
 
   return (
-    <div className="bg-[#121212] rounded-lg border border-gray-800 p-4 w-[270px]">
-      <div className="flex items-center gap-2 mb-3">
-        <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-        </svg>
-        <h3 className="text-sm font-semibold text-white">Top Offerings</h3>
+    <div className="bg-transparent rounded-2xl border border-gray-700/30 p-5 w-[270px]">
+      <div className="flex items-center gap-3 mb-4">
+        <div className="p-2 rounded-xl bg-gradient-to-br from-green-500 to-emerald-500">
+          <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+          </svg>
+        </div>
+        <h3 className="text-lg font-bold text-white bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">Top Offerings</h3>
       </div>
       
-      <div className="grid grid-cols-2 gap-2">
+      <div class="grid grid-cols-2 gap-3">
         {offerings.map((offering) => (
           <button
             key={offering.id}
             onClick={() => handleOfferingClick(offering)}
-            className="text-white text-xs font-medium py-2 px-3 rounded-md hover:opacity-80 transition-opacity text-center whitespace-nowrap border border-gray-600 w-[120px] cursor-pointer"
-            style={{ backgroundColor: '#202327' }}
+            className="text-white text-xs font-bold py-3 px-3 rounded-xl hover:opacity-90 transition-all duration-300 text-center whitespace-nowrap border border-green-500/30 w-[120px] cursor-pointer bg-gradient-to-r from-green-600/20 to-emerald-600/20 hover:from-green-700/30 hover:to-emerald-700/30"
           >
             {offering.name}
           </button>
@@ -43,48 +44,50 @@ const TopOfferings = () => {
 
       {/* Modal */}
       {showModal && selectedOffering && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-[#121212] rounded-lg border border-gray-700 max-w-md w-full mx-4 p-6">
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="glass-card rounded-2xl border border-gray-700/30 max-w-md w-full p-6 hover-lift">
             {/* Header */}
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-2">
-                <FiGift size={20} style={{ color: '#ffffff' }} />
-                <h2 className="text-lg font-semibold text-white">{selectedOffering.name}</h2>
+            <div className="flex items-center justify-between mb-5 pb-3 border-b border-gray-700/30">
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-xl bg-gradient-to-br from-green-500 to-emerald-500">
+                  <FiGift size={20} className="text-white" />
+                </div>
+                <h2 className="text-xl font-bold text-white">{selectedOffering.name}</h2>
               </div>
               <button
                 onClick={() => setShowModal(false)}
-                className="text-gray-400 hover:text-white transition-colors"
+                className="p-2 rounded-lg bg-gray-800/50 text-gray-400 hover:text-white hover:bg-gray-700/50 transition-all duration-300"
               >
-                <FiX className="h-5 w-5" style={{ color: '#ffffff' }} />
+                <FiX className="h-5 w-5" />
               </button>
             </div>
 
             {/* Description */}
-            <div className="mb-6 pb-6 border-b border-gray-700">
-              <p className="text-gray-300 text-sm leading-relaxed">
+            <div class="mb-6 pb-6 border-b border-gray-700/30">
+              <p className="text-gray-300 text-sm leading-relaxed bg-gray-800/30 rounded-xl p-4">
                 {selectedOffering.description}
               </p>
             </div>
 
             {/* How to Get Started */}
-            <div className="space-y-4 mb-6">
+            <div class="space-y-4 mb-6">
               <div>
-                <h3 className="text-white font-semibold mb-2">How to Get Started:</h3>
-                <ol className="text-sm text-gray-300 space-y-2">
-                  <li className="flex gap-2">
-                    <span className="text-white font-bold">1.</span>
+                <h3 className="text-white font-bold mb-3 text-lg">How to Get Started:</h3>
+                <ol className="text-sm text-gray-300 space-y-3">
+                  <li className="flex gap-3 items-start">
+                    <span className="text-white font-bold bg-gradient-to-r from-green-500 to-emerald-500 rounded-full w-6 h-6 flex items-center justify-center flex-shrink-0">1</span>
                     <span>Browse mentors offering this service</span>
                   </li>
-                  <li className="flex gap-2">
-                    <span className="text-white font-bold">2.</span>
+                  <li className="flex gap-3 items-start">
+                    <span className="text-white font-bold bg-gradient-to-r from-green-500 to-emerald-500 rounded-full w-6 h-6 flex items-center justify-center flex-shrink-0">2</span>
                     <span>Check their reviews and experience</span>
                   </li>
-                  <li className="flex gap-2">
-                    <span className="text-white font-bold">3.</span>
+                  <li className="flex gap-3 items-start">
+                    <span className="text-white font-bold bg-gradient-to-r from-green-500 to-emerald-500 rounded-full w-6 h-6 flex items-center justify-center flex-shrink-0">3</span>
                     <span>Book a session at your preferred time</span>
                   </li>
-                  <li className="flex gap-2">
-                    <span className="text-white font-bold">4.</span>
+                  <li className="flex gap-3 items-start">
+                    <span className="text-white font-bold bg-gradient-to-r from-green-500 to-emerald-500 rounded-full w-6 h-6 flex items-center justify-center flex-shrink-0">4</span>
                     <span>Connect and achieve your goals</span>
                   </li>
                 </ol>
@@ -95,13 +98,13 @@ const TopOfferings = () => {
             <div className="flex gap-3">
               <button
                 onClick={() => setShowModal(false)}
-                className="flex-1 px-4 py-2 rounded-lg bg-gray-700 text-white hover:bg-gray-600 transition-colors font-medium text-sm"
+                className="flex-1 px-4 py-3 rounded-xl bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-600 hover:to-gray-700 text-white font-bold transition-all duration-300 shadow-lg hover:shadow-xl"
               >
                 Close
               </button>
               <button
                 onClick={() => setShowModal(false)}
-                className="flex-1 px-4 py-2 rounded-lg bg-[#202327] text-white hover:bg-gray-700 transition-colors font-medium text-sm border border-white"
+                className="flex-1 px-4 py-3 rounded-xl bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-bold transition-all duration-300 shadow-lg hover:shadow-xl"
               >
                 Find Mentors
               </button>
