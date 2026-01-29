@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FiClock, FiVideo, FiCalendar } from 'react-icons/fi';
+import { FiClock, FiVideo, FiCalendar, FiUser } from 'react-icons/fi';
 import { API_BASE_URL } from '../config/backendConfig';
 
 const SessionTimer = ({ session, onJoinSession, onSessionExpired, userRole = 'student' }) => {
@@ -234,32 +234,42 @@ const SessionTimer = ({ session, onJoinSession, onSessionExpired, userRole = 'st
   }, [timing.isExpired, sessionStatus, session._id]);
 
   return (
-    <div className="bg-[#1a1a1a] rounded-lg shadow-sm border border-gray-600 p-4">
-      <div className="flex items-center justify-between mb-3">
-        <h3 className="text-lg font-semibold text-white truncate">
+    <div className="glass-card rounded-2xl shadow-xl border border-gray-700/30 p-5 hover-lift">
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="text-lg font-bold text-white truncate bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
           {session.sessionTitle}
         </h3>
-        <span className={`px-2 py-1 rounded-full text-xs font-medium border ${getStatusColor(sessionStatus)}`}>
+        <span className={`px-3 py-1.5 rounded-full text-xs font-bold border ${getStatusColor(sessionStatus)}`}>
           {sessionStatus.charAt(0).toUpperCase() + sessionStatus.slice(1)}
         </span>
       </div>
 
-      <div className="space-y-2 mb-4">
-        <div className="flex items-center text-sm text-gray-300">
-          <FiCalendar className="w-4 h-4 mr-2" />
+      <div className="space-y-3 mb-5">
+        <div className="flex items-center text-sm text-gray-300 bg-gray-800/30 rounded-xl p-3">
+          <div className="p-1.5 rounded-lg bg-blue-500/10 mr-3">
+            <FiCalendar className="w-4 h-4 text-blue-400" />
+          </div>
           <span>{formatDate(session.sessionDate)} at {session.sessionTime}</span>
         </div>
-        <div className="flex items-center text-sm text-gray-300">
-          <FiClock className="w-4 h-4 mr-2" />
+        <div className="flex items-center text-sm text-gray-300 bg-gray-800/30 rounded-xl p-3">
+          <div className="p-1.5 rounded-lg bg-purple-500/10 mr-3">
+            <FiClock className="w-4 h-4 text-purple-400" />
+          </div>
           <span>{session.duration} minutes</span>
         </div>
         {userRole === 'student' && session.mentor && (
-          <div className="flex items-center text-sm text-gray-300">
+          <div className="flex items-center text-sm text-gray-300 bg-gray-800/30 rounded-xl p-3">
+            <div className="p-1.5 rounded-lg bg-green-500/10 mr-3">
+              <FiUser className="w-4 h-4 text-green-400" />
+            </div>
             <span className="font-medium">Mentor: {session.mentor.name}</span>
           </div>
         )}
         {userRole === 'mentor' && session.student && (
-          <div className="flex items-center text-sm text-gray-300">
+          <div className="flex items-center text-sm text-gray-300 bg-gray-800/30 rounded-xl p-3">
+            <div className="p-1.5 rounded-lg bg-indigo-500/10 mr-3">
+              <FiUser className="w-4 h-4 text-indigo-400" />
+            </div>
             <span className="font-medium">Student: {session.student.name}</span>
           </div>
         )}
@@ -267,60 +277,62 @@ const SessionTimer = ({ session, onJoinSession, onSessionExpired, userRole = 'st
 
       {/* Compact Digital Timer Display */}
       {timing.clockDisplay ? (
-        <div className="bg-[#1a1a1a] rounded-lg p-0 mb-3 font-mono">
-          <div className="flex items-center justify-center space-x-1 text-lg font-bold">
+        <div className="bg-gray-800/30 rounded-2xl p-4 mb-4 font-mono border border-gray-700/30">
+          <div className="flex items-center justify-center space-x-2 text-xl font-bold">
             {timing.clockDisplay.days > 0 && (
               <>
                 <div className="text-center">
-                  <div className="bg-[#404040] text-white rounded px-1.5 py-0.5 min-w-[2rem] text-sm">
+                  <div className="bg-gradient-to-br from-gray-700 to-gray-800 text-white rounded-xl px-3 py-2 min-w-[3rem] text-base neumorphic">
                     {String(timing.clockDisplay.days).padStart(2, '0')}
                   </div>
-                  <div className="text-xs text-gray-400 mt-0.5">D</div>
+                  <div className="text-xs text-gray-400 mt-1 font-medium">D</div>
                 </div>
-                <div className="text-gray-400 text-sm">:</div>
+                <div className="text-gray-400 text-lg">:</div>
               </>
             )}
             
             {(timing.clockDisplay.hours > 0 || timing.clockDisplay.days > 0) && (
               <>
                 <div className="text-center">
-                  <div className="bg-[#404040] text-white rounded px-1.5 py-0.5 min-w-[2rem] text-sm">
+                  <div className="bg-gradient-to-br from-gray-700 to-gray-800 text-white rounded-xl px-3 py-2 min-w-[3rem] text-base neumorphic">
                     {String(timing.clockDisplay.hours).padStart(2, '0')}
                   </div>
-                  <div className="text-xs text-gray-400 mt-0.5">H</div>
+                  <div className="text-xs text-gray-400 mt-1 font-medium">H</div>
                 </div>
-                <div className="text-gray-400 text-sm">:</div>
+                <div className="text-gray-400 text-lg">:</div>
               </>
             )}
             
             <div className="text-center">
-              <div className="bg-[#404040] text-white rounded px-1.5 py-0.5 min-w-[2rem] text-sm">
+              <div className="bg-gradient-to-br from-gray-700 to-gray-800 text-white rounded-xl px-3 py-2 min-w-[3rem] text-base neumorphic">
                 {String(timing.clockDisplay.minutes).padStart(2, '0')}
               </div>
-              <div className="text-xs text-gray-400 mt-0.5">M</div>
+              <div className="text-xs text-gray-400 mt-1 font-medium">M</div>
             </div>
             
-            <div className={`text-gray-400 text-sm ${timing.isStartingSoon || timing.isInProgress ? 'animate-pulse' : ''}`}>:</div>
+            <div className={`text-gray-400 text-lg ${timing.isStartingSoon || timing.isInProgress ? 'animate-pulse text-red-400' : ''}`}>:</div>
             
             <div className="text-center">
-              <div className={`rounded px-1.5 py-0.5 min-w-[2rem] text-sm ${
-                timing.isStartingSoon || timing.isInProgress ? 'bg-gray-500 text-white animate-pulse' : 'bg-[#404040] text-white'
+              <div className={`rounded-xl px-3 py-2 min-w-[3rem] text-base ${
+                timing.isStartingSoon || timing.isInProgress 
+                  ? 'bg-gradient-to-br from-red-600 to-red-700 text-white animate-pulse shadow-lg' 
+                  : 'bg-gradient-to-br from-gray-700 to-gray-800 text-white neumorphic'
               }`}>
                 {String(timing.clockDisplay.seconds).padStart(2, '0')}
               </div>
-              <div className="text-xs text-gray-400 mt-0.5">S</div>
+              <div className="text-xs text-gray-400 mt-1 font-medium">S</div>
             </div>
           </div>
         </div>
       ) : (
-        <div className="bg-[#1a1a1a] rounded-lg p-0 mb-3">
+        <div className="bg-gray-800/30 rounded-2xl p-4 mb-4 border border-gray-700/30">
           <div className="text-center">
-            <span className={`text-sm font-medium ${
-              timing.isExpired ? 'text-gray-400' :
-              timing.isPending ? 'text-gray-300' : 
-              timing.isInProgress ? 'text-gray-200' :
-              timing.isStartingSoon ? 'text-gray-200' :
-              timing.timeLeft ? 'text-[#535353]' : 'text-gray-400'
+            <span className={`text-base font-bold ${
+              timing.isExpired ? 'text-gray-500' :
+              timing.isPending ? 'text-gray-400' : 
+              timing.isInProgress ? 'text-green-400' :
+              timing.isStartingSoon ? 'text-yellow-400' :
+              timing.timeLeft ? 'text-blue-400' : 'text-gray-400'
             }`}>
               {timing.message}
             </span>
@@ -329,12 +341,12 @@ const SessionTimer = ({ session, onJoinSession, onSessionExpired, userRole = 'st
       )}
 
       {/* Action Buttons */}
-      <div className="space-y-2">
+      <div className="space-y-3">
         {/* Expired Button */}
         {timing.isExpired && (
           <button
             disabled
-            className="w-full inline-flex items-center justify-center px-4 py-2 rounded-lg font-medium transition-colors bg-gray-700 text-gray-400 border border-gray-600 cursor-not-allowed"
+            className="w-full inline-flex items-center justify-center px-4 py-3 rounded-xl font-bold transition-all duration-300 bg-gray-800/50 text-gray-500 border border-gray-700/50 cursor-not-allowed"
           >
             <FiVideo className="w-4 h-4 mr-2" />
             Session Expired
@@ -345,7 +357,7 @@ const SessionTimer = ({ session, onJoinSession, onSessionExpired, userRole = 'st
         {!timing.isExpired && (
           <button
             onClick={() => onJoinSession(session)}
-            className="w-full inline-flex items-center justify-center px-4 py-2 rounded-lg font-medium transition-colors bg-[#2a3038] hover:bg-[#323a44] text-white border border-gray-600/50"
+            className="w-full inline-flex items-center justify-center px-4 py-3 rounded-xl font-bold transition-all duration-300 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white border border-blue-500/30 shadow-lg hover:shadow-xl"
           >
             <FiVideo className="w-4 h-4 mr-2" />
             Join Session (Test Mode)
@@ -356,7 +368,7 @@ const SessionTimer = ({ session, onJoinSession, onSessionExpired, userRole = 'st
         {timing.canJoin && !timing.isExpired && (
           <button
             onClick={() => onJoinSession(session)}
-            className="w-full inline-flex items-center justify-center px-4 py-2 rounded-lg font-medium transition-colors bg-[#2a3038] hover:bg-[#323a44] text-white border border-gray-600/50"
+            className="w-full inline-flex items-center justify-center px-4 py-3 rounded-xl font-bold transition-all duration-300 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white border border-green-500/30 shadow-lg hover:shadow-xl animate-pulse-glow"
           >
             <FiVideo className="w-4 h-4 mr-2" />
             {timing.isInProgress ? 'Join Session (Live)' : 'Join Session (Starting Soon)'}
@@ -366,8 +378,8 @@ const SessionTimer = ({ session, onJoinSession, onSessionExpired, userRole = 'st
 
       {/* Session Description */}
       {session.sessionDescription && (
-        <div className="mt-3 pt-3 border-t border-gray-600">
-          <p className="text-sm text-gray-300 line-clamp-2">{session.sessionDescription}</p>
+        <div className="mt-4 pt-4 border-t border-gray-700/50">
+          <p className="text-sm text-gray-300 line-clamp-2 bg-gray-800/30 rounded-xl p-3">{session.sessionDescription}</p>
         </div>
       )}
     </div>

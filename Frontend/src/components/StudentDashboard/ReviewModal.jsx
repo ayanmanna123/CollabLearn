@@ -58,28 +58,34 @@ const ReviewModal = ({ isOpen, onClose, sessionId, bookingId, mentorName, sessio
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-[#121212] rounded-lg p-6 w-96 border border-gray-700">
-        <div className="flex justify-between items-center mb-4">
-          <h3 className="text-lg font-semibold text-white">Review {mentorName}</h3>
-          <button onClick={onClose} className="text-gray-400 hover:text-white">✕</button>
+    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <div className="glass-card rounded-2xl p-7 w-full max-w-md border border-gray-700/30 shadow-2xl hover-lift">
+        <div className="flex justify-between items-center mb-5">
+          <h3 className="text-xl font-bold text-white bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">Review {mentorName}</h3>
+          <button onClick={onClose} className="p-2 rounded-xl hover:bg-gray-800/50 transition-all duration-300 group">
+            <span className="text-gray-400 group-hover:text-white text-xl">×</span>
+          </button>
         </div>
 
         {/* Session Info */}
-        <div className="bg-[#202327] rounded-lg p-4 mb-6 border border-gray-700">
-          <p className="text-xs text-gray-400 mb-2">Session Details</p>
-          <div className="space-y-2">
-            <div className="flex items-center gap-2">
-              <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-              </svg>
-              <span className="text-sm text-white">{formatSessionDate(sessionDate)}</span>
+        <div className="bg-gray-800/30 rounded-2xl p-5 mb-6 border border-gray-700/30">
+          <p className="text-xs text-gray-400 mb-3 font-semibold tracking-wide">Session Details</p>
+          <div className="space-y-3">
+            <div className="flex items-center gap-3 bg-gray-700/30 rounded-xl p-3">
+              <div className="p-1.5 rounded-lg bg-blue-500/10">
+                <svg className="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+              </div>
+              <span className="text-base text-white font-medium">{formatSessionDate(sessionDate)}</span>
             </div>
-            <div className="flex items-center gap-2">
-              <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 2m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <span className="text-sm text-white">{formatSessionTime(sessionDate)}</span>
+            <div className="flex items-center gap-3 bg-gray-700/30 rounded-xl p-3">
+              <div className="p-1.5 rounded-lg bg-purple-500/10">
+                <svg className="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 2m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <span className="text-base text-white font-medium">{formatSessionTime(sessionDate)}</span>
             </div>
           </div>
         </div>
@@ -89,23 +95,23 @@ const ReviewModal = ({ isOpen, onClose, sessionId, bookingId, mentorName, sessio
           onChange={(e) => setReview(e.target.value)}
           placeholder="Write your review here..."
           maxLength={500}
-          className="w-full h-32 p-3 bg-[#202327] border border-gray-600 rounded text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+          className="w-full h-36 p-4 bg-gray-800/50 border border-gray-700/50 rounded-2xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent transition-all duration-300 resize-none hover:bg-gray-800/70"
         />
-        <p className="text-xs text-gray-500 mt-1">{review.length}/500</p>
+        <p className="text-xs text-gray-500 mt-2 font-medium">{review.length}/500 characters</p>
 
-        <div className="flex gap-3 mt-4">
+        <div className="flex gap-4 mt-5">
           <button
             onClick={onClose}
-            className="flex-1 px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-600"
+            className="flex-1 px-5 py-3 bg-gray-800/50 text-gray-300 rounded-xl hover:bg-gray-700/50 hover:text-white transition-all duration-300 font-bold border border-gray-700/50 hover:border-gray-600/50"
           >
             Cancel
           </button>
           <button
             onClick={handleSubmit}
             disabled={loading || !review.trim()}
-            className="flex-1 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
+            className="flex-1 px-5 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl hover:from-blue-700 hover:to-blue-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 font-bold shadow-lg hover:shadow-xl disabled:hover:shadow-lg"
           >
-            {loading ? 'Submitting...' : 'Submit'}
+            {loading ? 'Submitting...' : 'Submit Review'}
           </button>
         </div>
       </div>

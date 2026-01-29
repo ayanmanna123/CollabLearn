@@ -41,20 +41,22 @@ const Navbar = ({ userName = 'Student' }) => {
   ];
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 supports-backdrop-blur:bg-black/80 border-b border-[#121212] shadow-lg ${isScrolled ? 'bg-black/80 backdrop-blur-lg shadow-white/30' : 'bg-black shadow-white/15'}`} style={{
-      backdropFilter: isScrolled ? 'blur(12px)' : 'none',
-      WebkitBackdropFilter: isScrolled ? 'blur(12px)' : 'none'
+    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 supports-backdrop-blur:bg-gray-900/90 border-b border-gray-800/50 shadow-2xl ${isScrolled ? 'bg-gradient-to-r from-gray-900/95 via-gray-950/95 to-black/95 backdrop-blur-xl' : 'bg-gradient-to-r from-gray-900 to-black'}`} style={{
+      backdropFilter: isScrolled ? 'blur(20px)' : 'blur(10px)',
+      WebkitBackdropFilter: isScrolled ? 'blur(20px)' : 'blur(10px)'
     }}>
       <div className="px-0">
         <div className="flex items-center justify-between h-14">
 
           {/* Logo and Branding */}
-          <Link to="/student/dashboard" className="flex items-center gap-2 hover:opacity-80 transition-opacity pl-4">
-            <img src={LogoHat} alt="Ment2Be" className="h-8 w-8" />
+          <Link to="/student/dashboard" className="flex items-center gap-2 hover:opacity-80 transition-all duration-300 pl-4 group">
+            <div className="p-1.5 rounded-xl bg-gradient-to-br from-gray-800 to-gray-900 group-hover:from-gray-700 group-hover:to-gray-800 transition-all duration-300 shadow-lg">
+              <img src={LogoHat} alt="Ment2Be" className="h-8 w-8" />
+            </div>
           </Link>
 
           {/* Desktop Navigation Items */}
-          <div className="hidden md:flex items-center gap-3 flex-1 justify-start ml-6">
+          <div className="hidden md:flex items-center gap-2 flex-1 justify-start ml-6">
             {menuItems.map((item) => {
               const Icon = item.icon;
               const isActive = location.pathname === item.href;
@@ -62,27 +64,20 @@ const Navbar = ({ userName = 'Student' }) => {
                 <Link
                   key={item.label}
                   to={item.href}
-                  className={`px-4 py-2 rounded-lg flex items-center gap-2 transition-all duration-200 ${
-                    isActive 
-                      ? 'text-white' 
-                      : 'bg-gray-800/40 text-gray-300 hover:bg-gray-700/60 hover:text-white'
-                  }`}
-                  style={isActive ? { backgroundColor: '#2a2d32' } : {}}
+                  className={`px-4 py-2.5 rounded-xl flex items-center gap-2 transition-all duration-300 ${isActive ? 'text-white bg-gradient-to-r from-blue-600/30 to-purple-600/30 border border-blue-500/30 shadow-lg' : 'bg-gray-800/30 text-gray-300 hover:bg-gray-700/50 hover:text-white hover:border hover:border-gray-600/30'}`}
                   title={item.label}
                 >
                   <Icon 
                     size={18} 
-                    className={isActive ? 'text-white' : 'text-gray-300'}
+                    className={isActive ? 'text-blue-400' : 'text-gray-400 group-hover:text-white'}
                   />
-                  <span className={`text-xs font-medium ${
-                    isActive ? 'text-white' : 'text-gray-300'
-                  }`}>
+                  <span className={`text-xs font-bold tracking-wide ${isActive ? 'text-white' : 'text-gray-300 group-hover:text-white'}`}>
                     {item.label}
                   </span>
                   
                   {/* Badge for New */}
                   {item.badge && (
-                    <span className="ml-1 px-2 py-0.5 bg-gray-700 text-gray-200 text-xs rounded-full font-semibold">
+                    <span className="ml-1 px-2.5 py-0.5 bg-gradient-to-r from-green-600 to-green-700 text-white text-xs rounded-full font-bold shadow-md">
                       {item.badge}
                     </span>
                   )}
@@ -100,36 +95,46 @@ const Navbar = ({ userName = 'Student' }) => {
             {/* Mobile Menu Button */}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="md:hidden p-1.5"
+              className="md:hidden p-2.5 rounded-xl bg-gray-800/50 hover:bg-gray-700/50 transition-all duration-300"
             >
-              {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
+              {isMenuOpen ? <X size={20} className="text-white" /> : <Menu size={20} className="text-white" />}
             </button>
           </div>
         </div>
 
         {/* Mobile Menu */}
         {isMenuOpen && (
-          <div className="md:hidden pb-3 space-y-1 border-t border-gray-700">
+          <div className="md:hidden pb-4 space-y-2 border-t border-gray-700/50 mt-2">
             {menuItems.map((item) => {
               const Icon = item.icon;
+              const isActive = location.pathname === item.href;
               return (
                 <div key={item.label}>
                   {item.href === '#' ? (
                     <button
-                      className="w-full text-left px-3 py-2 text-gray-300 hover:bg-gray-800 rounded-lg transition-colors flex items-center gap-2 text-sm"
+                      className="w-full text-left px-4 py-3 text-gray-300 hover:bg-gray-800/50 rounded-xl transition-all duration-300 flex items-center gap-3 text-sm font-medium"
                     >
-                      <Icon size={16} />
+                      <Icon size={18} />
                       {item.label}
                     </button>
                   ) : (
                     <Link
                       to={item.href}
                       onClick={() => setIsMenuOpen(false)}
-                      className="w-full block px-3 py-2 text-gray-300 hover:bg-gray-800 rounded-lg transition-colors text-sm"
+                      className={`w-full block px-4 py-3 rounded-xl transition-all duration-300 text-sm font-medium ${
+                        isActive 
+                          ? 'text-white bg-gradient-to-r from-blue-600/30 to-purple-600/30' 
+                          : 'text-gray-300 hover:bg-gray-800/50 hover:text-white'
+                      }`}
                     >
-                      <div className="flex items-center gap-2">
-                        <Icon size={16} />
+                      <div className="flex items-center gap-3">
+                        <Icon size={18} />
                         {item.label}
+                        {item.badge && (
+                          <span className="ml-auto px-2 py-0.5 bg-gradient-to-r from-green-600 to-green-700 text-white text-xs rounded-full font-bold">
+                            {item.badge}
+                          </span>
+                        )}
                       </div>
                     </Link>
                   )}
@@ -138,9 +143,9 @@ const Navbar = ({ userName = 'Student' }) => {
             })}
             <button
               onClick={handleLogout}
-              className="w-full text-left px-3 py-2 bg-red-900 hover:bg-red-800 text-white rounded-lg font-medium transition-colors flex items-center gap-2 text-sm mt-2"
+              className="w-full text-left px-4 py-3 bg-gradient-to-r from-red-700 to-red-800 hover:from-red-800 hover:to-red-900 text-white rounded-xl font-bold transition-all duration-300 flex items-center gap-3 text-sm mt-3 shadow-lg"
             >
-              <LogOut size={16} />
+              <LogOut size={18} />
               Logout
             </button>
           </div>

@@ -54,11 +54,13 @@ const MentorCard = ({ mentor, onNavigate }) => {
   };
 
   return (
-    <div className="flex flex-col space-y-2 p-3 bg-[#202327] rounded-lg hover:bg-[#2a2d32] transition-colors cursor-pointer" onClick={() => onNavigate(`/mentor-detail?mentorId=${mentor._id}&mentor=${encodeURIComponent(mentor.name)}`)}>
-      <div className="flex items-center space-x-3">
+    <div className="flex flex-col space-y-3 p-4 bg-gray-800/30 rounded-2xl hover:bg-gray-800/50 transition-all duration-300 cursor-pointer border border-gray-700/30 hover:border-gray-600/30 hover-lift" onClick={() => onNavigate(`/mentor-detail?mentorId=${mentor._id}&mentor=${encodeURIComponent(mentor.name)}`)}>
+      <div className="flex items-center space-x-4">
         <div className="relative">
-          {mentor.hasConfirmedSession && (<div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-[#121212] z-10"></div>)}
-          <div className="h-10 w-10 rounded-full bg-gray-600 flex items-center justify-center text-white font-semibold text-sm overflow-hidden">
+          {mentor.hasConfirmedSession && (
+            <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-gray-900 z-10 animate-pulse"></div>
+          )}
+          <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-gray-700 to-gray-800 flex items-center justify-center text-white font-bold text-base overflow-hidden neumorphic">
             {(mentor.profilePicture && mentor.profilePicture.trim()) || mentor.mentorProfile?.profilePicture ? (
               <img src={mentor.profilePicture && mentor.profilePicture.trim() ? mentor.profilePicture : mentor.mentorProfile?.profilePicture} alt={mentor.name} className="h-full w-full object-cover" />
             ) : (
@@ -67,20 +69,20 @@ const MentorCard = ({ mentor, onNavigate }) => {
           </div>
         </div>
         <div className="flex-1 min-w-0">
-          <p className="text-white font-medium text-sm truncate">{mentor.name}</p>
-          <p className="text-gray-400 text-xs">{mentor.title || 'Mentor'}</p>
+          <p className="text-white font-bold text-base truncate">{mentor.name}</p>
+          <p className="text-gray-400 text-sm mt-0.5">{mentor.title || 'Mentor'}</p>
         </div>
-        <div className="flex items-center space-x-2">
-          <div className="flex items-center bg-[#535353] text-white text-xs font-medium px-2 py-0.5 rounded">
-            <FiStar className="text-white mr-1" size={12} />
-            {Number(mentor.averageRating || 0).toFixed(1)} ({mentor.totalReviews || 0})
+        <div className="flex flex-col items-end space-y-2">
+          <div className="flex items-center bg-gradient-to-r from-yellow-500/20 to-yellow-600/20 text-yellow-300 text-xs font-bold px-3 py-1 rounded-full border border-yellow-500/30">
+            <FiStar className="text-yellow-400 mr-1.5" size={14} />
+            {Number(mentor.averageRating || 0).toFixed(1)} <span className="text-gray-400 ml-1">({mentor.totalReviews || 0})</span>
           </div>
-          <span className="text-xs bg-gray-600 text-white px-2 py-0.5 rounded-full whitespace-nowrap">{formatLastInteraction(mentor.lastInteraction || mentor.createdAt || mentor.updatedAt)}</span>
+          <span className="text-xs bg-gray-700/50 text-gray-300 px-3 py-1 rounded-full whitespace-nowrap border border-gray-600/30">{formatLastInteraction(mentor.lastInteraction || mentor.createdAt || mentor.updatedAt)}</span>
         </div>
       </div>
       {!loadingAvail && availability && (
-        <div className="flex items-center space-x-2 text-xs">
-          <FiCalendar className="w-3 h-3 text-white" />
+        <div className="flex items-center space-x-2 text-sm pt-2 border-t border-gray-700/30">
+          <FiCalendar className="w-4 h-4 text-blue-400" />
           <span className="text-gray-300 font-medium">{availability.timeSlots?.length || 0} slots available</span>
         </div>
       )}
@@ -225,7 +227,7 @@ const UserDashboard = () => {
       if (!token) return;
 
       // Fetch connected mentors sorted by connection date (most recent first)
-      const response = await fetch('https://k23dx.onrender.com/api/connections/my-connections?status=connected', {
+      const response = await fetch(`${API_BASE_URL}/connections/my-connections?status=connected`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
@@ -776,34 +778,41 @@ const UserDashboard = () => {
     return <PageLoader label="Loading dashboard..." />;
 
   return (
-    <div className="h-screen bg-[#000000] text-white overflow-hidden flex flex-col">
+    <div className="h-screen bg-gradient-to-br from-gray-900 via-gray-950 to-black text-white overflow-hidden flex flex-col">
       <style>{`
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         ::-webkit-scrollbar { width: 8px; height: 8px; }
-        ::-webkit-scrollbar-track { background: #121212; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb { background: #535353; border-radius: 4px; border: 1px solid #202327; }
-        ::-webkit-scrollbar-thumb:hover { background: #6b7280; }
-        ::-webkit-scrollbar-corner { background: #121212; }
-        * { scrollbar-width: thin; scrollbar-color: #535353 #121212; }
-        .custom-scroll { scrollbar-width: thin; scrollbar-color: #888888 #2a2a2a; }
+        ::-webkit-scrollbar-track { background: #0f172a; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; border: 1px solid #1e293b; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+        ::-webkit-scrollbar-corner { background: #0f172a; }
+        * { scrollbar-width: thin; scrollbar-color: #334155 #0f172a; }
+        .custom-scroll { scrollbar-width: thin; scrollbar-color: #475569 #1e293b; }
         .custom-scroll::-webkit-scrollbar { width: 6px; }
-        .custom-scroll::-webkit-scrollbar-track { background: #2a2a2a; border-radius: 6px; margin: 5px 0; }
-        .custom-scroll::-webkit-scrollbar-thumb { background: #888888; border-radius: 6px; }
-        .custom-scroll::-webkit-scrollbar-thumb:hover { background: #999999; }
+        .custom-scroll::-webkit-scrollbar-track { background: #1e293b; border-radius: 6px; margin: 5px 0; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #475569; border-radius: 6px; }
+        .custom-scroll::-webkit-scrollbar-thumb:hover { background: #64748b; }
+        .glass-card { background: rgba(30, 41, 59, 0.6); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(100, 116, 139, 0.2); }
+        .neumorphic { box-shadow: 8px 8px 16px #0c141d, -8px -8px 16px #141d29; }
+        .neumorphic-inset { box-shadow: inset 4px 4px 8px #0c141d, inset -4px -4px 8px #141d29; }
+        .pulse-glow { animation: pulse-glow 2s infinite; }
+        @keyframes pulse-glow { 0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); } 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); } }
+        .hover-lift { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .hover-lift:hover { transform: translateY(-4px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.1); }
       `}</style>
 
-      <div className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-[#000000]/80">
+      <div className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-gradient-to-r from-gray-900/90 via-gray-950/90 to-black/90 border-b border-gray-800/50 shadow-2xl">
         <Navbar userName={profile?.name || 'Student'} />
       </div>
 
-      <div className="flex-1 pt-20 pb-4">
-        <div className="h-full max-w-[95%] mx-auto grid grid-cols-12 gap-3">
+      <div className="flex-1 pt-20 pb-6">
+        <div className="h-full max-w-[96%] mx-auto grid grid-cols-12 gap-4">
           {/* LEFT COLUMN - Profile Card */}
-          <aside className="col-span-2 bg-[#121212] rounded-lg p-4 border border-gray-700 h-fit">
-            <div className="flex flex-col items-center text-center space-y-4">
+          <aside className="col-span-2 glass-card rounded-2xl p-5 h-fit hover-lift">
+            <div className="flex flex-col items-center text-center space-y-5">
               <div className="relative">
-                <div className="w-full h-full rounded-lg bg-gray-700 overflow-hidden border-4 border-gray-600 flex items-center justify-center">
+                <div className="w-full h-full rounded-2xl bg-gradient-to-br from-gray-700 to-gray-800 overflow-hidden border-4 border-gray-600/50 shadow-xl flex items-center justify-center pulse-glow">
                   {profile?.profilePicture ? (
                     <img src={profile.profilePicture} alt={profile.name} className="w-full h-full object-cover" />
                   ) : (
@@ -815,29 +824,44 @@ const UserDashboard = () => {
 
               </div>
 
-              <div className="space-y-1">
-                <h2 className="text-lg font-semibold text-white">{profile?.name}</h2>
-                <p className="text-gray-400 text-xs">{profile?.email}</p>
+              <div className="space-y-2">
+                <h2 className="text-xl font-bold text-white bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">{profile?.name}</h2>
+                <p className="text-gray-400 text-xs tracking-wide">{profile?.email}</p>
               </div>
 
-              <div className="w-full space-y-1.5 mt-4 border-t border-gray-600 pt-3">
+              <div className="w-full space-y-2 mt-5 border-t border-gray-700/50 pt-4">
 
                 <button
                   onClick={() => navigate('/student/mentors')}
-                  className="w-full flex items-center space-x-2 px-3 py-1.5 text-gray-300 text-sm hover:bg-[#202327] rounded-lg transition-colors text-left"
+                  className="w-full flex items-center space-x-3 px-4 py-2.5 text-gray-300 text-sm hover:bg-gray-800/50 rounded-xl transition-all duration-300 text-left group"
                 >
-                  <FiUser className="w-4 h-4 text-white" />
-                  <span>Mentors: {connectedMentorsLoading ? '...' : connectedMentorsCount}</span>
+                  <div className="p-1.5 rounded-lg bg-blue-500/10 group-hover:bg-blue-500/20 transition-colors">
+                    <FiUser className="w-4 h-4 text-blue-400" />
+                  </div>
+                  <div>
+                    <span className="text-white font-medium">Mentors</span>
+                    <span className="block text-xs text-gray-400">{connectedMentorsLoading ? '...' : connectedMentorsCount} connected</span>
+                  </div>
                 </button>
 
-                <div className="flex items-center space-x-2 px-3 py-1.5 text-gray-300 text-sm">
-                  <FiAward className="w-4 h-4 text-white" />
-                  <span>Karma Points: {profile?.karmaPoints || 0}</span>
+                <div className="flex items-center space-x-3 px-4 py-2.5 text-gray-300 text-sm bg-gray-800/30 rounded-xl">
+                  <div className="p-1.5 rounded-lg bg-yellow-500/10">
+                    <FiAward className="w-4 h-4 text-yellow-400" />
+                  </div>
+                  <div>
+                    <span className="text-white font-medium">Karma Points</span>
+                    <span className="block text-xs text-gray-400">{profile?.karmaPoints || 0} earned</span>
+                  </div>
                 </div>
 
-                <div className="flex items-center space-x-2 px-3 py-1.5 text-gray-300 text-sm">
-                  <FiCalendar className="w-4 h-4 text-white" />
-                  <span>Sessions: {profile?.totalSessions || 0}</span>
+                <div className="flex items-center space-x-3 px-4 py-2.5 text-gray-300 text-sm bg-gray-800/30 rounded-xl">
+                  <div className="p-1.5 rounded-lg bg-purple-500/10">
+                    <FiCalendar className="w-4 h-4 text-purple-400" />
+                  </div>
+                  <div>
+                    <span className="text-white font-medium">Sessions</span>
+                    <span className="block text-xs text-gray-400">{profile?.totalSessions || 0} completed</span>
+                  </div>
                 </div>
 
                 <button
@@ -846,47 +870,49 @@ const UserDashboard = () => {
                     localStorage.removeItem('user');
                     navigate('/login');
                   }}
-                  className="w-full flex items-center space-x-2 px-3 py-1.5 text-left text-gray-300 hover:bg-[#212121] rounded-lg transition-colors text-sm mt-2"
+                  className="w-full flex items-center space-x-3 px-4 py-2.5 text-left text-gray-300 hover:bg-red-500/10 hover:text-red-400 rounded-xl transition-all duration-300 text-sm mt-3 border border-gray-700/50 hover:border-red-500/30"
                 >
-                  <FiLogOut className="w-4 h-4 text-white" />
-                  <span>Sign out</span>
+                  <div className="p-1.5 rounded-lg bg-gray-700/50 group-hover:bg-red-500/20 transition-colors">
+                    <FiLogOut className="w-4 h-4" />
+                  </div>
+                  <span className="font-medium">Sign out</span>
                 </button>
               </div>
 
-              <div className="w-full border-t border-gray-600 pt-3 text-center">
-                <p className="text-gray-500 text-xs">Joined {joinedLabel}</p>
+              <div className="w-full border-t border-gray-700/50 pt-4 text-center">
+                <p className="text-gray-500 text-xs tracking-wider">Member since {joinedLabel}</p>
               </div>
             </div>
           </aside>
 
           {/* MIDDLE COLUMN - Main Content OR Profile Form */}
-          <main className="col-span-7 space-y-3 overflow-y-scroll scrollbar-hide h-full max-h-[calc(100vh-6rem)]">
+          <main className="col-span-7 space-y-4 overflow-y-scroll scrollbar-hide h-full max-h-[calc(100vh-6rem)]">
             {showProfileForm ? (
-              <div className="bg-[#121212] rounded-lg shadow border border-gray-700 flex flex-col h-full max-h-[calc(100vh-7rem)]">
-                <div className="flex items-center justify-between p-6 pb-4 border-b border-gray-700">
+              <div className="glass-card rounded-2xl shadow-2xl border border-gray-700/30 flex flex-col h-full max-h-[calc(100vh-7rem)] hover-lift">
+                <div className="flex items-center justify-between p-6 pb-4 border-b border-gray-700/50">
                   <div>
-                    <h1 className="text-xl font-bold text-white">Complete Your Profile</h1>
-                    <p className="text-sm text-gray-400 mt-1">Help mentors get to know you better</p>
+                    <h1 className="text-2xl font-bold text-white bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">Complete Your Profile</h1>
+                    <p className="text-sm text-gray-400 mt-1.5 tracking-wide">Help mentors get to know you better</p>
                   </div>
-                  <button onClick={handleCloseProfileForm} className="p-2 hover:bg-[#202327] rounded-lg transition-colors">
-                    <FiX className="w-5 h-5 text-white" />
+                  <button onClick={handleCloseProfileForm} className="p-2.5 hover:bg-gray-800/50 rounded-xl transition-all duration-300 group">
+                    <FiX className="w-5 h-5 text-gray-400 group-hover:text-white transition-colors" />
                   </button>
                 </div>
 
                 <form onSubmit={handleFormSubmit} className="flex flex-col flex-1 overflow-hidden">
-                  <div className="space-y-5 p-6 overflow-y-auto custom-scroll flex-1">
+                  <div className="space-y-6 p-6 overflow-y-auto custom-scroll flex-1">
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">Profile Picture</label>
-                      <div className="flex items-center space-x-4">
-                        <div className="relative w-24 h-24">
-                          <div className="w-full h-full rounded-full bg-gray-700 overflow-hidden border-4 border-gray-600 flex items-center justify-center">
+                      <label className="block text-sm font-semibold text-gray-200 mb-3 tracking-wide">Profile Picture</label>
+                      <div className="flex items-center space-x-5">
+                        <div className="relative w-28 h-28">
+                          <div className="w-full h-full rounded-2xl bg-gradient-to-br from-gray-700 to-gray-800 overflow-hidden border-4 border-gray-600/50 shadow-xl flex items-center justify-center neumorphic">
                             {imagePreview ? (
                               <img src={imagePreview} alt="Profile preview" className="w-full h-full object-cover" />
                             ) : (
                               <div className="w-full h-full flex items-center justify-center text-2xl font-semibold text-gray-300">{initials || "??"}</div>
                             )}
                           </div>
-                          <label htmlFor="profile-picture-upload" className="absolute bottom-0 right-0 w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center cursor-pointer hover:bg-blue-700 transition-colors border-2 border-[#121212]">
+                          <label htmlFor="profile-picture-upload" className="absolute bottom-0 right-0 w-9 h-9 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full flex items-center justify-center cursor-pointer hover:from-blue-600 hover:to-blue-700 transition-all duration-300 border-3 border-gray-900 shadow-lg hover:scale-110">
                             <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -895,35 +921,35 @@ const UserDashboard = () => {
                           <input id="profile-picture-upload" type="file" accept="image/*" onChange={handleImageChange} className="hidden" />
                         </div>
                         <div className="flex-1">
-                          <p className="text-xs text-gray-400">Click the camera icon to upload a new picture</p>
-                          <p className="text-xs text-gray-500 mt-1">JPG, PNG or GIF (max 5MB)</p>
+                          <p className="text-xs text-gray-300 font-medium">Click the camera icon to upload a new picture</p>
+                          <p className="text-xs text-gray-500 mt-1.5">JPG, PNG or GIF (max 5MB)</p>
                         </div>
                       </div>
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">Bio</label>
-                      <textarea name="bio" value={formData.bio} onChange={handleFormChange} rows={4} placeholder="Tell us about yourself..." className="w-full px-4 py-3 bg-[#202327] border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
+                      <label className="block text-sm font-semibold text-gray-200 mb-3 tracking-wide">Bio</label>
+                      <textarea name="bio" value={formData.bio} onChange={handleFormChange} rows={4} placeholder="Tell us about yourself..." className="w-full px-4 py-3.5 bg-gray-800/50 border border-gray-700/50 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent transition-all duration-300 hover:bg-gray-800/70" />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">Skills</label>
-                      <input type="text" name="skills" value={formData.skills} onChange={handleFormChange} placeholder="e.g., JavaScript, React, Python (comma separated)" className="w-full px-4 py-3 bg-[#202327] border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
+                      <label className="block text-sm font-semibold text-gray-200 mb-3 tracking-wide">Skills</label>
+                      <input type="text" name="skills" value={formData.skills} onChange={handleFormChange} placeholder="e.g., JavaScript, React, Python (comma separated)" className="w-full px-4 py-3.5 bg-gray-800/50 border border-gray-700/50 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent transition-all duration-300 hover:bg-gray-800/70" />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">Interests</label>
-                      <input type="text" name="interests" value={formData.interests} onChange={handleFormChange} placeholder="What topics interest you?" className="w-full px-4 py-3 bg-[#202327] border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
+                      <label className="block text-sm font-semibold text-gray-200 mb-3 tracking-wide">Interests</label>
+                      <input type="text" name="interests" value={formData.interests} onChange={handleFormChange} placeholder="What topics interest you?" className="w-full px-4 py-3.5 bg-gray-800/50 border border-gray-700/50 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent transition-all duration-300 hover:bg-gray-800/70" />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">Learning Goals</label>
-                      <textarea name="goals" value={formData.goals} onChange={handleFormChange} rows={3} placeholder="What do you want to achieve?" className="w-full px-4 py-3 bg-[#202327] border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
+                      <label className="block text-sm font-semibold text-gray-200 mb-3 tracking-wide">Learning Goals</label>
+                      <textarea name="goals" value={formData.goals} onChange={handleFormChange} rows={3} placeholder="What do you want to achieve?" className="w-full px-4 py-3.5 bg-gray-800/50 border border-gray-700/50 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent transition-all duration-300 hover:bg-gray-800/70" />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">Phone Number</label>
-                      <div className="flex gap-2">
+                      <label className="block text-sm font-semibold text-gray-200 mb-3 tracking-wide">Phone Number</label>
+                      <div className="flex gap-3">
                         <select
                           value={(() => {
                             const phone = formData.phoneNumber || '';
@@ -994,26 +1020,26 @@ const UserDashboard = () => {
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-1 gap-4">
+                    <div className="grid grid-cols-1 gap-5">
                       <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-2">LinkedIn Profile</label>
-                        <input type="url" name="linkedIn" value={formData.linkedIn} onChange={handleFormChange} placeholder="https://linkedin.com/in/yourprofile" className="w-full px-4 py-3 bg-[#202327] border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
+                        <label className="block text-sm font-semibold text-gray-200 mb-3 tracking-wide">LinkedIn Profile</label>
+                        <input type="url" name="linkedIn" value={formData.linkedIn} onChange={handleFormChange} placeholder="https://linkedin.com/in/yourprofile" className="w-full px-4 py-3.5 bg-gray-800/50 border border-gray-700/50 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent transition-all duration-300 hover:bg-gray-800/70" />
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-2">GitHub Profile</label>
-                        <input type="url" name="github" value={formData.github} onChange={handleFormChange} placeholder="https://github.com/yourusername" className="w-full px-4 py-3 bg-[#202327] border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
+                        <label className="block text-sm font-semibold text-gray-200 mb-3 tracking-wide">GitHub Profile</label>
+                        <input type="url" name="github" value={formData.github} onChange={handleFormChange} placeholder="https://github.com/yourusername" className="w-full px-4 py-3.5 bg-gray-800/50 border border-gray-700/50 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent transition-all duration-300 hover:bg-gray-800/70" />
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-2">Portfolio Website</label>
-                        <input type="url" name="portfolio" value={formData.portfolio} onChange={handleFormChange} placeholder="https://yourportfolio.com" className="w-full px-4 py-3 bg-[#202327] border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
+                        <label className="block text-sm font-semibold text-gray-200 mb-3 tracking-wide">Portfolio Website</label>
+                        <input type="url" name="portfolio" value={formData.portfolio} onChange={handleFormChange} placeholder="https://yourportfolio.com" className="w-full px-4 py-3.5 bg-gray-800/50 border border-gray-700/50 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent transition-all duration-300 hover:bg-gray-800/70" />
                       </div>
                     </div>
                   </div>
 
-                  <div className="p-6 pt-4 border-t border-gray-700 bg-[#121212]">
-                    <div className="flex items-center justify-end space-x-3">
-                      <button type="button" onClick={handleCloseProfileForm} className="px-6 py-2.5 bg-[#202327] text-gray-300 rounded-lg hover:bg-[#2a2d32] transition-colors">Cancel</button>
-                      <button type="submit" disabled={formLoading} className="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center">
+                  <div className="p-6 pt-5 border-t border-gray-700/50 bg-gradient-to-r from-gray-900/50 to-gray-950/50">
+                    <div className="flex items-center justify-end space-x-4">
+                      <button type="button" onClick={handleCloseProfileForm} className="px-6 py-3 bg-gray-800/50 text-gray-300 rounded-xl hover:bg-gray-700/50 hover:text-white transition-all duration-300 border border-gray-700/50 hover:border-gray-600/50 font-medium">Cancel</button>
+                      <button type="submit" disabled={formLoading} className="px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center font-medium shadow-lg hover:shadow-xl disabled:hover:shadow-lg">
                         {formLoading ? (<><FiLoader className="animate-spin w-4 h-4 mr-2" />Saving...</>) : (<><FiCheck className="w-4 h-4 mr-2" />Save Profile</>)}
                       </button>
                     </div>
@@ -1022,26 +1048,28 @@ const UserDashboard = () => {
               </div>
             ) : (
               <>
-                <div className="bg-[#121212] rounded-lg shadow p-4 border border-gray-700">
-                  <h1 className="text-lg font-bold text-white">Welcome back, {profile?.name || 'Student'}!</h1>
-                  <p className="text-xs text-gray-400 mt-0.5">Your learning journey at a glance</p>
+                <div className="glass-card rounded-2xl shadow-xl p-5 border border-gray-700/30 hover-lift">
+                  <h1 className="text-2xl font-bold text-white bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">Welcome back, {profile?.name || 'Student'}!</h1>
+                  <p className="text-sm text-gray-400 mt-1.5 tracking-wide">Your learning journey at a glance</p>
                 </div>
 
                 {error && (
-                  <div className="bg-red-900 bg-opacity-20 border border-red-700 rounded-lg p-3">
-                    <p className="text-red-400 text-sm">{error}</p>
+                  <div className="bg-red-900/20 border border-red-700/50 rounded-2xl p-4 neumorphic">
+                    <p className="text-red-400 text-sm font-medium">{error}</p>
                   </div>
                 )}
 
                 <div className="bg-[#121212] rounded-lg shadow p-4 border border-gray-700">
-                  <div className="flex items-center justify-between mb-3">
-                    <h2 className="text-sm font-semibold text-white flex items-center">
-                      <svg className="w-4 h-4 mr-2 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
-                      </svg>
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-lg font-bold text-white flex items-center bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+                      <div className="p-2 rounded-xl bg-blue-500/10 mr-3">
+                        <svg className="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                        </svg>
+                      </div>
                       Your Tasks
                     </h2>
-                    <button onClick={() => navigate('/student/tasks')} className="text-[#535353] hover:text-white text-xs font-medium">View All</button>
+                    <button onClick={() => navigate('/student/tasks')} className="text-gray-500 hover:text-blue-400 text-xs font-semibold tracking-wide transition-colors px-3 py-1.5 rounded-lg hover:bg-blue-500/10">View All</button>
                   </div>
 
                   {tasksLoading ? (
@@ -1098,15 +1126,17 @@ const UserDashboard = () => {
                   )}
                 </div>
 
-                <div className="bg-[#121212] rounded-lg shadow p-4 border border-gray-700 mb-4">
-                  <div className="flex items-center justify-between mb-3">
-                    <h2 className="text-sm font-semibold text-white flex items-center">
-                      <svg className="w-4 h-4 mr-2 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                      </svg>
+                <div className="glass-card rounded-2xl shadow-xl p-5 border border-gray-700/30 hover-lift mb-4">
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-lg font-bold text-white flex items-center bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+                      <div className="p-2 rounded-xl bg-green-500/10 mr-3">
+                        <svg className="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                        </svg>
+                      </div>
                       Recent Messages
                     </h2>
-                    <button onClick={() => navigate('/student/chat')} className="text-[#535353] hover:text-white text-xs font-medium">View All</button>
+                    <button onClick={() => navigate('/student/chat')} className="text-gray-500 hover:text-green-400 text-xs font-semibold tracking-wide transition-colors px-3 py-1.5 rounded-lg hover:bg-green-500/10">View All</button>
                   </div>
 
                   {messagesLoading ? (
@@ -1143,27 +1173,29 @@ const UserDashboard = () => {
                 </div>
 
                 <div className="bg-[#121212] rounded-lg shadow p-4 border border-gray-700">
-                  <div className="flex items-center justify-between mb-3">
-                    <h2 className="text-sm font-semibold text-white flex items-center">
-                      <svg className="w-4 h-4 mr-2 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-                      </svg>
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-lg font-bold text-white flex items-center bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+                      <div className="p-2 rounded-xl bg-yellow-500/10 mr-3">
+                        <svg className="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                        </svg>
+                      </div>
                       Rate Your Mentor
                     </h2>
-                    <button onClick={() => navigate('/student/submissions')} className="text-[#535353] hover:text-white text-xs font-medium">View All</button>
+                    <button onClick={() => navigate('/student/submissions')} className="text-gray-500 hover:text-yellow-400 text-xs font-semibold tracking-wide transition-colors px-3 py-1.5 rounded-lg hover:bg-yellow-500/10">View All</button>
                   </div>
 
                   {/* Tab Buttons */}
-                  <div className="flex mb-3 bg-[#202327] rounded-lg p-1">
+                  <div className="flex mb-4 bg-gray-800/50 rounded-xl p-1.5 neumorphic-inset">
                     <button
                       onClick={() => setRateTab('rate')}
-                      className={`flex-1 px-3 py-1.5 text-xs font-medium rounded-md transition-colors ${rateTab === 'rate' ? 'bg-gray-600 text-white' : 'text-gray-400 hover:text-white'}`}
+                      className={`flex-1 px-4 py-2 text-sm font-semibold rounded-lg transition-all duration-300 ${rateTab === 'rate' ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg' : 'text-gray-400 hover:text-white hover:bg-gray-700/30'}`}
                     >
                       Rate Mentor
                     </button>
                     <button
                       onClick={() => setRateTab('submissions')}
-                      className={`flex-1 px-3 py-1.5 text-xs font-medium rounded-md transition-colors ${rateTab === 'submissions' ? 'bg-gray-600 text-white' : 'text-gray-400 hover:text-white'}`}
+                      className={`flex-1 px-4 py-2 text-sm font-semibold rounded-lg transition-all duration-300 ${rateTab === 'submissions' ? 'bg-gradient-to-r from-purple-600 to-purple-700 text-white shadow-lg' : 'text-gray-400 hover:text-white hover:bg-gray-700/30'}`}
                     >
                       Submissions
                     </button>
@@ -1350,32 +1382,39 @@ const UserDashboard = () => {
                   )}
                 </div>
 
-                <div className="bg-[#121212] rounded-lg shadow p-4 border border-gray-700">
-                  <div className="flex items-center justify-between mb-3">
-                    <h2 className="text-sm font-semibold text-white flex items-center">
-                      <svg className="w-4 h-4 mr-2 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                      </svg>
+                <div className="glass-card rounded-2xl shadow-xl p-5 border border-gray-700/30 hover-lift">
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-lg font-bold text-white flex items-center bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+                      <div className="p-2 rounded-xl bg-indigo-500/10 mr-3">
+                        <svg className="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                        </svg>
+                      </div>
                       Your Recent Mentors
                     </h2>
-                    <button onClick={() => navigate('/student/mentors')} className="text-[#535353] hover:text-white text-xs font-medium">View All</button>
+                    <button onClick={() => navigate('/student/mentors')} className="text-gray-500 hover:text-indigo-400 text-xs font-semibold tracking-wide transition-colors px-3 py-1.5 rounded-lg hover:bg-indigo-500/10">View All</button>
                   </div>
 
                   {mentorsLoading ? (
-                    <div className="flex items-center justify-center py-8">
-                      <FiLoader className="animate-spin text-white mr-2" />
-                      <span className="text-gray-400 text-sm">Loading mentors...</span>
+                    <div className="flex items-center justify-center py-10">
+                      <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-indigo-500 border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite] mr-3"></div>
+                      <span className="text-gray-400 text-base font-medium">Loading mentors...</span>
                     </div>
                   ) : mentors.length > 0 ? (
-                    <div className="space-y-3">
+                    <div className="space-y-4">
                       {mentors.slice(0, 2).map((mentor) => (
                         <MentorCard key={mentor._id} mentor={mentor} onNavigate={navigate} />
                       ))}
                     </div>
                   ) : (
-                    <div className="text-center py-6">
-                      <p className="text-gray-400 text-sm">No recent mentors found</p>
-                      <button onClick={() => navigate('/student/explore')} className="mt-2 text-blue-400 hover:text-blue-300 text-xs font-medium">Browse Mentors</button>
+                    <div className="text-center py-10">
+                      <div className="mx-auto w-16 h-16 rounded-full bg-gray-800/50 flex items-center justify-center mb-4">
+                        <svg className="w-8 h-8 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                        </svg>
+                      </div>
+                      <p className="text-gray-400 text-base font-medium mb-3">No recent mentors found</p>
+                      <button onClick={() => navigate('/student/explore')} className="text-indigo-400 hover:text-indigo-300 text-sm font-semibold tracking-wide transition-colors px-4 py-2 rounded-lg hover:bg-indigo-500/10 border border-indigo-500/20 hover:border-indigo-500/30">Browse Mentors</button>
                     </div>
                   )}
                 </div>
@@ -1384,17 +1423,17 @@ const UserDashboard = () => {
           </main>
 
           {/* RIGHT COLUMN - Profile, Karma & Sessions */}
-          <aside className="col-span-3 space-y-3 overflow-y-auto custom-scroll">
+          <aside className="col-span-3 space-y-4 overflow-y-auto custom-scroll">
             {/* Karma Points Card */}
             {/* <KarmaPoints userId={profile?._id} /> */}
 
             {/* Profile Card */}
             {profile && (
-              <div className="bg-[#121212] rounded-lg shadow p-4 border border-gray-700">
-                <h2 className="text-sm font-semibold text-white mb-2">Your Profile</h2>
-                <div className="space-y-2">
+              <div className="glass-card rounded-2xl shadow-xl p-5 border border-gray-700/30 hover-lift">
+                <h2 className="text-lg font-bold text-white mb-3 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">Your Profile</h2>
+                <div className="space-y-3">
                   <div className="flex items-center">
-                    <div className="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center mr-2 overflow-hidden">
+                    <div className="w-12 h-12 bg-gradient-to-br from-gray-700 to-gray-800 rounded-2xl flex items-center justify-center mr-3 overflow-hidden neumorphic">
                       {profile.profilePicture ? (
                         <img src={profile.profilePicture} alt={profile.name} className="w-full h-full object-cover" />
                       ) : (
@@ -1402,29 +1441,28 @@ const UserDashboard = () => {
                       )}
                     </div>
                     <div>
-                      <p className="text-xs font-medium text-white">{profile.name}</p>
-
-                      <div className="flex items-center space-x-2">
-                        <span className="text-xs text-gray-300">{profile.karmaPoints || 0} Karma</span>
-                        <span className="text-[10px] text-gray-500">•</span>
+                      <p className="text-sm font-bold text-white">{profile.name}</p>
+                      <div className="flex items-center space-x-2 mt-1">
+                        <span className="text-xs text-yellow-400 font-medium">{profile.karmaPoints || 0} Karma</span>
+                        <span className="text-[10px] text-gray-600">•</span>
                         <span className="text-xs text-gray-400">{profile.email}</span>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div className="pt-2 border-t border-gray-700">
-                  <div className="flex items-center justify-between mb-1.5">
-                    <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium bg-gray-700 text-gray-300 capitalize">{profile.role}</span>
-                    <span className="text-xs text-gray-400">{profileCompletion}/100</span>
+                <div className="pt-3 border-t border-gray-700/50">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-gradient-to-r from-blue-500/20 to-indigo-500/20 text-blue-300 border border-blue-500/30 capitalize">{profile.role}</span>
+                    <span className="text-sm font-bold text-white">{profileCompletion}<span className="text-gray-400">/100</span></span>
                   </div>
-                  <div className="w-full bg-gray-700 rounded-full h-1.5 mb-3">
+                  <div className="w-full bg-gray-800/50 rounded-full h-2.5 mb-4 neumorphic-inset">
                     <div 
-                      className="h-1.5 rounded-full transition-all duration-300" 
-                      style={{ width: `${profileCompletion}%`, backgroundColor: '#ffffff' }}
+                      className="h-2.5 rounded-full transition-all duration-500 bg-gradient-to-r from-blue-500 to-purple-500" 
+                      style={{ width: `${profileCompletion}%` }}
                     ></div>
                   </div>
-                  <button onClick={handleCompleteProfile} className="mt-3 w-full flex items-center justify-center px-3 py-2 border border-gray-600 rounded-lg text-xs font-semibold text-gray-300 bg-[#202327] hover:bg-[#2a2d32] transition-colors focus:outline-none focus:ring-2 focus:ring-gray-500">
-                    <FiUserPlus className="w-4 h-4 mr-2 text-white" />
+                  <button onClick={handleCompleteProfile} className="mt-2 w-full flex items-center justify-center px-4 py-3 border border-gray-600/50 rounded-xl text-sm font-bold text-gray-300 bg-gray-800/50 hover:bg-gray-700/50 hover:text-white hover:border-gray-500/50 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-gray-500/50 hover-lift">
+                    <FiUserPlus className="w-4 h-4 mr-2" />
                     Complete Your Profile
                   </button>
                 </div>
@@ -1432,21 +1470,24 @@ const UserDashboard = () => {
             )}
 
             {/* Upcoming Sessions */}
-            <div className="bg-[#121212] rounded-lg shadow p-4 border border-gray-700">
-              <div className="flex items-center justify-between mb-3">
-                <h2 className="text-sm font-semibold text-white flex items-center">
-                  <FiCalendar className="w-3.5 h-3.5 mr-1.5 text-white" />
+            <div className="glass-card rounded-2xl shadow-xl p-5 border border-gray-700/30 hover-lift">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-lg font-bold text-white flex items-center bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+                  <div className="p-2 rounded-xl bg-red-500/10 mr-3">
+                    <FiCalendar className="w-5 h-5 text-red-400" />
+                  </div>
                   Next Session
                 </h2>
-                <button onClick={() => navigate('/student/sessions')} className="text-[#535353] hover:text-white text-xs font-medium">View All</button>
+                <button onClick={() => navigate('/student/sessions')} className="text-gray-500 hover:text-red-400 text-xs font-semibold tracking-wide transition-colors px-3 py-1.5 rounded-lg hover:bg-red-500/10">View All</button>
               </div>
 
               {sessionsLoading ? (
-                <div className="text-center py-4">
-                  <p className="text-gray-400 text-xs">Loading sessions...</p>
+                <div className="text-center py-8">
+                  <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-red-500 border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"></div>
+                  <p className="text-gray-400 text-sm mt-3 font-medium">Loading sessions...</p>
                 </div>
               ) : upcomingSessions.length > 0 ? (
-                <div className="space-y-3">
+                <div className="space-y-4">
                   {upcomingSessions.map((session) => (
                     <div key={session._id}>
                       <SessionTimer session={session} onJoinSession={handleJoinSession} userRole="student" />
@@ -1454,12 +1495,14 @@ const UserDashboard = () => {
                   ))}
                 </div>
               ) : (
-                <div className="text-center py-4">
-                  <FiCalendar className="w-8 h-8 text-white mx-auto mb-2" />
-                  <h3 className="text-xs font-medium text-gray-300 mb-1">No upcoming sessions</h3>
-                  <p className="text-[11px] text-gray-400 mb-2">Book a session with a mentor to get started!</p>
-                  <button onClick={() => navigate('/student/explore')} className="inline-flex items-center px-2.5 py-1 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors text-xs">
-                    <FiUser className="w-3 h-3 mr-1.5 text-white" />
+                <div className="text-center py-10">
+                  <div className="mx-auto w-16 h-16 rounded-full bg-gray-800/50 flex items-center justify-center mb-4">
+                    <FiCalendar className="w-8 h-8 text-gray-500" />
+                  </div>
+                  <h3 className="text-base font-bold text-gray-300 mb-2">No upcoming sessions</h3>
+                  <p className="text-sm text-gray-400 mb-4">Book a session with a mentor to get started!</p>
+                  <button onClick={() => navigate('/student/explore')} className="inline-flex items-center px-4 py-2.5 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-xl hover:from-red-700 hover:to-red-800 transition-all duration-300 text-sm font-semibold shadow-lg hover:shadow-xl">
+                    <FiUser className="w-4 h-4 mr-2" />
                     Find Mentors
                   </button>
                 </div>
