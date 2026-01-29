@@ -34,7 +34,7 @@ export function MenteesSidebar({ selectedMentee, onSelectMentee }) {
       }
 
       // Fetch tasks from configured backend
-      const tasksResponse = await fetch(TASK_API_URL, {
+      const tasksResponse = await fetch(`${API_BASE_URL}/tasks`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
