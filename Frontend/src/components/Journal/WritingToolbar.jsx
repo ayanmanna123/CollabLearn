@@ -2,10 +2,10 @@ import React from 'react';
 
 const WritingToolbar = ({ onFormat, onBold, onItalic, onUnderline, onBulletList, onNumberedList, onClear }) => {
   return (
-    <div className="bg-[#1a1a1a] border border-gray-700 rounded-t-lg p-2 flex items-center space-x-1">
+    <div className="bg-gradient-to-r from-gray-800 to-gray-900 border-b border-gray-700/30 rounded-t-2xl p-2 flex items-center space-x-1">
       <button
         onClick={onBold}
-        className="p-2 hover:bg-[#2a2a2a] rounded text-gray-300 hover:text-white transition-colors"
+        className="p-2.5 hover:bg-gradient-to-br from-blue-600/30 to-indigo-600/30 rounded-xl text-gray-300 hover:text-white transition-all duration-300 shadow-sm hover:shadow-md"
         title="Bold"
       >
         <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
@@ -15,7 +15,7 @@ const WritingToolbar = ({ onFormat, onBold, onItalic, onUnderline, onBulletList,
       
       <button
         onClick={onItalic}
-        className="p-2 hover:bg-[#2a2a2a] rounded text-gray-300 hover:text-white transition-colors"
+        className="p-2.5 hover:bg-gradient-to-br from-purple-600/30 to-pink-600/30 rounded-xl text-gray-300 hover:text-white transition-all duration-300 shadow-sm hover:shadow-md"
         title="Italic"
       >
         <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
@@ -25,7 +25,7 @@ const WritingToolbar = ({ onFormat, onBold, onItalic, onUnderline, onBulletList,
       
       <button
         onClick={onUnderline}
-        className="p-2 hover:bg-[#2a2a2a] rounded text-gray-300 hover:text-white transition-colors"
+        className="p-2.5 hover:bg-gradient-to-br from-green-600/30 to-emerald-600/30 rounded-xl text-gray-300 hover:text-white transition-all duration-300 shadow-sm hover:shadow-md"
         title="Underline"
       >
         <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
@@ -33,11 +33,11 @@ const WritingToolbar = ({ onFormat, onBold, onItalic, onUnderline, onBulletList,
         </svg>
       </button>
       
-      <div className="w-px h-6 bg-gray-600 mx-1"></div>
+      <div className="w-px h-6 bg-gradient-to-b from-gray-600 to-gray-800 mx-1"></div>
       
       <button
         onClick={onBulletList}
-        className="p-2 hover:bg-[#2a2a2a] rounded text-gray-300 hover:text-white transition-colors"
+        className="p-2.5 hover:bg-gradient-to-br from-yellow-600/30 to-orange-600/30 rounded-xl text-gray-300 hover:text-white transition-all duration-300 shadow-sm hover:shadow-md"
         title="Bullet List"
       >
         <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
@@ -47,7 +47,7 @@ const WritingToolbar = ({ onFormat, onBold, onItalic, onUnderline, onBulletList,
       
       <button
         onClick={onNumberedList}
-        className="p-2 hover:bg-[#2a2a2a] rounded text-gray-300 hover:text-white transition-colors"
+        className="p-2.5 hover:bg-gradient-to-br from-red-600/30 to-pink-600/30 rounded-xl text-gray-300 hover:text-white transition-all duration-300 shadow-sm hover:shadow-md"
         title="Numbered List"
       >
         <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
@@ -55,11 +55,11 @@ const WritingToolbar = ({ onFormat, onBold, onItalic, onUnderline, onBulletList,
         </svg>
       </button>
       
-      <div className="w-px h-6 bg-gray-600 mx-1"></div>
+      <div className="w-px h-6 bg-gradient-to-b from-gray-600 to-gray-800 mx-1"></div>
       
       <button
         onClick={onClear}
-        className="p-2 hover:bg-[#2a2a2a] rounded text-gray-300 hover:text-white transition-colors"
+        className="p-2.5 hover:bg-gradient-to-br from-gray-600/30 to-gray-700/30 rounded-xl text-gray-300 hover:text-white transition-all duration-300 shadow-sm hover:shadow-md"
         title="Clear Formatting"
       >
         <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">

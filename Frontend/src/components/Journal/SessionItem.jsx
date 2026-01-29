@@ -25,34 +25,34 @@ const SessionItem = ({ session, userRole, isActive, onClick, hasNotes, hasAIAnal
   return (
     <div
       onClick={onClick}
-      className={`p-3 rounded-lg cursor-pointer transition-all duration-200 border ${
+      className={`p-4 rounded-2xl cursor-pointer transition-all duration-300 border ${
         isActive 
-          ? 'bg-[#333333] border-gray-500' 
-          : 'bg-[#1a1a1a] border-gray-700 hover:bg-[#2a2a2a] hover:border-gray-600'
+          ? 'bg-gradient-to-br from-blue-500/20 to-indigo-500/20 border-blue-500/50 shadow-lg hover-lift' 
+          : 'glass-card border-gray-700/30 hover:border-gray-600/50 hover-lift'
       }`}
     >
       <div className="flex items-start justify-between">
         <div className="flex-1 min-w-0">
-          <h4 className="text-white font-medium text-sm truncate">
+          <h4 className="text-white font-bold text-sm truncate">
             Session with {counterpartName}
           </h4>
           <div className="flex items-center space-x-2 mt-1">
-            <span className="text-gray-400 text-xs">
+            <span className="text-gray-400 text-xs font-medium">
               {formatDate(session.sessionDate)}
             </span>
-            <span className="text-gray-500 text-xs">•</span>
-            <span className="text-gray-400 text-xs">
+            <span className="text-gray-500 text-xs font-medium">•</span>
+            <span className="text-gray-400 text-xs font-medium">
               {formatTime(session.sessionTime)}
             </span>
           </div>
           <div className="flex items-center space-x-2 mt-2">
-            <span className="text-gray-500 text-xs">
+            <span className="text-gray-500 text-xs font-medium">
               {session.duration || 60} min
             </span>
             {session.topic && (
               <>
-                <span className="text-gray-500 text-xs">•</span>
-                <span className="text-gray-300 text-xs truncate max-w-[100px]">
+                <span className="text-gray-500 text-xs font-medium">•</span>
+                <span className="text-gray-300 text-xs font-medium truncate max-w-[100px]">
                   {session.topic}
                 </span>
               </>
@@ -62,7 +62,10 @@ const SessionItem = ({ session, userRole, isActive, onClick, hasNotes, hasAIAnal
         
         <div className="flex flex-col items-end space-y-1 ml-2">
           {hasNotes && (
-            <div className="w-2 h-2 rounded-full bg-gray-400" title="Notes Saved"></div>
+            <div className="w-3 h-3 rounded-full bg-gradient-to-br from-green-500 to-emerald-500 shadow-sm" title="Notes Saved"></div>
+          )}
+          {hasAIAnalysis && (
+            <div className="w-3 h-3 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 shadow-sm" title="AI Analysis Available"></div>
           )}
         </div>
       </div>

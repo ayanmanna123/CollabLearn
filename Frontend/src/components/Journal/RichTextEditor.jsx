@@ -33,7 +33,7 @@ const RichTextEditor = ({ value, onChange, placeholder = 'Start writing your not
   };
 
   return (
-    <div className="bg-[#121212] border border-gray-700 rounded-lg overflow-hidden relative">
+    <div className="glass-card rounded-2xl border border-gray-700/30 overflow-hidden relative hover-lift">
       <WritingToolbar
         onBold={handleBold}
         onItalic={handleItalic}
@@ -46,13 +46,13 @@ const RichTextEditor = ({ value, onChange, placeholder = 'Start writing your not
         ref={editorRef}
         contentEditable
         onInput={handleInput}
-        className="bg-[#0a0a0a] text-gray-300 p-4 min-h-[400px] focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent"
+        className="bg-gray-900/50 text-gray-200 p-4 min-h-[400px] focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent rounded-b-xl"
         style={{ minHeight: height }}
         suppressContentEditableWarning={true}
       />
       {!editorRef.current?.innerHTML && (
         <div 
-          className="absolute top-16 left-4 text-gray-500 pointer-events-none"
+          className="absolute top-16 left-4 text-gray-500/70 pointer-events-none italic"
         >
           {placeholder}
         </div>
