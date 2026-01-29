@@ -5,7 +5,9 @@
 
 // Set to 'nodejs', 'java', or 'render' to switch between backends
 // Auto-detect: use 'render' in production, 'nodejs' in development
-const ACTIVE_BACKEND = import.meta.env.VITE_BACKEND || (import.meta.env.PROD ? 'render' : 'nodejs');
+// Set to 'nodejs', 'java', or 'render' to switch between backends
+// Auto-detect: use 'render' in production, 'nodejs' in development
+export const ACTIVE_BACKEND = import.meta.env.VITE_BACKEND || (import.meta.env.PROD ? 'render' : 'nodejs');
 
 // Base URLs for different backends
 const BASE_URLS = {

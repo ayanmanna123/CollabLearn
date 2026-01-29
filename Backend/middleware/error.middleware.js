@@ -6,7 +6,20 @@ import AppError from '../utils/errorHandler.js';
  * Must be placed after all other middleware and routes
  */
 const errorMiddleware = (err, req, res, next) => {
-  console.error('Error:', err);
+  const timestamp = new Date().toISOString();
+  console.error(`\n🔴 ----------------------------------------------------------------`);
+  console.error(`[${timestamp}] ERROR in ${req.method} ${req.originalUrl}`);
+  console.error(`Message: ${err.message}`);
+  if (err.stack) {
+    console.error(`Stack: ${err.stack}`);
+  }
+  // Log body if present (masked)
+  if (req.body && Object.keys(req.body).length > 0) {
+    const logBody = { ...req.body };
+    if (logBody.password) logBody.password = '*****';
+    console.error('📦 Body:', JSON.stringify(logBody, null, 2));
+  }
+  console.error(`---------------------------------------------------------------- 🔴\n`);
 
   // Default values
   let statusCode = err.statusCode || 500;

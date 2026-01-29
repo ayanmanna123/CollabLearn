@@ -191,14 +191,31 @@ const UserDashboard = () => {
       }
     };
 
-    fetchProfile();
-    fetchRecentMentors();
-    fetchTopExperts();
-    fetchUpcomingSessions();
-    fetchRecentMessages();
-    fetchRecentTasks();
-    fetchSubmittedReviews();
-    fetchConnectedMentorsCount();
+    const loadData = async () => {
+      // 1. Fetch Profile first (Critical)
+      await fetchProfile();
+
+      // 2. Fetch Sessions and Tasks (High Priority)
+      await Promise.all([
+        fetchUpcomingSessions(),
+        fetchRecentTasks()
+      ]);
+
+      // 3. Fetch Mentors & Experts (Medium Priority)
+      await Promise.all([
+        fetchRecentMentors(),
+        fetchTopExperts(),
+        fetchConnectedMentorsCount()
+      ]);
+
+      // 4. Fetch Messages and Reviews (Lower Priority)
+      await Promise.all([
+        fetchRecentMessages(),
+        fetchSubmittedReviews()
+      ]);
+    };
+
+    loadData();
   }, [navigate]);
 
   const fetchRecentMentors = async () => {

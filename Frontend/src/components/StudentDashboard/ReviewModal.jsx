@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { API_BASE_URL } from '../../config/backendConfig';
 
 const ReviewModal = ({ isOpen, onClose, sessionId, bookingId, mentorName, sessionDate, sessionTime }) => {
   const [review, setReview] = useState('');

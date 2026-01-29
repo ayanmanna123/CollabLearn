@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { API_BASE_URL } from '../../config/backendConfig';
 
 const RateModal = ({ isOpen, onClose, onSubmit, sessionId, bookingId, mentorName, sessionDate, sessionTime }) => {
   const [rating, setRating] = useState(0);

@@ -8,6 +8,7 @@ import { FiUpload, FiX, FiCalendar, FiUsers, FiClock, FiEdit3, FiSettings, FiLog
 import { formatDistanceToNow } from 'date-fns';
 import KarmaPointsCard from '../components/KarmaPointsCard/KarmaPointsCard';
 import PageLoader from '../components/PageLoader';
+import { chatSocketService } from '../services/chatSocketService';
 
 const MentorDashboard = () => {
   const navigate = useNavigate();
@@ -173,13 +174,33 @@ const MentorDashboard = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // Auto-refresh messages every 10 seconds to show new messages
+  // Initialize socket connection and listen for new messages
   useEffect(() => {
-    const messageInterval = setInterval(() => {
-      fetchRecentMessages();
-    }, 10000); // Refresh every 10 seconds
+    const token = localStorage.getItem('token');
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    const userId = user.id || user._id;
 
-    return () => clearInterval(messageInterval);
+    if (token && userId) {
+      // Connect to socket
+      const socket = chatSocketService.connect();
+      
+      // Join general room for user
+      socket.emit('join-room', userId);
+
+      // Listen for incoming messages
+      chatSocketService.onMessageReceived((message) => {
+        console.log('🔔 New message received via socket:', message);
+        // Refresh messages list when a new message arrives
+        fetchRecentMessages();
+      });
+
+    return () => {
+      chatSocketService.off('message-received');
+      // We don't disconnect here to avoid reconnecting on every navigation, 
+      // but you could if you wanted strict scoping.
+      // chatSocketService.disconnect();
+    };
+    }
   }, []);
 
   const fetchUpcomingSessions = async () => {
@@ -237,20 +258,27 @@ const MentorDashboard = () => {
         const data = await response.json();
         console.log('✅ Messages API Response:', data);
         
-        const conversations = Array.isArray(data.data) ? data.data : (Array.isArray(data.conversations) ? data.conversations : []);
+        let conversations = [];
+        if (Array.isArray(data.data)) {
+          conversations = data.data;
+        } else if (Array.isArray(data.conversations)) {
+          conversations = data.conversations;
+        } else if (data.success && Array.isArray(data.data)) {
+           conversations = data.data;
+        }
         
         console.log('📨 Raw conversations data:', conversations);
         
         // Get the latest message from each conversation and limit to 3
         const messages = conversations
-          .filter(conv => conv.lastMessage) // lastMessage is a string from the API
+          .filter(conv => conv.lastMessage) // lastMessage is string
           .map(conv => {
             return {
               _id: conv.conversationId || Math.random(),
               senderId: conv.lastSender,
               senderName: conv.participantName || 'Unknown',
               senderAvatar: conv.profilePicture || '',
-              content: conv.lastMessage, // This is already the message content string
+              content: conv.lastMessage, 
               timestamp: conv.lastMessageTime || new Date().toISOString(),
               participantId: conv.participantId
             };
@@ -258,8 +286,36 @@ const MentorDashboard = () => {
           .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
           .slice(0, 3);
 
-        console.log('Processed messages:', messages);
-        setRecentMessages(messages);
+        // Enrich with profile pictures if missing (Robust fallback)
+        const enrichedMessages = await Promise.all(
+          messages.map(async (msg) => {
+            if (!msg.senderAvatar && msg.participantId) {
+              try {
+                // Try fetching user details if profile picture is missing
+                const userRes = await fetch(`${API_BASE_URL}/user/${msg.participantId}`, {
+                   headers: {
+                     'Authorization': `Bearer ${token}`
+                   }
+                });
+                if (userRes.ok) {
+                   const userData = await userRes.json();
+                   // Check for profile picture in different possible locations
+                   if (userData.user?.profilePicture) {
+                     msg.senderAvatar = userData.user.profilePicture;
+                   } else if (userData.user?.mentorProfile?.profilePicture) {
+                     msg.senderAvatar = userData.user.mentorProfile.profilePicture;
+                   }
+                }
+              } catch (err) {
+                console.error(`Error fetching profile picture for ${msg.participantId}:`, err);
+              }
+            }
+            return msg;
+          })
+        );
+
+        console.log('Processed messages:', enrichedMessages);
+        setRecentMessages(enrichedMessages);
       } else {
         console.error('API Error:', response.status);
       }

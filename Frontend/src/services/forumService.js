@@ -1,6 +1,6 @@
-import { API_BASE_URL } from '../config/apiConfig';
+import { buildApiUrl } from '../utils/apiUrl';
 
-const FORUM_API = `${API_BASE_URL}/api/forum`;
+const FORUM_API = buildApiUrl('/forum');
 
 /**
  * Forum Service - Handles all forum/question related API calls
