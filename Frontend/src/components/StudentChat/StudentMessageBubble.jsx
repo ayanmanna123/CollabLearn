@@ -12,28 +12,28 @@ const typeConfig = {
   [MessageTypes.QUESTION]: {
     icon: HelpCircle,
     label: "Question",
-    className: "bg-blue-100 text-blue-800",
+    className: "bg-gradient-to-br from-blue-500/20 to-indigo-500/20 text-blue-300",
   },
   [MessageTypes.INSIGHT]: {
     icon: Lightbulb,
     label: "Insight",
-    className: "bg-yellow-100 text-yellow-800",
+    className: "bg-gradient-to-br from-yellow-500/20 to-orange-500/20 text-yellow-300",
   },
   [MessageTypes.ADVICE]: {
     icon: BookOpen,
     label: "Advice",
-    className: "bg-green-100 text-green-800",
+    className: "bg-gradient-to-br from-green-500/20 to-emerald-500/20 text-green-300",
   },
   [MessageTypes.ACTION]: {
     icon: CheckSquare,
     label: "Action Item",
-    className: "bg-purple-100 text-purple-800",
+    className: "bg-gradient-to-br from-purple-500/20 to-pink-500/20 text-purple-300",
   },
   // Fallback for unknown message types
   unknown: {
     icon: AlertCircle,
     label: "Unknown",
-    className: "bg-gray-100 text-gray-800",
+    className: "bg-gradient-to-br from-gray-700/30 to-gray-800/30 text-gray-300",
   },
 };
 
@@ -88,35 +88,35 @@ export function StudentMessageBubble({ message = {} }) {
       <div className={cn("max-w-[80%] relative", isMentor ? "pr-4" : "pl-4")}>
         {/* Sender name */}
         {senderName && (
-          <div className="text-xs text-gray-500 mb-1 ml-1">
+          <div className="text-xs text-gray-400 mb-1 ml-1 font-medium">
             {senderName}
           </div>
         )}
         
         <div 
           className={cn(
-            "rounded-2xl px-4 py-2 text-sm transition-all duration-200",
+            "rounded-2xl px-4 py-2 text-sm transition-all duration-300 glass-card hover-lift",
             isMentor 
-              ? "bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-tl-none" 
-              : "bg-blue-500 text-white rounded-tr-none",
-            "hover:shadow-lg hover:shadow-gray-900/20"
+              ? "bg-gradient-to-br from-gray-800/40 to-gray-900/40 text-gray-200 rounded-tl-none border border-gray-700/30" 
+              : "bg-gradient-to-br from-blue-500/30 to-indigo-500/30 text-white rounded-tr-none border border-blue-400/30",
+            "hover:shadow-lg hover:shadow-gray-900/30"
           )}
         >
           {/* Message type indicator */}
           {messageType !== MessageTypes.NORMAL && (
-            <div className={cn("flex items-center mb-1 text-xs font-medium", isMentor ? 'text-gray-500' : 'text-blue-100')}>
+            <div className={cn("flex items-center mb-1 text-xs font-bold", isMentor ? 'text-gray-400' : 'text-blue-200')}>
               <Icon className="w-3.5 h-3.5 mr-1" />
               <span>{config.label}</span>
             </div>
           )}
           
           {/* Message content */}
-          <div className="whitespace-pre-wrap break-words">
+          <div className="whitespace-pre-wrap break-words font-medium">
             {messageContent || 'No content'}
           </div>
           
           {/* Message time */}
-          <div className={cn("text-xs mt-1 text-right", isMentor ? 'text-gray-500' : 'text-blue-100')}>
+          <div className={cn("text-xs mt-1 text-right font-medium", isMentor ? 'text-gray-500' : 'text-blue-200')}>
             {formatTime(messageTime)}
           </div>
         </div>

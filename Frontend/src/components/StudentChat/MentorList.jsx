@@ -21,28 +21,28 @@ export function MentorList({ mentors, activeMentorId, onSelectMentor }) {
   const cn = (...classes) => classes.filter(Boolean).join(' ');
 
   return (
-    <div className="flex flex-col h-full bg-[#121212] border-r border-[#535353]/30">
+    <div className="flex flex-col h-full glass-card border-r border-gray-700/30">
       {/* Header */}
-      <div className="p-4 border-b border-[#535353]/30">
+      <div className="p-4 border-b border-gray-700/30">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
-            <div className="p-2 rounded-lg bg-gray-700 border border-gray-600">
+            <div className="p-2 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-600 border border-blue-500/30 neumorphic">
               <MessageSquare className="w-5 h-5 text-white" />
             </div>
-            <h2 className="font-semibold text-white">Messages</h2>
+            <h2 className="font-bold text-white bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">Messages</h2>
           </div>
-          <button className="p-2 rounded-lg hover:bg-[#212121] transition-colors">
-            <Plus className="w-5 h-5 text-[#b3b3b3]" />
+          <button className="p-2 rounded-xl hover:bg-gradient-to-br from-gray-700/30 to-gray-800/30 transition-all duration-300 shadow-sm hover:shadow-md neumorphic">
+            <Plus className="w-5 h-5 text-gray-400" />
           </button>
         </div>
 
         {/* Search */}
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#535353]" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
           <input
             type="text"
             placeholder="Search conversations..."
-            className="w-full pl-10 pr-4 py-2.5 bg-[#212121] border border-[#535353]/30 rounded-lg text-sm text-white placeholder:text-[#535353] focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all"
+            className="w-full pl-10 pr-4 py-2.5 bg-gradient-to-br from-gray-800/40 to-gray-900/40 border border-gray-700/30 rounded-xl text-sm text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-300 glass-card hover-lift"
           />
         </div>
       </div>
@@ -50,7 +50,7 @@ export function MentorList({ mentors, activeMentorId, onSelectMentor }) {
       {/* Mentor list */}
       <div className="flex-1 overflow-y-auto py-2 chat-scrollbar">
         {mentors.length === 0 ? (
-          <div className="flex items-center justify-center h-32 text-gray-400 text-sm">
+          <div className="flex items-center justify-center h-32 text-gray-400 text-sm font-medium">
             No conversations yet
           </div>
         ) : (
@@ -59,16 +59,16 @@ export function MentorList({ mentors, activeMentorId, onSelectMentor }) {
             key={mentor.id}
             onClick={() => onSelectMentor(mentor.id)}
             className={cn(
-              "w-full p-3 mx-2 mb-1 rounded-xl flex items-start gap-3 transition-all duration-200 text-left",
+              "w-full p-3 mx-2 mb-1 rounded-2xl flex items-start gap-3 transition-all duration-300 text-left hover-lift",
               activeMentorId === mentor.id
-                ? "bg-[#212121] border border-gray-600"
-                : "hover:bg-[#212121]/50 border border-transparent",
+                ? "bg-gradient-to-br from-blue-500/20 to-indigo-500/20 border border-blue-500/30 shadow-md" 
+                : "glass-card border border-gray-700/30 hover:border-gray-600/50",
             )}
             style={{ width: "calc(100% - 16px)" }}
           >
             {/* Avatar with online indicator */}
             <div className="relative flex-shrink-0">
-              <div className="w-12 h-12 rounded-xl bg-[#212121] border border-[#535353]/30 flex items-center justify-center overflow-hidden">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-gray-700 to-gray-800 border border-gray-600/30 flex items-center justify-center overflow-hidden neumorphic">
                 {mentor.avatar ? (
                   <img 
                     src={mentor.avatar} 
@@ -81,30 +81,30 @@ export function MentorList({ mentors, activeMentorId, onSelectMentor }) {
                   />
                 ) : null}
                 <span 
-                  className="text-lg font-semibold text-white flex items-center justify-center"
+                  className="text-lg font-bold text-white flex items-center justify-center"
                   style={{ display: mentor.avatar ? 'none' : 'flex' }}
                 >
                   {mentor.name.charAt(0)}
                 </span>
               </div>
               {mentor.isOnline && (
-                <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-gray-400 rounded-full border-2 border-[#121212]" />
+                <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-green-400 rounded-full border-2 border-gray-900 neumorphic" />
               )}
             </div>
 
             {/* Content */}
             <div className="flex-1 min-w-0">
               <div className="flex items-center justify-between mb-1">
-                <span className="font-medium text-white truncate">{mentor.name}</span>
-                <span className="text-xs text-[#535353] flex-shrink-0 ml-2">
+                <span className="font-bold text-white truncate bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">{mentor.name}</span>
+                <span className="text-xs text-gray-500 flex-shrink-0 ml-2 font-medium">
                   {formatTime(mentor.lastMessageTime)}
                 </span>
               </div>
-              <p className="text-xs text-[#535353] mb-1 truncate">{mentor.role}</p>
+              <p className="text-xs text-gray-500 mb-1 truncate font-medium">{mentor.role}</p>
               <div className="flex items-center justify-between">
-                <p className="text-sm text-[#b3b3b3] truncate pr-2">{mentor.lastMessage}</p>
+                <p className="text-sm text-gray-400 truncate pr-2 font-medium">{mentor.lastMessage}</p>
                 {mentor.unreadCount > 0 && (
-                  <span className="flex-shrink-0 min-w-[20px] h-5 px-1.5 bg-gray-600 rounded-full text-xs font-medium text-white flex items-center justify-center">
+                  <span className="flex-shrink-0 min-w-[20px] h-5 px-1.5 bg-gradient-to-br from-red-500 to-red-600 rounded-full text-xs font-bold text-white flex items-center justify-center shadow-sm">
                     {mentor.unreadCount}
                   </span>
                 )}
@@ -115,7 +115,7 @@ export function MentorList({ mentors, activeMentorId, onSelectMentor }) {
       </div>
 
       {/* Footer - Current User */}
-      <div className="p-4 border-t border-[#535353]/30">
+      <div className="p-4 border-t border-gray-700/30">
         {(() => {
           try {
             const currentUser = JSON.parse(localStorage.getItem('user') || '{}');
@@ -123,13 +123,13 @@ export function MentorList({ mentors, activeMentorId, onSelectMentor }) {
             const userRole = currentUser?.role === 'mentor' ? 'Mentor Account' : 'Student Account';
             
             return (
-              <div className="flex items-center gap-3 p-3 rounded-xl bg-[#212121] border border-[#535353]/30">
-                <div className="w-10 h-10 rounded-lg bg-gray-700 flex items-center justify-center">
-                  <span className="text-sm font-semibold text-white">{userInitial}</span>
+              <div className="flex items-center gap-3 p-3 rounded-2xl bg-gradient-to-br from-gray-800/40 to-gray-900/40 border border-gray-700/30 glass-card hover-lift">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-gray-700 to-gray-800 flex items-center justify-center neumorphic">
+                  <span className="text-sm font-bold text-white">{userInitial}</span>
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-white truncate">{currentUser?.name || 'User'}</p>
-                  <p className="text-xs text-gray-400">{userRole}</p>
+                  <p className="text-sm font-bold text-white truncate">{currentUser?.name || 'User'}</p>
+                  <p className="text-xs text-gray-400 font-medium">{userRole}</p>
                 </div>
               </div>
             );

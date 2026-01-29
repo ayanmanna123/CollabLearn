@@ -10,7 +10,7 @@ export function StudentChatMessages({ messages }) {
   }, [messages]);
 
   return (
-    <div className="flex-1 overflow-y-auto px-6 py-4 space-y-4 bg-[#121212] chat-scrollbar">
+    <div className="flex-1 overflow-y-auto px-6 py-4 space-y-4 bg-gradient-to-br from-gray-900 via-gray-950 to-black chat-scrollbar">
       {messages.map((message, index) => (
         <StudentMessageBubble key={message.id || `msg-${index}`} message={message} />
       ))}

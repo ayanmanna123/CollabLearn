@@ -16,7 +16,7 @@ const ChatPage = () => {
   const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;
 
   return (
-    <div className="h-screen bg-[#202327] flex flex-col pt-14">
+    <div className="h-screen bg-gradient-to-br from-gray-900 via-gray-950 to-black flex flex-col pt-14">
       <Navbar userName={user?.name || 'Student'} />
       
       <div className="flex-1 overflow-hidden">

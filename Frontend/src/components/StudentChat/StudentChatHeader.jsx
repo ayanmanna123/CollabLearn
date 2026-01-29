@@ -17,10 +17,10 @@ export function StudentChatHeader({
   };
 
   return (
-    <header className="flex items-center justify-between px-6 py-2 border-b border-[#535353]/30 bg-[#121212]">
+    <header className="flex items-center justify-between px-6 py-2 border-b border-gray-700/30 glass-card">
       <div className="flex items-center gap-3">
         <div className="relative">
-          <div className="h-10 w-10 border-2 border-gray-600 rounded-full overflow-hidden bg-[#212121] flex items-center justify-center">
+          <div className="h-10 w-10 border-2 border-gray-600 rounded-full overflow-hidden bg-gradient-to-br from-gray-700 to-gray-800 flex items-center justify-center neumorphic">
             {mentorAvatar ? (
               <img 
                 src={mentorAvatar} 
@@ -33,23 +33,23 @@ export function StudentChatHeader({
               />
             ) : null}
             <span 
-              className="text-sm font-semibold text-white flex items-center justify-center w-full h-full"
+              className="text-sm font-bold text-white flex items-center justify-center w-full h-full"
               style={{ display: mentorAvatar ? 'none' : 'flex' }}
             >
               {getInitials(mentorName)}
             </span>
           </div>
-          <Circle className="absolute -bottom-0.5 -right-0.5 h-3 w-3 fill-gray-300 text-gray-300" />
+          <Circle className="absolute -bottom-0.5 -right-0.5 h-3 w-3 fill-green-400 text-green-400" />
         </div>
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-base font-semibold text-white">
+            <h1 className="text-base font-bold text-white bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">
               {mentorName}
             </h1>
           </div>
-          <div className="flex items-center gap-2 text-xs text-[#b3b3b3]">
+          <div className="flex items-center gap-2 text-xs text-gray-400">
             {mentorRole && (
-              <span>{mentorRole}</span>
+              <span className="font-medium">{mentorRole}</span>
             )}
           </div>
         </div>
@@ -57,7 +57,7 @@ export function StudentChatHeader({
 
       <div className="flex items-center gap-2">
         <button 
-          className="p-2 rounded-lg text-[#b3b3b3] hover:text-white hover:bg-[#212121] transition-colors"
+          className="p-2 rounded-xl text-gray-400 hover:text-white hover:bg-gradient-to-br from-gray-700/30 to-gray-800/30 transition-all duration-300 shadow-sm hover:shadow-md neumorphic"
           title="More options"
         >
           <MoreVertical className="h-5 w-5" />

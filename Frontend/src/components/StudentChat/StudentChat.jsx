@@ -486,17 +486,17 @@ export function StudentChat() {
 
   // ---------------------- SKELETON LOADING COMPONENT ------------------------
   const SkeletonLoader = () => (
-    <div className="flex h-full w-full bg-[#000000] overflow-hidden">
+    <div className="flex h-full w-full bg-gradient-to-br from-gray-900 via-gray-950 to-black overflow-hidden">
       {/* Sidebar Skeleton */}
-      <div className="hidden md:block w-[280px] flex-shrink-0 h-full border-r border-gray-800 bg-[#121212]">
+      <div className="hidden md:block w-[280px] flex-shrink-0 h-full border-r border-gray-700/30 glass-card">
         <div className="p-4">
-          <div className="h-6 bg-gray-700 rounded animate-pulse mb-4"></div>
+          <div className="h-6 bg-gradient-to-r from-gray-700 to-gray-800 rounded-xl animate-pulse mb-4"></div>
           {[...Array(5)].map((_, i) => (
-            <div key={i} className="flex items-center space-x-3 p-3 mb-2">
-              <div className="w-10 h-10 bg-gray-700 rounded-full animate-pulse"></div>
+            <div key={i} className="flex items-center space-x-3 p-3 mb-2 glass-card rounded-xl">
+              <div className="w-10 h-10 bg-gradient-to-br from-gray-700 to-gray-800 rounded-full animate-pulse"></div>
               <div className="flex-1">
-                <div className="h-4 bg-gray-700 rounded animate-pulse mb-2"></div>
-                <div className="h-3 bg-gray-700 rounded animate-pulse w-3/4"></div>
+                <div className="h-4 bg-gradient-to-r from-gray-700 to-gray-800 rounded-xl animate-pulse mb-2"></div>
+                <div className="h-3 bg-gradient-to-r from-gray-700 to-gray-800 rounded-xl animate-pulse w-3/4"></div>
               </div>
             </div>
           ))}
@@ -504,19 +504,19 @@ export function StudentChat() {
       </div>
       
       {/* Main Content Skeleton */}
-      <div className="flex flex-col flex-1 h-full min-w-0 bg-[#000000]">
-        <div className="h-16 bg-[#121212] border-b border-gray-800 flex items-center px-4">
-          <div className="w-8 h-8 bg-gray-700 rounded-full animate-pulse mr-3"></div>
-          <div className="h-4 bg-gray-700 rounded animate-pulse w-32"></div>
+      <div className="flex flex-col flex-1 h-full min-w-0 bg-gradient-to-br from-gray-900 via-gray-950 to-black">
+        <div className="h-16 glass-card border-b border-gray-700/30 flex items-center px-4">
+          <div className="w-8 h-8 bg-gradient-to-br from-gray-700 to-gray-800 rounded-full animate-pulse mr-3"></div>
+          <div className="h-4 bg-gradient-to-r from-gray-700 to-gray-800 rounded-xl animate-pulse w-32"></div>
         </div>
         
         <div className="flex-1 flex items-center justify-center">
           <div className="text-center px-4 py-8 max-w-md">
             <div className="mb-6 flex justify-center">
-              <div className="w-16 h-16 bg-gray-700 rounded-full animate-pulse"></div>
+              <div className="w-16 h-16 bg-gradient-to-br from-gray-700 to-gray-800 rounded-full animate-pulse neumorphic"></div>
             </div>
-            <div className="h-6 bg-gray-700 rounded animate-pulse mb-3 mx-auto w-48"></div>
-            <div className="h-4 bg-gray-700 rounded animate-pulse mx-auto w-64"></div>
+            <div className="h-6 bg-gradient-to-r from-gray-700 to-gray-800 rounded-xl animate-pulse mb-3 mx-auto w-48"></div>
+            <div className="h-4 bg-gradient-to-r from-gray-700 to-gray-800 rounded-xl animate-pulse mx-auto w-64"></div>
           </div>
         </div>
       </div>
@@ -525,26 +525,28 @@ export function StudentChat() {
 
   // ---------------------- EMPTY STATE COMPONENT ------------------------
   const EmptyState = () => (
-    <div className="flex h-full w-full bg-[#000000] overflow-hidden">
+    <div className="flex h-full w-full bg-gradient-to-br from-gray-900 via-gray-950 to-black overflow-hidden">
       {/* Empty Sidebar */}
-      <div className="hidden md:block w-[280px] flex-shrink-0 h-full border-r border-gray-800 bg-[#121212]">
+      <div className="hidden md:block w-[280px] flex-shrink-0 h-full border-r border-gray-700/30 glass-card">
         <div className="p-4">
-          <h2 className="text-lg font-semibold text-white mb-4">Messages</h2>
+          <h2 className="text-lg font-bold text-white mb-4 bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">Messages</h2>
           <div className="text-center py-8">
             <div className="mb-4 flex justify-center">
-              <svg className="w-16 h-16 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a2 2 0 01-2-2v-2M9 12h.01M12 12h.01M15 12h.01M17 4H7a2 2 0 00-2 2v6a2 2 0 002 2h2v4l4-4h4a2 2 0 002-2V6a2 2 0 00-2-2z" />
-              </svg>
+              <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-gray-700/30 to-gray-800/30 flex items-center justify-center neumorphic">
+                <svg className="w-8 h-8 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a2 2 0 01-2-2v-2M9 12h.01M12 12h.01M15 12h.01M17 4H7a2 2 0 00-2 2v6a2 2 0 002 2h2v4l4-4h4a2 2 0 002-2V6a2 2 0 00-2-2z" />
+                </svg>
+              </div>
             </div>
-            <p className="text-gray-400 text-sm">No conversations yet</p>
+            <p className="text-gray-400 text-sm font-medium">No conversations yet</p>
           </div>
         </div>
       </div>
       
       {/* Main Empty Content */}
-      <div className="flex flex-col flex-1 h-full min-w-0 bg-[#000000]">
-        <div className="h-16 bg-[#121212] border-b border-gray-800 flex items-center px-4">
-          <h1 className="text-lg font-semibold text-white">Messages</h1>
+      <div className="flex flex-col flex-1 h-full min-w-0 bg-gradient-to-br from-gray-900 via-gray-950 to-black">
+        <div className="h-16 glass-card border-b border-gray-700/30 flex items-center px-4">
+          <h1 className="text-lg font-bold text-white bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">Messages</h1>
         </div>
         
         <div className="flex-1 flex items-center justify-center">
@@ -552,42 +554,44 @@ export function StudentChat() {
             {/* Large Illustration */}
             <div className="mb-8 flex justify-center">
               <div className="relative">
-                <svg className="w-32 h-32 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                </svg>
+                <div className="w-32 h-32 rounded-2xl bg-gradient-to-br from-gray-800/30 to-gray-900/30 flex items-center justify-center neumorphic hover-lift">
+                  <svg className="w-16 h-16 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                  </svg>
+                </div>
                 {/* Floating dots animation */}
-                <div className="absolute -top-2 -right-2 w-4 h-4 bg-gray-500 rounded-full animate-bounce"></div>
-                <div className="absolute -bottom-2 -left-2 w-3 h-3 bg-gray-600 rounded-full animate-bounce" style={{animationDelay: '0.5s'}}></div>
-                <div className="absolute top-1/2 -right-4 w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '1s'}}></div>
+                <div className="absolute -top-2 -right-2 w-4 h-4 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full animate-bounce"></div>
+                <div className="absolute -bottom-2 -left-2 w-3 h-3 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-full animate-bounce" style={{animationDelay: '0.5s'}}></div>
+                <div className="absolute top-1/2 -right-4 w-2 h-2 bg-gradient-to-br from-green-500 to-emerald-500 rounded-full animate-bounce" style={{animationDelay: '1s'}}></div>
               </div>
             </div>
             
             {/* Main Message */}
-            <h3 className="text-2xl font-bold text-white mb-4">Start Your First Conversation</h3>
-            <p className="text-gray-400 text-base mb-6 leading-relaxed">
+            <h3 className="text-2xl font-bold text-white mb-4 bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">Start Your First Conversation</h3>
+            <p className="text-gray-400 text-base mb-6 leading-relaxed font-medium">
               Connect with your mentors and get personalized guidance. Book a session first, then start chatting to make the most of your mentorship journey.
             </p>
             
             {/* Action Steps */}
             <div className="space-y-3 mb-8">
               <div className="flex items-center justify-center space-x-3 text-sm text-gray-300">
-                <div className="w-6 h-6 bg-gray-700 rounded-full flex items-center justify-center text-white font-bold text-xs">1</div>
-                <span>Book a session with a mentor</span>
+                <div className="w-6 h-6 rounded-full bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center text-white font-bold text-xs neumorphic">1</div>
+                <span className="font-medium">Book a session with a mentor</span>
               </div>
               <div className="flex items-center justify-center space-x-3 text-sm text-gray-300">
-                <div className="w-6 h-6 bg-gray-700 rounded-full flex items-center justify-center text-white font-bold text-xs">2</div>
-                <span>Start messaging after booking</span>
+                <div className="w-6 h-6 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold text-xs neumorphic">2</div>
+                <span className="font-medium">Start messaging after booking</span>
               </div>
               <div className="flex items-center justify-center space-x-3 text-sm text-gray-300">
-                <div className="w-6 h-6 bg-gray-700 rounded-full flex items-center justify-center text-white font-bold text-xs">3</div>
-                <span>Get personalized guidance</span>
+                <div className="w-6 h-6 rounded-full bg-gradient-to-br from-green-500 to-emerald-500 flex items-center justify-center text-white font-bold text-xs neumorphic">3</div>
+                <span className="font-medium">Get personalized guidance</span>
               </div>
             </div>
             
             {/* CTA Button */}
             <button 
               onClick={() => window.location.href = '/student/explore'}
-              className="inline-flex items-center px-6 py-3 bg-gray-700 hover:bg-gray-600 text-white font-medium rounded-lg transition-colors duration-200 shadow-lg hover:shadow-xl border border-gray-600 hover:border-gray-500"
+              className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl border border-blue-500/30 hover:border-blue-400/50 hover-lift"
             >
               <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -607,18 +611,20 @@ export function StudentChat() {
 
   if (error) {
     return (
-      <div className="flex items-center justify-center h-full w-full bg-[#000000]">
-        <div className="text-center px-4 py-8">
+      <div className="flex items-center justify-center h-full w-full bg-gradient-to-br from-gray-900 via-gray-950 to-black">
+        <div className="text-center px-4 py-8 glass-card rounded-2xl p-8 hover-lift">
           <div className="mb-4 flex justify-center">
-            <svg className="w-16 h-16 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
-            </svg>
+            <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-red-500/20 to-red-600/20 flex items-center justify-center neumorphic">
+              <svg className="w-8 h-8 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
+              </svg>
+            </div>
           </div>
-          <h3 className="text-xl font-semibold text-white mb-2">Something went wrong</h3>
-          <p className="text-red-400 mb-4">{error}</p>
+          <h3 className="text-xl font-bold text-white mb-2 bg-gradient-to-r from-red-400 to-orange-400 bg-clip-text text-transparent">Something went wrong</h3>
+          <p className="text-red-400 mb-4 font-medium">{error}</p>
           <button 
             onClick={() => window.location.reload()}
-            className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors"
+            className="px-4 py-2.5 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white rounded-xl font-bold transition-all duration-300 shadow-lg hover:shadow-xl hover-lift"
           >
             Try Again
           </button>
@@ -632,10 +638,10 @@ export function StudentChat() {
   }
 
   return (
-    <div className="flex h-full w-full bg-[#000000] overflow-hidden">
+    <div className="flex h-full w-full bg-gradient-to-br from-gray-900 via-gray-950 to-black overflow-hidden">
       {/* Main content */}
       <div className="relative z-10 flex w-full h-full">
-        <div className="hidden md:block w-[280px] flex-shrink-0 h-full border-r border-gray-800">
+        <div className="hidden md:block w-[280px] flex-shrink-0 h-full border-r border-gray-700/30">
           <MentorList
             mentors={mentors}
             activeMentorId={activeMentorId}
@@ -644,7 +650,7 @@ export function StudentChat() {
         </div>
 
         {/* Chat area - flexible width */}
-        <div className="flex flex-col flex-1 h-full min-w-0 bg-[#000000]">
+        <div className="flex flex-col flex-1 h-full min-w-0 bg-gradient-to-br from-gray-900 via-gray-950 to-black">
           {activeMentor ? (
             <>
               <StudentChatHeader 
@@ -653,13 +659,13 @@ export function StudentChat() {
                 mentorAvatar={activeMentor.avatar}
               />
               {isLoadingMessages ? (
-                <div className="flex-1 flex items-center justify-center bg-[#000000]">
-                  <div className="flex flex-col items-center gap-4">
+                <div className="flex-1 flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-950 to-black">
+                  <div className="flex flex-col items-center gap-4 glass-card rounded-2xl p-6 hover-lift">
                     <div className="relative w-12 h-12">
-                      <div className="absolute inset-0 rounded-full border-4 border-gray-700/30"></div>
-                      <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-gray-400 animate-spin"></div>
+                      <div className="absolute inset-0 rounded-full border-4 border-purple-500/30"></div>
+                      <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-purple-400 animate-spin"></div>
                     </div>
-                    <p className="text-gray-400 text-sm">Loading messages...</p>
+                    <p className="text-gray-400 text-sm font-bold">Loading messages...</p>
                   </div>
                 </div>
               ) : (
@@ -678,14 +684,16 @@ export function StudentChat() {
                 mentorRole=""
                 mentorAvatar=""
               />
-              <div className="flex-1 flex items-center justify-center bg-[#000000]">
+              <div className="flex-1 flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-950 to-black">
                 <div className="text-center px-4 py-8 max-w-lg">
                   {/* Enhanced Illustration */}
                   <div className="mb-8 flex justify-center">
                     <div className="relative">
-                      <svg className="w-28 h-28 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                      </svg>
+                      <div className="w-28 h-28 rounded-2xl bg-gradient-to-br from-gray-800/30 to-gray-900/30 flex items-center justify-center neumorphic hover-lift">
+                        <svg className="w-14 h-14 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                        </svg>
+                      </div>
                       {/* Animated arrow pointing left */}
                       <div className="absolute -left-12 top-1/2 transform -translate-y-1/2 hidden md:block">
                         <svg className="w-8 h-8 text-gray-400 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -693,7 +701,7 @@ export function StudentChat() {
                         </svg>
                       </div>
                       {/* Floating message bubble */}
-                      <div className="absolute -top-3 -right-3 w-6 h-6 bg-gray-600 rounded-full flex items-center justify-center animate-bounce">
+                      <div className="absolute -top-3 -right-3 w-6 h-6 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-full flex items-center justify-center animate-bounce neumorphic">
                         <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
                           <path fillRule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clipRule="evenodd" />
                         </svg>
@@ -702,8 +710,8 @@ export function StudentChat() {
                   </div>
                   
                   {/* Enhanced Message */}
-                  <h3 className="text-2xl font-bold text-white mb-3">Ready to Chat!</h3>
-                  <p className="text-gray-400 text-base mb-6 leading-relaxed">
+                  <h3 className="text-2xl font-bold text-white mb-3 bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">Ready to Chat!</h3>
+                  <p className="text-gray-400 text-base mb-6 leading-relaxed font-medium">
                     {mentors.length === 0 
                       ? "No conversations yet. Book a session with a mentor to start messaging!"
                       : `You have ${mentors.length} mentor${mentors.length > 1 ? 's' : ''} available. Select one from the sidebar to start your conversation.`
@@ -712,7 +720,7 @@ export function StudentChat() {
                   
                   {/* Helpful tip for mobile users */}
                   <div className="md:hidden mb-6">
-                    <div className="inline-flex items-center px-4 py-2 bg-gray-700/30 border border-gray-600/40 rounded-lg text-gray-300 text-sm">
+                    <div className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-gray-700/30 to-gray-800/30 border border-gray-600/40 rounded-xl text-gray-300 text-sm font-medium neumorphic">
                       <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
@@ -724,7 +732,7 @@ export function StudentChat() {
                   {mentors.length === 0 && (
                     <button 
                       onClick={() => window.location.href = '/student/explore'}
-                      className="inline-flex items-center px-6 py-3 bg-gray-700 hover:bg-gray-600 text-white font-medium rounded-lg transition-colors duration-200 shadow-lg hover:shadow-xl border border-gray-600 hover:border-gray-500"
+                      className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl border border-blue-500/30 hover:border-blue-400/50 hover-lift"
                     >
                       <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -740,7 +748,7 @@ export function StudentChat() {
 
         {/* Context sidebar - 320px fixed width */}
         {activeMentor && (
-          <div className="hidden lg:block w-[320px] flex-shrink-0 h-full border-l border-gray-800 bg-[#000000]">
+          <div className="hidden lg:block w-[320px] flex-shrink-0 h-full border-l border-gray-700/30 bg-gradient-to-br from-gray-900 via-gray-950 to-black">
             <StudentContextSidebar 
               messages={messages} 
               mentor={{
@@ -750,7 +758,8 @@ export function StudentChat() {
                 bio: activeMentor.bio || '',
                 expertise: activeMentor.expertise || [],
                 nextSession: activeMentor.nextSession?.sessionDate,
-                company: activeMentor.company || ''
+                company: activeMentor.company || '',
+                currentTaskCount: activeMentor.nextSession ? 5 : 3
               }}
             />
           </div>

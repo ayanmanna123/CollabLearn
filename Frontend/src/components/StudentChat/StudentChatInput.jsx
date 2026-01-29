@@ -7,36 +7,36 @@ const messageTypes = [
     type: MessageTypes.NORMAL,
     icon: MessageSquare,
     label: "Message",
-    color: "text-gray-300 hover:text-white",
-    activeColor: "bg-[#212121] text-white ring-[#535353]",
+    color: "text-gray-400 hover:text-white",
+    activeColor: "bg-gradient-to-br from-gray-700 to-gray-800 text-white ring-gray-600/50",
   },
   {
     type: MessageTypes.QUESTION,
     icon: HelpCircle,
     label: "Question",
-    color: "text-gray-300 hover:text-white",
-    activeColor: "bg-gray-700 text-white ring-gray-600",
+    color: "text-blue-400 hover:text-blue-300",
+    activeColor: "bg-gradient-to-br from-blue-600/30 to-indigo-600/30 text-blue-300 ring-blue-500/50",
   },
   {
     type: MessageTypes.INSIGHT,
     icon: Lightbulb,
     label: "Insight",
-    color: "text-gray-300 hover:text-white",
-    activeColor: "bg-gray-700 text-white ring-gray-600",
+    color: "text-yellow-400 hover:text-yellow-300",
+    activeColor: "bg-gradient-to-br from-yellow-600/30 to-orange-600/30 text-yellow-300 ring-yellow-500/50",
   },
   {
     type: MessageTypes.ADVICE,
     icon: BookOpen,
     label: "Advice",
-    color: "text-gray-300 hover:text-white",
-    activeColor: "bg-gray-700 text-white ring-gray-600",
+    color: "text-green-400 hover:text-green-300",
+    activeColor: "bg-gradient-to-br from-green-600/30 to-emerald-600/30 text-green-300 ring-green-500/50",
   },
   {
     type: MessageTypes.ACTION,
     icon: CheckSquare,
     label: "Action",
-    color: "text-gray-300 hover:text-white",
-    activeColor: "bg-gray-700 text-white ring-gray-600",
+    color: "text-purple-400 hover:text-purple-300",
+    activeColor: "bg-gradient-to-br from-purple-600/30 to-pink-600/30 text-purple-300 ring-purple-500/50",
   },
 ];
 
@@ -60,7 +60,7 @@ export function StudentChatInput({ selectedType, onTypeChange, onSendMessage }) 
   const cn = (...classes) => classes.filter(Boolean).join(' ');
 
   return (
-    <div className="px-6 py-4 border-t border-[#535353]/30 bg-[#121212]">
+    <div className="px-6 py-4 border-t border-gray-700/30 glass-card">
       {/* Message type selector */}
       <div className="flex items-center gap-1 mb-3">
         {messageTypes.map(({ type, icon: Icon, label, color, activeColor }) => (
@@ -68,8 +68,8 @@ export function StudentChatInput({ selectedType, onTypeChange, onSendMessage }) 
             key={type}
             onClick={() => onTypeChange(type)}
             className={cn(
-              "flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200",
-              selectedType === type ? `${activeColor} ring-1 ring-inset` : `${color} hover:bg-[#212121]/50`,
+              "flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all duration-300 shadow-sm hover:shadow-md neumorphic",
+              selectedType === type ? `${activeColor} ring-1 ring-inset` : `${color} hover:bg-gradient-to-br from-gray-700/30 to-gray-800/30`,
             )}
           >
             <Icon className="h-3.5 w-3.5" />
@@ -88,10 +88,10 @@ export function StudentChatInput({ selectedType, onTypeChange, onSendMessage }) 
             placeholder="Type your message..."
             rows={1}
             className={cn(
-              "w-full resize-none rounded-lg border border-[#535353]/30 bg-[#212121]",
-              "px-4 py-3 text-sm text-white placeholder:text-[#535353]",
-              "focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500",
-              "transition-all duration-200 min-h-[48px] max-h-[120px]",
+              "w-full resize-none rounded-xl border border-gray-700/30 bg-gradient-to-br from-gray-800/40 to-gray-900/40 glass-card",
+              "px-4 py-3 text-sm text-white placeholder:text-gray-500",
+              "focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50",
+              "transition-all duration-300 min-h-[48px] max-h-[120px] hover-lift",
             )}
             style={{ height: "48px" }}
             onInput={(e) => {
@@ -105,10 +105,10 @@ export function StudentChatInput({ selectedType, onTypeChange, onSendMessage }) 
           onClick={handleSend}
           disabled={!inputValue.trim()}
           className={cn(
-            "h-12 w-12 rounded-lg",
-            "bg-gray-600 hover:bg-gray-500",
+            "h-12 w-12 rounded-xl flex items-center justify-center",
+            "bg-gradient-to-br from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700",
             "disabled:opacity-50 disabled:cursor-not-allowed",
-            "transition-all duration-200",
+            "transition-all duration-300 shadow-lg hover:shadow-xl border border-blue-500/30 hover:border-blue-400/50 hover-lift",
           )}
         >
           <Send className="h-5 w-5 text-white" />
