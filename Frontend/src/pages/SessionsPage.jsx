@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { FiCalendar, FiClock, FiUser, FiDollarSign, FiEye, FiMapPin, FiRefreshCw } from 'react-icons/fi';
+import { Calendar, Clock, User, DollarSign, Eye, MapPin, RefreshCw, ChevronLeft, Video, CheckCircle, XCircle, Clock4, Users } from 'lucide-react';
 import { API_BASE_URL } from '../config/backendConfig';
 import Navbar from '../components/StudentDashboard/Navbar';
 import SessionTimer from '../components/SessionTimer';
@@ -11,13 +11,13 @@ const SessionsPage = () => {
   const [loading, setLoading] = useState(true);
   const [bookings, setBookings] = useState([]);
   const [error, setError] = useState(null);
-  const [filter, setFilter] = useState('all'); // all, upcoming, past
+  const [filter, setFilter] = useState('all');
+  const [activeTab, setActiveTab] = useState('all');
 
   const handleJoinSession = async (session) => {
     try {
       console.log('Attempting to join session:', session);
       
-      // For ZegoCloud meetings
       const roomId = session.meetingId || session.roomId || `session_${session._id}`;
       if (roomId) {
         const meetingUrl = `/student/meeting/${encodeURIComponent(roomId)}/${session._id}`;
@@ -26,7 +26,6 @@ const SessionsPage = () => {
         return;
       }
       
-      // For Zoom meetings
       if (session.meetingLink && session.meetingLink.includes('zoom.us')) {
         if (session.meetingLink.includes('?') || session.meetingLink.includes('/j/')) {
           console.log('Opening Zoom meeting with direct link');
@@ -42,14 +41,12 @@ const SessionsPage = () => {
         return;
       }
       
-      // For direct meeting links
       if (session.meetingLink) {
         console.log('Opening direct meeting link');
         window.open(session.meetingLink, '_blank');
         return;
       }
       
-      // If we get here, we couldn't determine how to join
       console.error('Could not join meeting - missing required parameters. Session data:', {
         meetingType: session.meetingType,
         meetingLink: session.meetingLink,
@@ -60,7 +57,6 @@ const SessionsPage = () => {
         status: session.status
       });
       
-      // Check if this is a session that should have a meeting link
       const sessionDate = session.sessionDate ? new Date(session.sessionDate) : null;
       const now = new Date();
       
@@ -130,65 +126,108 @@ const SessionsPage = () => {
     });
   };
 
-  const getStatusColor = (status) => {
+  const getStatusConfig = (status) => {
     switch (status) {
       case 'confirmed':
-        return 'bg-[#2c2c2c] text-gray-200 border-gray-600';
+        return {
+          bg: 'bg-blue-500/20',
+          text: 'text-blue-300',
+          border: 'border-blue-500/30',
+          icon: <CheckCircle className="h-3 w-3" />
+        };
       case 'pending':
-        return 'bg-[#2c2c2c] text-gray-200 border-gray-600';
+        return {
+          bg: 'bg-yellow-500/20',
+          text: 'text-yellow-300',
+          border: 'border-yellow-500/30',
+          icon: <Clock4 className="h-3 w-3" />
+        };
       case 'cancelled':
-        return 'bg-[#2c2c2c] text-gray-400 border-gray-600';
+        return {
+          bg: 'bg-red-500/20',
+          text: 'text-red-300',
+          border: 'border-red-500/30',
+          icon: <XCircle className="h-3 w-3" />
+        };
       case 'completed':
-        return 'bg-[#2c2c2c] text-gray-200 border-gray-600';
+        return {
+          bg: 'bg-green-500/20',
+          text: 'text-green-300',
+          border: 'border-green-500/30',
+          icon: <CheckCircle className="h-3 w-3" />
+        };
       default:
-        return 'bg-[#2c2c2c] text-gray-200 border-gray-600';
+        return {
+          bg: 'bg-gray-500/20',
+          text: 'text-gray-300',
+          border: 'border-gray-500/30',
+          icon: <Clock className="h-3 w-3" />
+        };
     }
   };
 
-  const filteredBookings = bookings.filter(booking => {
-    const sessionDate = new Date(booking.sessionDate);
-    const now = new Date();
-    
-    if (filter === 'upcoming') {
-      return sessionDate >= now && ['pending', 'confirmed'].includes(booking.status);
-    } else if (filter === 'past') {
-      return sessionDate < now || ['completed', 'cancelled'].includes(booking.status);
-    }
-    return true; // all
-  });
+
 
   const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-black text-white">
+      <div className="h-screen bg-gray-900 text-white flex flex-col">
         <Navbar userName={user?.name || 'Student'} />
-        <div className="flex items-center justify-center h-64">
-          <div className="text-gray-400">Loading bookings...</div>
+        <div className="flex-1 flex items-center justify-center pt-16">
+          <div className="text-center">
+            <div className="inline-flex animate-spin rounded-full h-12 w-12 border-b-2 border-blue-400 mb-4"></div>
+            <p className="text-gray-300 text-lg font-medium">Loading sessions...</p>
+          </div>
         </div>
       </div>
     );
   }
 
-  // Categorize bookings
-  const completedSessions = bookings.filter(booking => booking.status === 'completed');
-  const upcomingSessions = bookings.filter(booking => 
-    ['scheduled', 'confirmed', 'pending'].includes(booking.status) && 
-    new Date(booking.sessionDate) >= new Date()
-  );
-  const cancelledSessions = bookings.filter(booking => booking.status === 'cancelled');
+  const filteredBookings = bookings.filter(booking => {
+    if (activeTab === 'all') return true;
+    if (activeTab === 'upcoming') {
+      return ['scheduled', 'confirmed', 'pending'].includes(booking.status) && 
+             new Date(booking.sessionDate) >= new Date();
+    }
+    if (activeTab === 'completed') return booking.status === 'completed';
+    if (activeTab === 'cancelled') return booking.status === 'cancelled';
+    return true;
+  });
 
   const SessionCard = ({ booking }) => {
-    // Check if session can be joined (within 5 minutes of start time)
-    const sessionDate = new Date(booking.sessionDate);
+    // Helper to construct the correct date object from date and time string
+    const getSessionDateTime = (booking) => {
+      const date = new Date(booking.sessionDate);
+      if (!booking.sessionTime) return date;
+
+      try {
+        const [time, period] = booking.sessionTime.split(' ');
+        let [hours, minutes] = time.split(':').map(Number);
+
+        if (period === 'PM' && hours !== 12) hours += 12;
+        if (period === 'AM' && hours === 12) hours = 0;
+
+        date.setHours(hours, minutes, 0, 0);
+        return date;
+      } catch (e) {
+        console.error('Error parsing session time:', e);
+        return date;
+      }
+    };
+
+    const sessionDate = getSessionDateTime(booking);
     const now = new Date();
     const timeDiff = sessionDate - now;
-    const fiveMinutes = 5 * 60 * 1000; // 5 minutes in milliseconds
-    const canJoin = timeDiff <= fiveMinutes; // Can join if within 5 minutes or session has started
+    const fiveMinutes = 5 * 60 * 1000;
+    const duration = booking.duration || 60;
+    const isExpired = timeDiff < -(duration * 60 * 1000);
+    const canJoin = !isExpired && timeDiff <= fiveMinutes;
     
-    // Format time until session
+    const statusConfig = getStatusConfig(booking.status);
+    
     const formatTimeUntil = () => {
-      if (timeDiff <= 0) return null; // Session has started
+      if (timeDiff <= 0) return null;
       const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
       const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
       const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
@@ -199,67 +238,77 @@ const SessionsPage = () => {
     };
 
     return (
-      <div className={`rounded-lg p-4 mb-3 transition-all ${
-        booking.status === 'completed'
-          ? 'bg-gradient-to-r from-[#1f1f1f] to-[#121212] border border-gray-700 shadow-lg shadow-black/30'
-          : 'bg-[#121212] border border-gray-700 hover:border-white'
-      }`}>
-        <div className="flex items-start space-x-3">
-          <div className="flex-shrink-0">
-            <div className={`h-10 w-10 rounded-full flex items-center justify-center ${
-              booking.status === 'completed'
-                ? 'bg-gray-800'
-                : 'bg-gray-800'
-            }`}>
-              <FiUser className="h-5 w-5 text-gray-200" />
+      <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 rounded-xl p-5 hover:border-gray-600/50 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/10">
+        <div className="flex items-start justify-between mb-4">
+          <div className="flex items-center gap-3">
+            <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-blue-600/20 to-purple-600/20 flex items-center justify-center border border-blue-500/30">
+              <User className="h-6 w-6 text-blue-400" />
+            </div>
+            <div>
+              <h3 className="font-bold text-white text-lg">{booking.mentor?.name || 'Mentor Name'}</h3>
+              <p className="text-gray-400 text-sm">{booking.mentor?.title || 'Mentor'}</p>
             </div>
           </div>
-          <div className="flex-1 min-w-0">
-            <h4 className="text-sm font-medium text-white truncate">
-              {booking.mentor?.name || 'Mentor Name'}
-            </h4>
-            <p className="text-xs text-gray-400">{booking.mentor?.title || 'Mentor'}</p>
-            
-            <div className="mt-2 flex items-center text-xs text-gray-400">
-              <FiCalendar className="mr-1 h-3 w-3" />
-              {new Date(booking.sessionDate).toLocaleDateString()}
-              <span className="mx-1">•</span>
-              <FiClock className="mr-1 h-3 w-3" />
-              {new Date(booking.sessionDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-            </div>
-            
-            <div className="mt-2">
-              <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${
-                booking.status === 'completed' 
-                  ? 'bg-[#2c2c2c] text-gray-200 border border-gray-600' 
-                  : booking.status === 'cancelled' 
-                    ? 'bg-[#2c2c2c] text-gray-400 border border-gray-600'
-                    : 'bg-[#2c2c2c] text-white border border-gray-600'
-              }`}>
-                {booking.status ? booking.status.charAt(0).toUpperCase() + booking.status.slice(1) : 'Scheduled'}
-              </span>
-            </div>
+          <div className={`px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1 ${statusConfig.bg} ${statusConfig.text} ${statusConfig.border} border`}> 
+            {statusConfig.icon}
+            {booking.status ? booking.status.charAt(0).toUpperCase() + booking.status.slice(1) : 'Scheduled'}
           </div>
         </div>
         
+        <div className="space-y-3 mb-4">
+          <div className="flex items-center text-gray-300 text-sm">
+            <Calendar className="h-4 w-4 mr-2 text-blue-400" />
+            <span>{sessionDate.toLocaleDateString('en-US', { 
+              weekday: 'short', 
+              month: 'short', 
+              day: 'numeric', 
+              year: 'numeric' 
+            })}</span>
+          </div>
+          
+          <div className="flex items-center text-gray-300 text-sm">
+            <Clock className="h-4 w-4 mr-2 text-purple-400" />
+            <span>{booking.sessionTime || sessionDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+          </div>
+          
+          {booking.price && (
+            <div className="flex items-center text-gray-300 text-sm">
+              <DollarSign className="h-4 w-4 mr-2 text-green-400" />
+              <span>${booking.price}</span>
+            </div>
+          )}
+        </div>
+        
         {!['completed', 'cancelled'].includes(booking.status) && (
-          <div className="mt-3 pt-3 border-t border-gray-700">
-            {canJoin ? (
+          <div className="pt-4 border-t border-gray-700/50">
+            {isExpired ? (
+              <div className="text-center">
+                <button
+                  disabled
+                  className="w-full py-3 px-4 bg-gray-700/50 text-gray-500 font-medium rounded-lg cursor-not-allowed flex items-center justify-center gap-2"
+                >
+                  <Video className="h-4 w-4" />
+                  Session Expired
+                </button>
+              </div>
+            ) : canJoin ? (
               <button
                 onClick={() => handleJoinSession(booking)}
-                className="w-full py-2 px-3 bg-white hover:bg-gray-200 text-gray-900 text-xs font-medium rounded transition-colors"
+                className="w-full py-3 px-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold rounded-lg transition-all duration-300 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl"
               >
+                <Video className="h-4 w-4" />
                 Join Session
               </button>
             ) : (
               <div className="text-center">
                 <button
                   disabled
-                  className="w-full py-2 px-3 bg-gray-700 text-gray-400 text-xs font-medium rounded cursor-not-allowed"
+                  className="w-full py-3 px-4 bg-gray-700/50 text-gray-400 font-medium rounded-lg cursor-not-allowed flex items-center justify-center gap-2"
                 >
+                  <Video className="h-4 w-4" />
                   Join Session
                 </button>
-                <p className="text-[10px] text-gray-500 mt-1">
+                <p className="text-xs text-gray-500 mt-2">
                   Available in {formatTimeUntil()} (5 min before start)
                 </p>
               </div>
@@ -271,98 +320,104 @@ const SessionsPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white overflow-hidden pt-14 scrollbar-hide">
+    <div className="h-screen bg-gradient-to-br from-gray-900 via-gray-900 to-black text-white flex flex-col overflow-hidden">
       <style>{`
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
         .scrollbar-hide::-webkit-scrollbar { display: none; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #1f2937; }
+        ::-webkit-scrollbar-thumb { background: #4b5563; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #6b7280; }
       `}</style>
+      
       <Navbar userName={user?.name || 'Student'} />
       
-      <div className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 overflow-hidden">
-        <div className="mb-6">
-          <h1 className="text-2xl font-bold">My Sessions</h1>
-          <p className="text-sm text-gray-400 mt-1">Manage your mentoring sessions</p>
-        </div>
+      <div className="flex-1 overflow-y-auto pt-16 pb-6 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          {/* Header */}
+          <div className="mb-8">
+            <div className="flex items-center gap-3 mb-2">
+              <button 
+                onClick={() => navigate('/student/dashboard')}
+                className="p-2 hover:bg-gray-800 rounded-lg transition-colors"
+              >
+                <ChevronLeft className="h-5 w-5 text-gray-400" />
+              </button>
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">My Sessions</h1>
+            </div>
+            <p className="text-gray-400 ml-10">Manage your mentoring sessions</p>
+          </div>
 
-        {error ? (
-          <div className="bg-red-900/20 border border-red-700 rounded-lg p-4 text-center">
-            <p className="text-red-400">{error}</p>
-            <button
-              onClick={fetchBookings}
-              className="mt-2 px-4 py-2 bg-gray-800 rounded-lg text-sm font-medium text-gray-300 hover:bg-gray-700 flex items-center mx-auto"
-            >
-              <FiRefreshCw className="mr-2" /> Try Again
-            </button>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 overflow-hidden">
-            {/* Upcoming Sessions */}
-            <div>
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-semibold text-white">Upcoming</h2>
-                <span className="text-xs bg-[#2c2c2c] text-gray-300 px-2 py-1 rounded-full">
-                  {upcomingSessions.length} sessions
-                </span>
+          {error ? (
+            <div className="bg-red-900/20 border border-red-700/50 rounded-xl p-6 text-center max-w-md mx-auto">
+              <p className="text-red-400 mb-4">{error}</p>
+              <button
+                onClick={fetchBookings}
+                className="px-4 py-2 bg-gray-800 hover:bg-gray-700 rounded-lg text-sm font-medium text-gray-300 flex items-center mx-auto transition-colors"
+              >
+                <RefreshCw className="mr-2 h-4 w-4" /> Try Again
+              </button>
+            </div>
+          ) : (
+            <>
+              {/* Tabs */}
+              <div className="flex gap-2 mb-8 overflow-x-auto pb-2 scrollbar-hide">
+                {[
+                  { id: 'all', label: 'All Sessions', icon: Users },
+                  { id: 'upcoming', label: 'Upcoming', icon: Clock },
+                  { id: 'completed', label: 'Completed', icon: CheckCircle },
+                  { id: 'cancelled', label: 'Cancelled', icon: XCircle }
+                ].map(tab => {
+                  const Icon = tab.icon;
+                  const count = tab.id === 'all' 
+                    ? bookings.length
+                    : bookings.filter(b => 
+                        tab.id === 'upcoming' ? ['scheduled', 'confirmed', 'pending'].includes(b.status) && new Date(b.sessionDate) >= new Date() :
+                        tab.id === 'completed' ? b.status === 'completed' :
+                        b.status === 'cancelled'
+                      ).length;
+                  
+                  return (
+                    <button
+                      key={tab.id}
+                      onClick={() => setActiveTab(tab.id)}
+                      className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-medium transition-all duration-300 whitespace-nowrap ${
+                        activeTab === tab.id
+                          ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg'
+                          : 'bg-gray-800/50 text-gray-300 hover:bg-gray-700/50 hover:text-white'
+                      }`}
+                    >
+                      <Icon className="h-4 w-4" />
+                      {tab.label}
+                      <span className={`text-xs px-2 py-0.5 rounded-full ${
+                        activeTab === tab.id ? 'bg-white/20' : 'bg-gray-700'
+                      }`}>
+                        {count}
+                      </span>
+                    </button>
+                  );
+                })}
               </div>
-              <div className="space-y-3">
-                {upcomingSessions.length > 0 ? (
-                  upcomingSessions.map(booking => (
+
+              {/* Sessions Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {filteredBookings.length > 0 ? (
+                  filteredBookings.map(booking => (
                     <SessionCard key={booking._id} booking={booking} />
                   ))
                 ) : (
-                  <div className="bg-[#121212] rounded-lg p-6 border border-dashed border-gray-700 text-center">
-                    <FiCalendar className="mx-auto h-8 w-8 text-gray-500" />
-                    <p className="mt-2 text-sm text-gray-400">No upcoming sessions</p>
+                  <div className="col-span-full bg-gray-800/30 backdrop-blur-sm border border-dashed border-gray-700 rounded-xl p-12 text-center">
+                    <div className="h-16 w-16 mx-auto mb-4 rounded-full bg-gray-700/50 flex items-center justify-center">
+                      <Calendar className="h-8 w-8 text-gray-500" />
+                    </div>
+                    <h3 className="text-lg font-medium text-gray-300 mb-2">No sessions found</h3>
+                    <p className="text-gray-500">{activeTab === 'all' ? 'You have no sessions yet.' : `No ${activeTab} sessions.`}</p>
                   </div>
                 )}
               </div>
-            </div>
-            
-            {/* Completed Sessions */}
-            <div>
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-semibold text-white">Completed</h2>
-                <span className="text-xs bg-[#2c2c2c] text-gray-300 px-2 py-1 rounded-full">
-                  {completedSessions.length} sessions
-                </span>
-              </div>
-              <div className="space-y-3">
-                {completedSessions.length > 0 ? (
-                  completedSessions.map(booking => (
-                    <SessionCard key={booking._id} booking={booking} />
-                  ))
-                ) : (
-                  <div className="bg-[#121212] rounded-lg p-6 border border-dashed border-gray-700 text-center">
-                    <FiCalendar className="mx-auto h-8 w-8 text-gray-500" />
-                    <p className="mt-2 text-sm text-gray-400">No completed sessions</p>
-                  </div>
-                )}
-              </div>
-            </div>
-            
-            {/* Cancelled Sessions */}
-            <div>
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-semibold text-white">Cancelled</h2>
-                <span className="text-xs bg-[#2c2c2c] text-gray-300 px-2 py-1 rounded-full">
-                  {cancelledSessions.length} sessions
-                </span>
-              </div>
-              <div className="space-y-3">
-                {cancelledSessions.length > 0 ? (
-                  cancelledSessions.map(booking => (
-                    <SessionCard key={booking._id} booking={booking} />
-                  ))
-                ) : (
-                  <div className="bg-[#121212] rounded-lg p-6 border border-dashed border-gray-700 text-center">
-                    <FiCalendar className="mx-auto h-8 w-8 text-gray-500" />
-                    <p className="mt-2 text-sm text-gray-400">No cancelled sessions</p>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        )}
+            </>
+          )}
+        </div>
       </div>
     </div>
   );

@@ -88,10 +88,35 @@ export const AvailableSlotsCard = ({ className, data, onEdit, onSave }) => {
   const [duration, setDuration] = useState('30');
   const totalAvailable = data.reduce((acc, group) => acc + group.availableCount, 0);
 
+  const [customTime, setCustomTime] = useState('');
+
   const timeSlots = [
     '09:00 AM', '10:00 AM', '11:00 AM', '12:00 PM',
-    '02:00 PM', '03:00 PM', '04:00 PM', '05:00 PM'
+    '02:00 PM', '03:00 PM', '04:00 PM', '05:00 PM',
+    '06:00 PM', '07:00 PM', '08:00 PM', '09:00 PM',
+    '10:00 PM', '11:00 PM', '12:00 AM',
   ];
+
+  // Helper to format time input (HH:mm) to display format (hh:mm AM/PM)
+  const formatTimeInput = (timeStr) => {
+    if (!timeStr) return '';
+    const [hours, minutes] = timeStr.split(':');
+    let h = parseInt(hours);
+    const m = parseInt(minutes);
+    const ampm = h >= 12 ? 'PM' : 'AM';
+    h = h % 12;
+    h = h ? h : 12; // the hour '0' should be '12'
+    return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')} ${ampm}`;
+  };
+
+  const addCustomTime = () => {
+    if (!customTime) return;
+    const formattedTime = formatTimeInput(customTime);
+    if (!selectedTimeSlots.includes(formattedTime)) {
+      setSelectedTimeSlots([...selectedTimeSlots, formattedTime]);
+      setCustomTime('');
+    }
+  };
 
   const toggleTimeSlot = (time) => {
     if (selectedTimeSlots.includes(time)) {
@@ -162,11 +187,43 @@ export const AvailableSlotsCard = ({ className, data, onEdit, onSave }) => {
             />
           </div>
 
+          {/* Custom Time Input */}
+          <div className="mb-6">
+            <label className="block text-sm font-medium text-gray-300 mb-2">Add Custom Time</label>
+            <div className="flex gap-2">
+              <input 
+                type="time" 
+                value={customTime}
+                onChange={(e) => setCustomTime(e.target.value)}
+                className="flex-1 bg-[#202327] border border-[#404040] text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-white focus:border-transparent"
+              />
+              <button
+                type="button"
+                onClick={addCustomTime}
+                disabled={!customTime}
+                className="bg-[#2a2d32] hover:bg-[#3a3d42] text-white px-4 py-2 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Add Slot
+              </button>
+            </div>
+          </div>
+
           {/* Available Time Slots */}
           <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-300 mb-3">Available Time Slots</label>
-            <div className="grid grid-cols-2 gap-2">
-              {timeSlots.map((time) => (
+            <label className="block text-sm font-medium text-gray-300 mb-3">Select Time Slots</label>
+            <div className="grid grid-cols-2 gap-2 max-h-48 overflow-y-auto pr-1 custom-scrollbar">
+              {/* Combine default slots and any selected custom slots that aren't in default */}
+              {[...new Set([...timeSlots, ...selectedTimeSlots])].sort((a, b) => {
+                 // Simple sort for display: convert to 24h for comparison
+                 const to24 = (t) => {
+                     const [time, period] = t.split(' ');
+                     let [h, m] = time.split(':').map(Number);
+                     if (period === 'PM' && h !== 12) h += 12;
+                     if (period === 'AM' && h === 12) h = 0;
+                     return h * 60 + m;
+                 };
+                 return to24(a) - to24(b);
+              }).map((time) => (
                 <button
                   key={time}
                   type="button"

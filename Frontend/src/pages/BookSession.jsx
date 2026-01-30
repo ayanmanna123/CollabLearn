@@ -358,12 +358,7 @@ const BookSession = () => {
     return days;
   };
 
-  // All possible time slots - will be filtered based on mentor's availability
-  const allTimeSlots = [
-    '09:00 AM', '10:00 AM', '11:00 AM', '12:00 PM',
-    '01:00 PM', '02:00 PM', '03:00 PM', '04:00 PM',
-    '05:00 PM', '06:00 PM', '07:00 PM', '08:00 PM'
-  ];
+
 
   const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;
 
@@ -627,25 +622,20 @@ const BookSession = () => {
                   
                   <p className="text-gray-400 text-xs mb-3">Choose a time slot for the mentorship session</p>
                   
-                  {/* Preset Time Slots */}
+                  {/* Available Time Slots */}
                   <div className="grid grid-cols-3 gap-1.5">
-                    {allTimeSlots.map((time) => {
-                      // Check if this time is in the mentor's available slots for the selected date
-                      const isAvailable = selectedDate && availableTimeSlots.includes(time);
+                    {availableTimeSlots.map((time) => {
+                      const isSelected = selectedTimeSlot === time;
                       return (
                         <button
                           key={time}
                           type="button"
-                          onClick={() => isAvailable && handleTimeSlotSelect(time)}
-                          disabled={!isAvailable}
+                          onClick={() => handleTimeSlotSelect(time)}
                           className={`p-2 text-center border rounded transition-all text-xs ${
-                            selectedTimeSlot === time && isAvailable
+                            isSelected
                               ? 'bg-gray-600 text-white border-gray-600'
-                              : isAvailable
-                              ? 'bg-[#202327] text-gray-300 border-gray-700 hover:border-gray-600 hover:bg-gray-700/30 cursor-pointer'
-                              : 'bg-[#202327] text-gray-500 border-gray-700 opacity-50 cursor-not-allowed'
+                              : 'bg-[#202327] text-gray-300 border-gray-700 hover:border-gray-600 hover:bg-gray-700/30 cursor-pointer'
                           }`}
-                          title={!isAvailable && selectedDate ? 'Not available' : ''}
                         >
                           {time}
                         </button>

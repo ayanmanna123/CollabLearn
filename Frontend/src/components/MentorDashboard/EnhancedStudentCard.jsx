@@ -195,11 +195,51 @@ export const EnhancedStudentCard = ({
     }
   };
 
-  const timing = getSessionTiming(selectedSession);
+  /* Removed unused timing variable */
+
+  // Check if session is expired
+  const checkSessionExpired = (session) => {
+    if (!session) return false;
+    if (session.status === 'completed' || session.status === 'cancelled') return false;
+
+    // First try precise timing
+    const timing = getSessionTiming(session);
+    
+    if (timing && typeof timing.timeLeft === 'number') {
+       const duration = session.duration || 60;
+       // Expired if time has passed + duration
+       return timing.timeLeft < -duration;
+    }
+    
+    // Fallback: Date check
+    const sDate = new Date(session.sessionDate);
+    const now = new Date();
+    
+    // Normalize to midnight for strict date comparison
+    const sDateMidnight = new Date(sDate);
+    sDateMidnight.setHours(0, 0, 0, 0);
+    
+    const nowMidnight = new Date(now);
+    nowMidnight.setHours(0, 0, 0, 0);
+    
+    // If same day or future day, it's not expired (based on date alone)
+    if (sDateMidnight.getTime() >= nowMidnight.getTime()) {
+        return false;
+    }
+    
+    // Otherwise it's in the past
+    return true;
+  };
 
   const getStatusBadge = (status, sessionDate) => {
-    // Check if session is expired (past date and not completed)
-    const isExpired = new Date(sessionDate) < new Date() && status !== 'completed' && status !== 'cancelled';
+    // Check if session is expired using helper on selectedSession
+    // Note: sessionDate arg is used as fallback if selectedSession is missing
+    let isExpired = checkSessionExpired(selectedSession);
+
+    if (!selectedSession && sessionDate) {
+         isExpired = new Date(sessionDate) < new Date() && status !== 'completed' && status !== 'cancelled';
+    }
+
     const displayStatus = isExpired ? 'expired' : status;
     
     const badges = {
@@ -211,8 +251,19 @@ export const EnhancedStudentCard = ({
     };
     const badge = badges[displayStatus] || badges.pending;
     const Icon = badge.icon;
+    
+    const badgeColors = {
+        pending: 'bg-yellow-500/20 text-yellow-400 border-yellow-500/40',
+        confirmed: 'bg-green-500/20 text-green-400 border-green-500/40',
+        completed: 'bg-blue-500/20 text-blue-400 border-blue-500/40',
+        cancelled: 'bg-red-500/20 text-red-400 border-red-500/40',
+        expired: 'bg-gray-500/20 text-gray-400 border-gray-500/40'
+    };
+    
+    const colorClass = badgeColors[displayStatus] || badgeColors.pending;
+
     return (
-      <span className="inline-flex items-center gap-1 px-2 py-1 rounded-md text-xs font-medium text-white">
+      <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium border ${colorClass}`}>
         <Icon className="w-3 h-3" />
         {badge.text}
       </span>
@@ -223,8 +274,13 @@ export const EnhancedStudentCard = ({
   const totalSessions = sessions.length;
   const completedSessions = sessions.filter(s => s.status === 'completed').length;
   const upcomingSessions = sessions.filter(s => {
-    const date = new Date(s.sessionDate);
-    return date >= new Date() && ['pending', 'confirmed'].includes(s.status);
+    // Use proper timing check for upcoming statistic
+    if (checkSessionExpired(s)) return false;
+    
+    // If not expired, and pending/confirmed. 
+    // Additional check: is it actually in the future/now?
+    // checkSessionExpired returns false for today's future sessions, which is correct.
+    return ['pending', 'confirmed'].includes(s.status);
   }).length;
   const totalHours = Math.round(sessions.filter(s => s.status === 'completed').reduce((sum, s) => sum + s.duration, 0) / 60);
 
@@ -345,14 +401,18 @@ export const EnhancedStudentCard = ({
                   <FiCalendar className="w-3 h-3" />
                   <span>{new Date(session.sessionDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
                   <span className={`w-2 h-2 rounded-full ${
-                    new Date(session.sessionDate) < new Date() && session.status !== 'completed' && session.status !== 'cancelled' ? 'bg-gray-500' :
-                    session.status === 'confirmed' ? 'bg-white' :
-                    session.status === 'pending' ? 'bg-white' :
-                    session.status === 'completed' ? 'bg-white' : 'bg-gray-400'
+                    (() => {
+                      const isExpired = checkSessionExpired(session);
+                      return isExpired ? 'bg-red-500' :
+                             session.status === 'confirmed' ? 'bg-green-500' :
+                             session.status === 'pending' ? 'bg-yellow-500' :
+                             session.status === 'completed' ? 'bg-blue-500' : 'bg-gray-400';
+                    })()
                   }`}></span>
                 </div>
               </button>
             );
+
           })}
         </div>
       </div>
@@ -403,7 +463,7 @@ export const EnhancedStudentCard = ({
         <div className="flex gap-3">
           {selectedSession.status === 'pending' && (
             <>
-              {new Date(selectedSession.sessionDate) < new Date() ? (
+              {checkSessionExpired(selectedSession) ? (
                 <button
                   disabled
                   className="flex-1 bg-[#1a1a1a] text-gray-500 px-4 py-2 rounded-lg font-medium cursor-not-allowed flex items-center justify-center gap-2"
