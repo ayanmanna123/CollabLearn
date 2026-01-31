@@ -3,34 +3,61 @@ import { Link } from 'react-router-dom';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import {
   FiArrowRight, FiVideo, FiTarget, FiShield, FiCpu, FiGlobe, FiAward,
-  FiUserPlus, FiSearch, FiBookOpen, FiStar, FiChevronDown, FiPlus, FiMinus
+  FiUserPlus, FiSearch, FiBookOpen, FiStar, FiChevronDown, FiPlus, FiMinus,
+  FiBriefcase, FiDollarSign, FiUsers
 } from 'react-icons/fi';
 import LandingNavbar from '../components/LandingNavbar';
 import LandingFooter from '../components/LandingFooter';
 import studentDashboardImage from '../assets/studentdashbaordimage.png';
+import mentorDashboardImage from '../assets/MentorDahboard.png';
 
 // --- Data ---
-const testimonials = [
-  { name: "Sarah J.", role: "Software Engineer", quote: "Ment2Be helped me break into big tech. My mentor was incredible." },
-  { name: "David L.", role: "Product Manager", quote: "The structure and goal tracking kept me accountable every week." },
-  { name: "Emily R.", role: "UX Designer", quote: "I learned more in 3 months here than 2 years of tutorials." },
-  { name: "Michael C.", role: "Data Scientist", quote: "Found a mentor who guided me through my entire career transition." },
-  { name: "Jessica K.", role: "Frontend Dev", quote: "The mock interviews were a game changer for my confidence." },
-  { name: "Alex P.", role: "Founder", quote: "Invaluable advice on scaling my startup from industry veterans." },
-];
+const testimonials = {
+  student: [
+    { name: "Sarah J.", role: "Software Engineer", quote: "Ment2Be helped me break into big tech. My mentor was incredible." },
+    { name: "David L.", role: "Product Manager", quote: "The structure and goal tracking kept me accountable every week." },
+    { name: "Emily R.", role: "UX Designer", quote: "I learned more in 3 months here than 2 years of tutorials." },
+    { name: "Michael C.", role: "Data Scientist", quote: "Found a mentor who guided me through my entire career transition." },
+    { name: "Jessica K.", role: "Frontend Dev", quote: "The mock interviews were a game changer for my confidence." },
+    { name: "Alex P.", role: "Founder", quote: "Invaluable advice on scaling my startup from industry veterans." },
+  ],
+  mentor: [
+    { name: "Dr. James W.", role: "Senior Architect", quote: "Sharing my knowledge has been incredibly rewarding. Also great side income." },
+    { name: "Anita S.", role: "Ex-Google Lead", quote: "I love connecting with ambitious students. The platform makes scheduling so easy." },
+    { name: "Robert M.", role: "CTO at TechCorp", quote: "Ment2Be takes care of all the admin work so I can focus on mentoring." },
+    { name: "Lisa T.", role: "Design Director", quote: "It’s helped me refine my own leadership skills while helping others grow." },
+    { name: "Kevin D.", role: "AI Researcher", quote: "The community of mentors here is top-notch. Great networking opportunity." },
+    { name: "Priya G.", role: "Startup Advisor", quote: "Flexible hours mean I can mentor on weekends without disrupting my job." },
+  ]
+};
 
-const faqData = [
-  { question: "How does the matching process work?", answer: "Our AI analyzes your goals, skills, and learning style to recommend the perfect mentors from our database of over 500+ experts." },
-  { question: "Is there a free trial?", answer: "Yes! You can browse mentors and join community discussions for free. Premium mentorship sessions start with a 14-day money-back guarantee." },
-  { question: "Can I be both a mentor and a mentee?", answer: "Absolutely. We believe everyone has something to teach and something to learn. You can easily switch between roles in your dashboard." },
-  { question: "What happens if I'm not satisfied?", answer: "If a session doesn't meet your expectations, we offer a full refund and will help you find a better match." },
-];
+const faqData = {
+  student: [
+    { question: "How does the matching process work?", answer: "Our AI analyzes your goals, skills, and learning style to recommend the perfect mentors from our database of over 500+ experts." },
+    { question: "Is there a free trial?", answer: "Yes! You can browse mentors and join community discussions for free. Premium mentorship sessions start with a 14-day money-back guarantee." },
+    { question: "Can I be both a mentor and a mentee?", answer: "Absolutely. We believe everyone has something to teach and something to learn. You can easily switch between roles in your dashboard." },
+    { question: "What happens if I'm not satisfied?", answer: "If a session doesn't meet your expectations, we offer a full refund and will help you find a better match." },
+  ],
+  mentor: [
+    { question: "How do I get paid?", answer: "We process payments directly to your bank account every week. You keep 90% of your earnings; we take a small platform fee." },
+    { question: "Can I set my own rates?", answer: "Yes, you have complete control over your hourly rate and session availability. You can change them at any time." },
+    { question: "What acts as proof of expertise?", answer: "We verify your LinkedIn profile and may ask for certifications or work history during the onboarding process to ensure quality." },
+    { question: "Is there a minimum commitment?", answer: "No. You can mentor as little as 1 hour a month or 20 hours a week. It's completely up to your schedule." },
+  ]
+};
 
-const steps = [
-  { icon: FiUserPlus, title: "Create Profile", desc: "Tell us about your goals and what you want to learn." },
-  { icon: FiSearch, title: "Get Matched", desc: "Our AI pairs you with mentors who fit your needs perfectly." },
-  { icon: FiBookOpen, title: "Start Learning", desc: "Book 1-on-1 sessions and track your progress instantly." },
-];
+const steps = {
+  student: [
+    { icon: FiUserPlus, title: "Create Profile", desc: "Tell us about your goals and what you want to learn." },
+    { icon: FiSearch, title: "Get Matched", desc: "Our AI pairs you with mentors who fit your needs perfectly." },
+    { icon: FiBookOpen, title: "Start Learning", desc: "Book 1-on-1 sessions and track your progress instantly." },
+  ],
+  mentor: [
+    { icon: FiBriefcase, title: "Build Profile", desc: "Showcase your experience, skills, and teaching style." },
+    { icon: FiDollarSign, title: "Set Availability", desc: "Choose your hours and set your own hourly rates." },
+    { icon: FiUsers, title: "Start Mentoring", desc: "Receive booking requests and start guiding the next generation." },
+  ]
+};
 
 // --- Components ---
 
@@ -93,6 +120,7 @@ const AccordionItem = ({ question, answer, isOpen, onClick }) => (
 
 const LandingPage = () => {
   const containerRef = useRef(null);
+  const [activeTab, setActiveTab] = useState('student');
   const [openFaqIndex, setOpenFaqIndex] = useState(null);
 
   const { scrollYProgress } = useScroll({
@@ -130,39 +158,64 @@ const LandingPage = () => {
             transition={{ duration: 1, ease: "easeOut" }}
             className="mb-8"
           >
-            <span className="inline-block py-2 px-5 rounded-full bg-white/5 border border-white/10 text-sm font-medium tracking-wide text-indigo-300 backdrop-blur-md">
-              New: AI-Powered Learning Paths
-            </span>
+            {/* Persona Switcher */}
+            <div className="inline-flex p-1 rounded-full bg-white/10 backdrop-blur-md border border-white/10 mb-6">
+              <button
+                onClick={() => setActiveTab('student')}
+                className={`px-6 py-2 rounded-full text-sm font-medium transition-all duration-300 ${activeTab === 'student' ? 'bg-white text-black shadow-lg shadow-white/10' : 'text-gray-400 hover:text-white'}`}
+              >
+                For Students
+              </button>
+              <button
+                onClick={() => setActiveTab('mentor')}
+                className={`px-6 py-2 rounded-full text-sm font-medium transition-all duration-300 ${activeTab === 'mentor' ? 'bg-indigo-500 text-white shadow-lg shadow-indigo-500/20' : 'text-gray-400 hover:text-white'}`}
+              >
+                For Mentors
+              </button>
+            </div>
           </motion.div>
 
-          <h1 className="text-6xl md:text-8xl lg:text-9xl font-semibold tracking-tighter mb-8 leading-[0.9]">
-            <span className="block bg-clip-text text-transparent bg-gradient-to-b from-white to-white/60">
-              Mentorship.
-            </span>
-            <span className="block bg-clip-text text-transparent bg-gradient-to-b from-indigo-300 via-purple-300 to-indigo-300">
-              Reimagined.
-            </span>
-          </h1>
-
-          <p className="text-xl md:text-2xl text-gray-400 max-w-2xl mx-auto mb-12 font-light leading-relaxed">
-            The all-in-one platform for effortless learning. Connect with experts, track your growth, and achieve your dreams.
-          </p>
-
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-            <Link
-              to="/student/explore"
-              className="group relative px-8 py-4 bg-white text-black rounded-full font-semibold text-lg hover:bg-gray-100 transition-all duration-300 hover:scale-105"
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeTab}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.5 }}
             >
-              Find a Mentor
-              <span className="absolute inset-0 rounded-full ring-2 ring-white/50 ring-offset-2 ring-offset-black opacity-0 group-hover:opacity-100 transition-opacity" />
-            </Link>
-            <Link
-              to="/login"
-              className="px-8 py-4 rounded-full text-white font-medium text-lg hover:bg-white/10 transition-all border border-white/10 backdrop-blur-sm"
-            >
-              Log In
-            </Link>
-          </div>
+              <h1 className="text-6xl md:text-8xl lg:text-9xl font-semibold tracking-tighter mb-8 leading-[0.9]">
+                <span className="block bg-clip-text text-transparent bg-gradient-to-b from-white to-white/60">
+                  {activeTab === 'student' ? 'Mentorship.' : 'Leadership.'}
+                </span>
+                <span className="block bg-clip-text text-transparent bg-gradient-to-b from-indigo-300 via-purple-300 to-indigo-300">
+                  {activeTab === 'student' ? 'Reimagined.' : 'Amplified.'}
+                </span>
+              </h1>
+
+              <p className="text-xl md:text-2xl text-gray-400 max-w-2xl mx-auto mb-12 font-light leading-relaxed">
+                {activeTab === 'student'
+                  ? "The all-in-one platform for effortless learning. Connect with experts, track your growth, and achieve your dreams."
+                  : "Share your expertise, mentor the next generation, and earn on your schedule. Join a global network of leaders."
+                }
+              </p>
+
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
+                <Link
+                  to={activeTab === 'student' ? "/student/explore" : "/register?role=mentor"}
+                  className={`group relative px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300 hover:scale-105 ${activeTab === 'student' ? 'bg-white text-black' : 'bg-indigo-600 text-white'}`}
+                >
+                  {activeTab === 'student' ? 'Find a Mentor' : 'Apply to Mentor'}
+                  <span className="absolute inset-0 rounded-full ring-2 ring-white/50 ring-offset-2 ring-offset-black opacity-0 group-hover:opacity-100 transition-opacity" />
+                </Link>
+                <Link
+                  to="/login"
+                  className="px-8 py-4 rounded-full text-white font-medium text-lg hover:bg-white/10 transition-all border border-white/10 backdrop-blur-sm"
+                >
+                  Log In
+                </Link>
+              </div>
+            </motion.div>
+          </AnimatePresence>
         </motion.div>
 
         <motion.div
@@ -174,10 +227,14 @@ const LandingPage = () => {
         >
           <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-white/10 bg-[#0a0a0a] group">
             <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent pointer-events-none z-10" />
-            <img
-              src={studentDashboardImage}
+            <motion.img
+              key={activeTab}
+              src={activeTab === 'student' ? studentDashboardImage : mentorDashboardImage}
               alt="Dashboard Interface"
-              className="w-full h-auto object-cover opacity-90 group-hover:scale-[1.01] transition-transform duration-700 ease-out"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.9 }}
+              transition={{ duration: 0.5 }}
+              className="w-full h-auto object-cover group-hover:scale-[1.01] transition-transform duration-700 ease-out"
             />
           </div>
         </motion.div>
@@ -188,35 +245,38 @@ const LandingPage = () => {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-500 mb-4">
-              Your path to mastery.
+              Your path to {activeTab === 'student' ? 'mastery' : 'impact'}.
             </h2>
             <p className="text-gray-400 text-lg">Three simple steps to start your journey.</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {steps.map((step, idx) => (
-              <motion.div
-                key={idx}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: idx * 0.2 }}
-                className="relative p-8 rounded-3xl bg-white/[0.02] border border-white/5 hover:bg-white/[0.04] transition-colors group"
-              >
-                <div className="absolute -top-6 -left-6 w-24 h-24 bg-indigo-500/10 rounded-full blur-2xl group-hover:bg-indigo-500/20 transition-colors" />
-                <div className="relative">
-                  <div className="w-14 h-14 bg-gray-900 rounded-2xl border border-white/10 flex items-center justify-center mb-6 shadow-lg">
-                    <step.icon className="w-6 h-6 text-indigo-400" />
+            <AnimatePresence mode="wait">
+              {steps[activeTab].map((step, idx) => (
+                <motion.div
+                  key={`${activeTab}-${idx}`}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ delay: idx * 0.2 }}
+                  className="relative p-8 rounded-3xl bg-white/[0.02] border border-white/5 hover:bg-white/[0.04] transition-colors group"
+                >
+                  <div className={`absolute -top-6 -left-6 w-24 h-24 rounded-full blur-2xl transition-colors ${activeTab === 'student' ? 'bg-indigo-500/10 group-hover:bg-indigo-500/20' : 'bg-purple-500/10 group-hover:bg-purple-500/20'}`} />
+                  <div className="relative">
+                    <div className="w-14 h-14 bg-gray-900 rounded-2xl border border-white/10 flex items-center justify-center mb-6 shadow-lg">
+                      <step.icon className={`w-6 h-6 ${activeTab === 'student' ? 'text-indigo-400' : 'text-purple-400'}`} />
+                    </div>
+                    <h3 className="text-2xl font-semibold mb-3">{step.title}</h3>
+                    <p className="text-gray-400 leading-relaxed">{step.desc}</p>
                   </div>
-                  <h3 className="text-2xl font-semibold mb-3">{step.title}</h3>
-                  <p className="text-gray-400 leading-relaxed">{step.desc}</p>
-                </div>
-              </motion.div>
-            ))}
+                </motion.div>
+              ))}
+            </AnimatePresence>
           </div>
         </div>
       </section>
 
-      {/* Bento Grid Features Section */}
+      {/* Bento Grid Features Section (Common for now, but titled appropriately) */}
       <section className="py-32 px-6 bg-[#050505]">
         <div className="max-w-7xl mx-auto">
           <div className="mb-24 md:pl-8 border-l-2 border-indigo-500/50">
@@ -229,6 +289,7 @@ const LandingPage = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[minmax(180px,auto)]">
+            {/* Bento Cards (Keeping these generic as platform features apply to both mostly) */}
             <BentoItem className="md:col-span-2 min-h-[400px] flex flex-col justify-between overflow-hidden relative">
               <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-500/10 rounded-full blur-[80px] -mr-20 -mt-20" />
               <div className="relative z-10">
@@ -253,7 +314,7 @@ const LandingPage = () => {
                   <FiCpu size={24} />
                 </div>
                 <h3 className="text-3xl font-semibold mb-4">AI Magic</h3>
-                <p className="text-gray-400">Smart matching algorithms find the perfect mentor for your unique goals.</p>
+                <p className="text-gray-400">Smart matching algorithms find the perfect {activeTab === 'student' ? 'mentor' : 'match'} for your unique goals.</p>
               </div>
               <div className="mt-10 flex justify-center">
                 <div className="relative w-48 h-48">
@@ -278,7 +339,7 @@ const LandingPage = () => {
               <FiGlobe className="text-blue-400 w-10 h-10 mb-auto relative z-10" />
               <div className="relative z-10">
                 <h3 className="text-2xl font-semibold mb-2">Global Network</h3>
-                <p className="text-gray-400 text-sm">Mentors from 50+ countries.</p>
+                <p className="text-gray-400 text-sm">Connect from anywhere.</p>
               </div>
             </BentoItem>
 
@@ -314,28 +375,38 @@ const LandingPage = () => {
           <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#050505] to-transparent z-10" />
           <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#050505] to-transparent z-10" />
 
-          <div className="flex gap-6 w-max animate-scroll-left hover:[animation-play-state:paused]">
-            {[...testimonials, ...testimonials].map((t, i) => (
-              <div
-                key={i}
-                className="w-[350px] p-6 rounded-2xl bg-[#0a0a0a] border border-white/10 flex-shrink-0"
-              >
-                <div className="flex gap-1 text-yellow-500 mb-4">
-                  {[...Array(5)].map((_, i) => <FiStar key={i} size={14} fill="currentColor" />)}
-                </div>
-                <p className="text-gray-300 mb-6 text-lg">"{t.quote}"</p>
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-gray-700 to-gray-600 flex items-center justify-center font-bold">
-                    {t.name[0]}
+          {/* Keyed animation to reset when tab changes */}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeTab}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.5 }}
+              className="flex gap-6 w-max animate-scroll-left hover:[animation-play-state:paused]"
+            >
+              {[...testimonials[activeTab], ...testimonials[activeTab]].map((t, i) => (
+                <div
+                  key={`${activeTab}-${i}`}
+                  className="w-[350px] p-6 rounded-2xl bg-[#0a0a0a] border border-white/10 flex-shrink-0"
+                >
+                  <div className="flex gap-1 text-yellow-500 mb-4">
+                    {[...Array(5)].map((_, i) => <FiStar key={i} size={14} fill="currentColor" />)}
                   </div>
-                  <div>
-                    <h4 className="font-semibold">{t.name}</h4>
-                    <p className="text-xs text-gray-500">{t.role}</p>
+                  <p className="text-gray-300 mb-6 text-lg">"{t.quote}"</p>
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-gray-700 to-gray-600 flex items-center justify-center font-bold">
+                      {t.name[0]}
+                    </div>
+                    <div>
+                      <h4 className="font-semibold">{t.name}</h4>
+                      <p className="text-xs text-gray-500">{t.role}</p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </motion.div>
+          </AnimatePresence>
         </div>
       </section>
 
@@ -348,15 +419,17 @@ const LandingPage = () => {
           </div>
 
           <div className="space-y-2">
-            {faqData.map((item, index) => (
-              <AccordionItem
-                key={index}
-                question={item.question}
-                answer={item.answer}
-                isOpen={openFaqIndex === index}
-                onClick={() => toggleFaq(index)}
-              />
-            ))}
+            <AnimatePresence mode="wait">
+              {faqData[activeTab].map((item, index) => (
+                <AccordionItem
+                  key={`${activeTab}-${index}`}
+                  question={item.question}
+                  answer={item.answer}
+                  isOpen={openFaqIndex === index}
+                  onClick={() => toggleFaq(index)}
+                />
+              ))}
+            </AnimatePresence>
           </div>
         </div>
       </section>
@@ -365,15 +438,15 @@ const LandingPage = () => {
       <section className="py-32 bg-white text-black overflow-hidden relative">
         <div className="max-w-7xl mx-auto px-6 relative z-10">
           <ParallaxText className="text-5xl md:text-8xl font-bold tracking-tighter mb-12">
-            Start your journey.
+            Start your {activeTab === 'student' ? 'journey' : 'legacy'}.
           </ParallaxText>
           <p className="text-xl md:text-3xl font-medium text-gray-500 max-w-3xl leading-relaxed">
-            Join a community of ambitious learners and world-class experts. The skills you need are one conversation away.
+            Join a community of ambitious learners and world-class experts. {activeTab === 'student' ? 'The skills you need are one conversation away.' : 'Your knowledge can change lives.'}
           </p>
 
           <div className="mt-16 flex gap-6">
-            <Link to="/register" className="px-10 py-5 bg-black text-white rounded-full font-bold text-xl hover:scale-105 transition-transform">
-              Get Started Free
+            <Link to={activeTab === 'student' ? "/register" : "/register?role=mentor"} className="px-10 py-5 bg-black text-white rounded-full font-bold text-xl hover:scale-105 transition-transform">
+              {activeTab === 'student' ? 'Get Started Free' : 'Start Mentoring'}
             </Link>
           </div>
         </div>

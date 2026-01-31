@@ -1,326 +1,221 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useRef } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { FiMessageSquare, FiCheckCircle, FiUsers, FiTrendingUp, FiShield, FiStar, FiZap, FiActivity } from 'react-icons/fi';
 import LandingNavbar from '../components/LandingNavbar';
 import LandingFooter from '../components/LandingFooter';
-import connectIllustration from '../assets/connect.svg';
 import studentImage from '../assets/student.png';
 import student2Image from '../assets/student2.png';
 import student3Image from '../assets/student3.png';
-import successIllustration from '../assets/success-social-media---achievement-woman-trophy-award-reward-win-competition.svg';
 import mentorImage from '../assets/mentor.png';
 import mentor2Image from '../assets/mentor2.png';
-import mentorDashboardImage from '../assets/MentorDahboard.png';
+
+// --- Shared Components (for consistency) ---
+
+const GradientBlob = ({ className }) => (
+  <div className={`absolute rounded-full mix-blend-screen filter blur-[100px] opacity-30 animate-blob ${className}`} />
+);
+
+const ParallaxText = ({ children, className }) => (
+  <motion.h2
+    initial={{ opacity: 0, y: 50 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true }}
+    transition={{ duration: 0.8, ease: "easeOut" }}
+    className={className}
+  >
+    {children}
+  </motion.h2>
+);
+
+const BentoItem = ({ children, className, delay = 0 }) => (
+  <motion.div
+    initial={{ opacity: 0, y: 30 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true, margin: "-50px" }}
+    transition={{ duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] }}
+    className={`relative overflow-hidden rounded-3xl bg-white/[0.03] border border-white/10 backdrop-blur-xl p-8 hover:bg-white/[0.05] transition-colors duration-500 group ${className}`}
+  >
+    {children}
+  </motion.div>
+);
 
 const SolutionsPage = () => {
-  const [isImageVisible, setIsImageVisible] = useState(false);
-  const [isHeadlineVisible, setIsHeadlineVisible] = useState(false);
-  const [isFlipped, setIsFlipped] = useState(false);
-  const [mentorImageIndex, setMentorImageIndex] = useState(0);
+  const containerRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end end"]
+  });
 
-  const mentorImages = [
-    { src: mentorImage, title: 'Mentor Chat Section', desc: 'Interact with mentees through real-time chat' },
-    { src: mentor2Image, title: 'Ratings & Reviews', desc: 'View mentee feedback and performance ratings' }
-  ];
+  const heroScale = useTransform(scrollYProgress, [0, 0.2], [1, 0.95]);
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
 
-  useEffect(() => {
-    const imageElement = document.getElementById('student-solution-image');
-    const headlineElement = document.getElementById('student-solution-headline');
-
-    const imageObserver = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsImageVisible(true);
-        }
-      },
-      { threshold: 0.2 }
-    );
-
-    const headlineObserver = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsHeadlineVisible(true);
-        }
-      },
-      { threshold: 0.5 }
-    );
-
-    if (imageElement) imageObserver.observe(imageElement);
-    if (headlineElement) headlineObserver.observe(headlineElement);
-
-    return () => {
-      if (imageElement) imageObserver.unobserve(imageElement);
-      if (headlineElement) headlineObserver.unobserve(headlineElement);
-    };
-  }, []);
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#0a0a0a] via-[#1a1410] to-[#0a0a0a]">
+    <div ref={containerRef} className="bg-[#050505] min-h-screen text-white overflow-x-hidden selection:bg-indigo-500/30">
       <LandingNavbar />
-      
+
       {/* Hero Section */}
-      <div className="pt-32 pb-20 px-6">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            {/* Left Side - Text */}
-            <div>
-              <h1 className="text-6xl md:text-7xl font-bold text-white mb-8">
-                Solutions for Students
-              </h1>
-              <p className="text-2xl text-gray-300 mb-8">
-                Tailored mentorship solutions designed for students to achieve their goals.
-              </p>
-            </div>
-            
-            {/* Right Side - Illustration */}
-            <div className="hidden lg:flex justify-center">
-              <img 
-                src={connectIllustration} 
-                alt="Connect Illustration" 
-                className="w-full max-w-md h-auto"
-                style={{
-                  filter: 'brightness(0.8) invert(1) sepia(1) hue-rotate(180deg) saturate(5) contrast(1.5) brightness(1.2)'
-                }}
-              />
-            </div>
-          </div>
+      <section className="relative min-h-[90vh] flex flex-col items-center justify-center pt-32 pb-20 overflow-hidden">
+        {/* Background Gradients */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <GradientBlob className="w-[800px] h-[800px] bg-blue-600/20 top-[-20%] right-[-10%]" />
+          <GradientBlob className="w-[600px] h-[600px] bg-indigo-600/20 bottom-[-10%] left-[-10%] animation-delay-2000" />
         </div>
-      </div>
 
-      {/* Student Solution Image Section */}
-      <div className="px-6 pb-20">
-        <div className="max-w-6xl mx-auto">
-          <div 
-            id="student-solution-headline"
-            className="mb-12 text-center"
-            style={{
-              opacity: isHeadlineVisible ? 1 : 0,
-              transform: isHeadlineVisible ? 'translateY(0)' : 'translateY(30px)',
-              transition: 'all 0.8s ease-out'
-            }}
+        <motion.div
+          style={{ scale: heroScale, opacity: heroOpacity }}
+          className="z-10 text-center max-w-7xl mx-auto px-6"
+        >
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1, ease: "easeOut" }}
+            className="mb-8"
           >
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-              Student Forum Solution
-            </h2>
-            <p className="text-lg text-gray-400">
-              Connect with peers, ask questions, and share knowledge in a collaborative community
-            </p>
-          </div>
-          <div
-            id="student-solution-image"
-            style={{
-              opacity: isImageVisible ? 1 : 0,
-              transform: isImageVisible ? 'scale(1)' : 'scale(0.95)',
-              transition: 'all 0.8s ease-out'
-            }}
-          >
-            <div 
-              className="relative w-full max-w-4xl mx-auto h-96 cursor-pointer"
-              style={{ perspective: '1000px' }}
-              onClick={() => setIsFlipped(!isFlipped)}
-            >
-              <div 
-                className="relative w-full h-full transition-all duration-700 ease-in-out"
-                style={{
-                  transformStyle: 'preserve-3d',
-                  transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)'
-                }}
-              >
-                {/* Front Side - Student Image */}
-                <div 
-                  className="absolute w-full h-full rounded-xl group"
-                  style={{
-                    backfaceVisibility: 'hidden',
-                    WebkitBackfaceVisibility: 'hidden'
-                  }}
-                >
-                  <img 
-                    src={studentImage}
-                    alt="Student Solution"
-                    className="w-full h-full rounded-xl object-cover"
-                    style={{
-                      boxShadow: '0 20px 60px rgba(0, 0, 0, 0.8)',
-                      border: '1px solid rgba(255, 255, 255, 0.1)'
-                    }}
-                  />
-                  {/* Overlay - Shows on Hover */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
-                    <div className="text-white">
-                      <h3 className="text-xl font-bold mb-2">Student Forum</h3>
-                      <p className="text-sm text-gray-200">Click to flip and explore</p>
-                    </div>
-                  </div>
-                </div>
-                
-                {/* Back Side - Student2 Image */}
-                <div 
-                  className="absolute w-full h-full rounded-xl"
-                  style={{
-                    backfaceVisibility: 'hidden',
-                    WebkitBackfaceVisibility: 'hidden',
-                    transform: 'rotateY(180deg)',
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
-                    boxShadow: '0 20px 60px rgba(0, 0, 0, 0.8)'
-                  }}
-                >
-                  <img 
-                    src={student2Image}
-                    alt="Student Forum Demo"
-                    className="w-full h-full rounded-xl object-cover"
-                  />
-                  {/* Overlay - Shows on Hover */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
-                    <div className="text-white">
-                      <h3 className="text-xl font-bold mb-2">Forum in Action</h3>
-                      <p className="text-sm text-gray-200">Click to flip back</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <p className="text-center text-gray-400 mt-4 text-sm">Click to flip card</p>
-          </div>
-        </div>
-      </div>
+            <span className="inline-block py-2 px-5 rounded-full bg-white/5 border border-white/10 text-sm font-medium tracking-wide text-blue-300 backdrop-blur-md">
+              The Suite
+            </span>
+          </motion.div>
 
-      {/* Task Completion Solution Section */}
-      <div className="px-6 pb-20">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            {/* Left Side - Text */}
-            <div>
-              <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-                Task Completion Solution
-              </h2>
-              <p className="text-xl text-gray-400">
-                Students are given structured tasks to complete, helping them apply knowledge and track progress
-              </p>
-            </div>
+          <h1 className="text-6xl md:text-8xl lg:text-9xl font-semibold tracking-tighter mb-8 leading-[0.9]">
+            <span className="block bg-clip-text text-transparent bg-gradient-to-b from-white to-white/60">
+              Every tool.
+            </span>
+            <span className="block bg-clip-text text-transparent bg-gradient-to-b from-blue-400 via-indigo-400 to-blue-400">
+              One ecosystem.
+            </span>
+          </h1>
 
-            {/* Right Side - Image */}
-            <div className="flex justify-center">
-              <img 
-                src={student3Image}
-                alt="Task Completion"
-                className="w-full max-w-2xl rounded-xl"
-                style={{
-                  boxShadow: '0 20px 60px rgba(0, 0, 0, 0.8)',
-                  border: '1px solid rgba(255, 255, 255, 0.1)'
-                }}
-              />
-            </div>
-          </div>
-        </div>
-      </div>
+          <p className="text-xl md:text-2xl text-gray-400 max-w-2xl mx-auto mb-12 font-light leading-relaxed">
+            From collaborative forums to advanced task tracking. Everything you need to succeed, beautifully integrated.
+          </p>
+        </motion.div>
+      </section>
 
-      {/* Solutions for Mentors Section */}
-      <div className="px-6 pb-20">
-        <div className="max-w-6xl mx-auto">
-          {/* Mentor Hero Section */}
+      {/* Student Solutions Section */}
+      <section className="py-24 px-6 bg-[#050505]">
+        <div className="max-w-7xl mx-auto">
           <div className="mb-20">
-            <div className="text-center mb-12">
-              <h2 className="text-6xl md:text-7xl font-bold text-white mb-8">
-                Solutions for Mentors
-              </h2>
-              <p className="text-2xl text-gray-300">
-                Powerful tools to manage mentees, track progress, and build meaningful mentorship relationships.
-              </p>
-            </div>
-
-            {/* Mentor Features Grid */}
-            <div className="flex justify-center">
-              <img 
-                src={successIllustration}
-                alt="Mentor Success"
-                className="w-full max-w-sm h-auto"
-                style={{
-                  filter: 'brightness(0) invert(1) drop-shadow(0 10px 20px rgba(0, 0, 0, 0.4))'
-                }}
-              />
-            </div>
+            <h2 className="text-4xl md:text-5xl font-bold mb-4">For Students</h2>
+            <p className="text-xl text-gray-400 max-w-xl">Study smarter, not harder. Tools designed to accelerate your learning curve.</p>
           </div>
 
-          {/* Mentor Image Section with Carousel */}
-          <div className="flex justify-center">
-            <div className="relative w-full max-w-4xl">
-              {/* Image Container */}
-              <div className="relative overflow-hidden rounded-xl">
-                <div 
-                  className="flex transition-transform duration-700 ease-in-out"
-                  style={{
-                    transform: `translateX(-${mentorImageIndex * 100}%)`
-                  }}
-                >
-                  {mentorImages.map((image, index) => (
-                    <div key={index} className="w-full flex-shrink-0 flex items-center justify-center">
-                      <div className="relative group">
-                        <img 
-                          src={image.src}
-                          alt={image.title}
-                          className="w-full rounded-xl"
-                          style={{
-                            boxShadow: '0 20px 60px rgba(0, 0, 0, 0.8)',
-                            border: '1px solid rgba(255, 255, 255, 0.1)'
-                          }}
-                        />
-                        {/* Hover Overlay */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
-                          <div className="text-white">
-                            <h3 className="text-xl font-bold mb-2">{image.title}</h3>
-                            <p className="text-sm text-gray-200">{image.desc}</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Feature 1: The Forum */}
+            <BentoItem className="min-h-[500px] flex flex-col justify-between group">
+              <div className="relative z-10">
+                <div className="w-14 h-14 bg-indigo-500/20 rounded-2xl flex items-center justify-center mb-6 text-indigo-400">
+                  <FiMessageSquare size={28} />
                 </div>
+                <h3 className="text-3xl font-semibold mb-4">Collaborative Forum</h3>
+                <p className="text-gray-400 text-lg">Ask questions, share code snippets, and solve problems together in real-time threaded discussions.</p>
               </div>
 
-              {/* Left Arrow Button */}
-              <button
-                onClick={() => setMentorImageIndex((prev) => (prev === 0 ? mentorImages.length - 1 : prev - 1))}
-                className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-16 bg-white/20 hover:bg-white/40 text-white p-3 rounded-full transition-all duration-300 z-10"
-              >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                </svg>
-              </button>
+              {/* 3D Float Effect Image */}
+              <div className="relative mt-10 h-64 w-full flex items-center justify-center perspective-1000">
+                <motion.div
+                  whileHover={{ rotateY: 10, rotateX: -5, scale: 1.05 }}
+                  transition={{ type: "spring", stiffness: 100 }}
+                  className="relative w-full h-full rounded-xl overflow-hidden shadow-2xl border border-white/10"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent z-10" />
+                  <img src={studentImage} alt="Forum UI" className="w-full h-full object-cover" />
+                  <div className="absolute bottom-6 left-6 z-20">
+                    <div className="flex -space-x-2 mb-2">
+                      <div className="w-8 h-8 rounded-full bg-blue-500 border-2 border-black" />
+                      <div className="w-8 h-8 rounded-full bg-green-500 border-2 border-black" />
+                      <div className="w-8 h-8 rounded-full bg-purple-500 border-2 border-black" />
+                    </div>
+                    <p className="text-white font-medium">1.2k Active Discussions</p>
+                  </div>
+                </motion.div>
+              </div>
+            </BentoItem>
 
-              {/* Right Arrow Button */}
-              <button
-                onClick={() => setMentorImageIndex((prev) => (prev === mentorImages.length - 1 ? 0 : prev + 1))}
-                className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-16 bg-white/20 hover:bg-white/40 text-white p-3 rounded-full transition-all duration-300 z-10"
-              >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </button>
+            {/* Feature 2: Task Tracking */}
+            <BentoItem className="min-h-[500px] flex flex-col justify-between group bg-gradient-to-br from-gray-900 to-black">
+              <div className="relative z-10">
+                <div className="w-14 h-14 bg-green-500/20 rounded-2xl flex items-center justify-center mb-6 text-green-400">
+                  <FiCheckCircle size={28} />
+                </div>
+                <h3 className="text-3xl font-semibold mb-4">Task Management</h3>
+                <p className="text-gray-400 text-lg">Break down big goals into manageable steps. Track your progress visually.</p>
+              </div>
 
-              {/* Dots Indicator */}
-              <div className="flex justify-center gap-2 mt-6">
-                {mentorImages.map((_, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setMentorImageIndex(index)}
-                    className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                      index === mentorImageIndex ? 'bg-white w-8' : 'bg-gray-500'
-                    }`}
-                  />
+              <div className="relative mt-8 space-y-3">
+                {['Complete Python module', 'Mentor Check-in', 'Update Portfolio'].map((item, i) => (
+                  <div key={i} className="flex items-center gap-4 p-4 rounded-xl bg-white/5 border border-white/10 backdrop-blur-sm hover:bg-white/10 transition-colors">
+                    <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${i === 0 ? 'border-green-500 bg-green-500/20' : 'border-gray-600'}`}>
+                      {i === 0 && <FiCheckCircle className="text-green-500 w-4 h-4" />}
+                    </div>
+                    <span className={i === 0 ? 'text-gray-500 line-through' : 'text-gray-200'}>{item}</span>
+                  </div>
                 ))}
               </div>
-            </div>
-          </div>
-
-          {/* Trusted Banner */}
-          <div className="mt-20 text-center">
-            <p className="text-gray-400 mb-8">Trusted by many students</p>
-            <div className="flex flex-wrap justify-center items-center gap-12">
-              <div className="text-white font-bold text-lg">10K+ Students</div>
-              <div className="text-white font-bold text-lg">500+ Mentors</div>
-              <div className="text-white font-bold text-lg">4.9★ Rating</div>
-              <div className="text-white font-bold text-lg">95% Success</div>
-            </div>
+            </BentoItem>
           </div>
         </div>
-      </div>
+      </section>
+
+      {/* Mentor Solutions Section */}
+      <section className="py-24 px-6 bg-[#050505]">
+        <div className="max-w-7xl mx-auto">
+          <div className="mb-20 text-right">
+            <h2 className="text-4xl md:text-5xl font-bold mb-4">For Mentors</h2>
+            <p className="text-xl text-gray-400 max-w-xl ml-auto">Empowering you to share knowledge efficiently and effectively.</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* Analytics Card */}
+            <BentoItem className="md:col-span-1 min-h-[400px]">
+              <FiActivity className="text-purple-400 w-10 h-10 mb-6" />
+              <h3 className="text-2xl font-bold mb-2">Deep Analytics</h3>
+              <p className="text-gray-400 mb-8">Track student engagement and session quality.</p>
+              <div className="h-40 bg-gradient-to-t from-purple-500/20 to-transparent rounded-xl flex items-end gap-2 px-4 pb-4">
+                {[40, 70, 50, 90, 60, 80].map((h, i) => (
+                  <div key={i} style={{ height: `${h}%` }} className="flex-1 bg-purple-500/50 rounded-t-sm" />
+                ))}
+              </div>
+            </BentoItem>
+
+            {/* Dashboard Main Feature */}
+            <BentoItem className="md:col-span-2 relative overflow-hidden flex flex-col justify-center">
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-900/20 to-purple-900/20 z-0" />
+              <div className="relative z-10 flex flex-col md:flex-row gap-8 items-center">
+                <div className="flex-1">
+                  <h3 className="text-3xl font-bold mb-4">Command Center</h3>
+                  <p className="text-gray-300 text-lg mb-6">Manage all your sessions, chats, and ratings from a single powerful dashboard.</p>
+                  <ul className="space-y-2">
+                    <li className="flex items-center gap-2 text-gray-400"><FiZap className="text-yellow-400" /> Instant scheduling</li>
+                    <li className="flex items-center gap-2 text-gray-400"><FiShield className="text-green-400" /> Secure payments</li>
+                  </ul>
+                </div>
+                <div className="flex-1">
+                  <img src={mentorImage} alt="Mentor Dashboard" className="rounded-lg shadow-2xl border border-white/10 hover:scale-105 transition-transform duration-500" />
+                </div>
+              </div>
+            </BentoItem>
+          </div>
+        </div>
+      </section>
+
+      {/* Trust Stats */}
+      <section className="py-24 border-t border-white/10 bg-[#0a0a0a]">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+            {[
+              { label: "Students", value: "10K+" },
+              { label: "Mentors", value: "500+" },
+              { label: "Rating", value: "4.9/5" },
+              { label: "Success Rate", value: "95%" }
+            ].map((stat, i) => (
+              <div key={i}>
+                <h4 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-white to-gray-500 mb-2">{stat.value}</h4>
+                <p className="text-gray-500 font-medium uppercase tracking-wider text-sm">{stat.label}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
       <LandingFooter />
     </div>
