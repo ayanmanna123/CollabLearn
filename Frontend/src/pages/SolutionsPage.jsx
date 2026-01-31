@@ -1,7 +1,7 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { FiMessageSquare, FiCheckCircle, FiUsers, FiTrendingUp, FiShield, FiStar, FiZap, FiActivity } from 'react-icons/fi';
+import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
+import { FiMessageSquare, FiCheckCircle, FiUsers, FiTrendingUp, FiShield, FiStar, FiZap, FiActivity, FiCheck, FiX, FiPlus, FiMinus, FiCpu, FiGlobe, FiLayers, FiSmartphone, FiCalendar, FiVideo, FiCode } from 'react-icons/fi';
 import LandingNavbar from '../components/LandingNavbar';
 import LandingFooter from '../components/LandingFooter';
 import studentImage from '../assets/student.png';
@@ -40,6 +40,33 @@ const BentoItem = ({ children, className, delay = 0 }) => (
   </motion.div>
 );
 
+const AccordionItem = ({ question, answer, isOpen, onClick }) => (
+  <div className="border-b border-white/10">
+    <button
+      onClick={onClick}
+      className="w-full py-6 flex items-center justify-between text-left focus:outline-none group"
+    >
+      <span className="text-xl font-medium text-gray-200 group-hover:text-white transition-colors">{question}</span>
+      <div className={`p-2 rounded-full bg-white/5 transition-colors group-hover:bg-white/10`}>
+        {isOpen ? <FiMinus className="w-5 h-5 text-indigo-400" /> : <FiPlus className="w-5 h-5 text-gray-400" />}
+      </div>
+    </button>
+    <AnimatePresence> {/* Note: Need to make sure AnimatePresence is imported or available. It is imported in LandingPage but let's check imports here. */}
+      {isOpen && (
+        <motion.div
+          initial={{ height: 0, opacity: 0 }}
+          animate={{ height: "auto", opacity: 1 }}
+          exit={{ height: 0, opacity: 0 }}
+          transition={{ duration: 0.3 }}
+          className="overflow-hidden"
+        >
+          <p className="pb-6 text-gray-400 leading-relaxed">{answer}</p>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  </div>
+);
+
 const SolutionsPage = () => {
   const containerRef = useRef(null);
   const { scrollYProgress } = useScroll({
@@ -47,6 +74,11 @@ const SolutionsPage = () => {
     offset: ["start start", "end end"]
   });
   const { hash } = useLocation();
+  const [openFaqIndex, setOpenFaqIndex] = useState(null);
+
+  const toggleFaq = (index) => {
+    setOpenFaqIndex(openFaqIndex === index ? null : index);
+  };
 
   const heroScale = useTransform(scrollYProgress, [0, 0.2], [1, 0.95]);
   const heroOpacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
@@ -213,6 +245,213 @@ const SolutionsPage = () => {
         </div>
       </section>
 
+      {/* Feature Deep Dive Section */}
+      <section className="py-32 px-6 bg-[#050505] overflow-hidden">
+        <div className="max-w-7xl mx-auto space-y-32">
+          {[{
+            title: "Simulated Code Execution",
+            desc: "Don't just write code—watch it run. Our sandboxed execution environment calculates complexity in real-time.",
+            icon: FiCode,
+            image: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&q=80&w=1000",
+            color: "blue"
+          }, {
+            title: "Smart Scheduling",
+            desc: "Seamlessly sync calendars. Automated time-zone detection makes global mentorship effortless.",
+            icon: FiCalendar,
+            image: "https://images.unsplash.com/photo-1506784983877-45594efa4cbe?auto=format&fit=crop&q=80&w=1000",
+            color: "purple"
+          }].map((feature, i) => (
+            <div key={i} className={`flex flex-col ${i % 2 === 1 ? 'lg:flex-row-reverse' : 'lg:flex-row'} items-center gap-16`}>
+              <div className="flex-1 space-y-8">
+                <div className={`w-16 h-16 rounded-2xl bg-${feature.color}-500/20 flex items-center justify-center text-${feature.color}-400`}>
+                  <feature.icon size={32} />
+                </div>
+                <h3 className="text-4xl md:text-5xl font-bold leading-tight">{feature.title}</h3>
+                <p className="text-xl text-gray-400 leading-relaxed">{feature.desc}</p>
+                <button className="text-white border-b border-white/30 pb-1 hover:border-white transition-colors">
+                  Learn more &rarr;
+                </button>
+              </div>
+              <div className="flex-1 w-full perspective-1000">
+                <motion.div
+                  initial={{ opacity: 0, rotateY: i % 2 === 0 ? 15 : -15 }}
+                  whileInView={{ opacity: 1, rotateY: 0 }}
+                  transition={{ duration: 0.8 }}
+                  className="relative rounded-2xl overflow-hidden shadow-2xl border border-white/10 group bg-[#0a0a0a]"
+                >
+                  <div className={`absolute inset-0 bg-gradient-to-tr from-${feature.color}-500/10 to-transparent opacity-50`} />
+                  <img src={feature.image} alt={feature.title} className="w-full h-auto object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700" />
+                </motion.div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Ecosystem Integration Section */}
+      <section className="py-24 px-6 bg-[#050505] relative overflow-hidden">
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-indigo-900/10 rounded-full blur-[100px]" />
+        </div>
+        <div className="max-w-7xl mx-auto text-center relative z-10">
+          <span className="text-indigo-400 font-medium tracking-wider uppercase mb-4 block">The Ecosystem</span>
+          <h2 className="text-4xl md:text-6xl font-bold mb-8">Everything connected.</h2>
+          <p className="text-xl text-gray-400 max-w-2xl mx-auto mb-20">
+            A unified learning experience where your code, chats, and goals live in perfect harmony.
+          </p>
+
+          <div className="relative h-[600px] flex items-center justify-center">
+            {/* Center Hub */}
+            <div className="relative z-20 w-32 h-32 bg-indigo-600 rounded-full flex items-center justify-center shadow-[0_0_50px_rgba(79,70,229,0.5)] border-4 border-black">
+              <span className="text-3xl">🚀</span>
+            </div>
+
+            {/* Orbiting Planets */}
+            {[
+              { icon: FiMessageSquare, label: "Forum", x: 0, y: -200, delay: 0 },
+              { icon: FiVideo, label: "Calls", x: 200, y: 0, delay: 1 },
+              { icon: FiCheckCircle, label: "Tasks", x: 0, y: 200, delay: 2 },
+              { icon: FiCode, label: "Code", x: -200, y: 0, delay: 3 },
+            ].map((item, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, scale: 0 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ delay: i * 0.1, duration: 0.5 }}
+                className="absolute flex flex-col items-center gap-4"
+                style={{ transform: `translate(${item.x}px, ${item.y}px)` }}
+              >
+                <div className="w-20 h-20 bg-[#111] rounded-2xl border border-white/10 flex items-center justify-center text-gray-300 shadow-xl z-20 hover:scale-110 hover:text-white hover:border-indigo-500/50 transition-all duration-300 cursor-pointer">
+                  <item.icon size={30} />
+                </div>
+                <span className="text-sm font-medium text-gray-400 uppercase tracking-widest">{item.label}</span>
+
+                {/* Connection Line */}
+                <svg className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] -z-10 pointer-events-none overflow-visible">
+                  <motion.line
+                    x1="50%" y1="50%"
+                    x2={200 - item.x + (item.x > 0 ? -40 : item.x < 0 ? 40 : 0)}
+                    y2={200 - item.y + (item.y > 0 ? -40 : item.y < 0 ? 40 : 0)}
+                    stroke="rgba(255,255,255,0.1)"
+                    strokeWidth="2"
+                    initial={{ pathLength: 0 }}
+                    whileInView={{ pathLength: 1 }}
+                    transition={{ duration: 1.5, delay: 0.5 }}
+                  />
+                </svg>
+              </motion.div>
+            ))}
+
+            {/* Orbit Circle */}
+            <div className="absolute w-[400px] h-[400px] border border-white/5 rounded-full -z-10" />
+            <div className="absolute w-[600px] h-[600px] border border-white/5 rounded-full -z-10 opacity-50" />
+          </div>
+        </div>
+      </section>
+
+      {/* Comparison Table */}
+      <section className="py-24 px-6 bg-[#0a0a0a]">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-5xl font-bold mb-4">Why choose us?</h2>
+          </div>
+          <div className="overflow-hidden rounded-3xl border border-white/10 bg-white/[0.02]">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="border-b border-white/10 bg-white/5">
+                  <th className="p-6 text-gray-400 font-medium w-1/3">Feature</th>
+                  <th className="p-6 text-white font-bold text-xl w-1/3 text-center bg-white/5">CollabLearn</th>
+                  <th className="p-6 text-gray-500 font-medium w-1/3 text-center">Others</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { feature: "Mentorship Matching", us: true, them: false },
+                  { feature: "Integrated IDE", us: true, them: false },
+                  { feature: "Video Calls", us: true, them: true },
+                  { feature: "Task Tracking", us: true, them: "Partial" },
+                  { feature: "Community Forum", us: true, them: true },
+                  { feature: "Mobile App", us: true, them: false },
+                ].map((row, i) => (
+                  <tr key={i} className="border-b border-white/5 hover:bg-white/[0.02] transition-colors">
+                    <td className="p-6 text-gray-300 font-medium">{row.feature}</td>
+                    <td className="p-6 text-center bg-white/[0.02]">
+                      {row.us === true ? <div className="inline-flex p-1 bg-green-500/20 rounded-full"><FiCheck className="text-green-500" /></div> : row.us}
+                    </td>
+                    <td className="p-6 text-center text-gray-600">
+                      {row.them === true ? <FiCheck className="mx-auto" /> : row.them === false ? <FiX className="mx-auto" /> : row.them}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing Section */}
+      <section className="py-32 px-6 bg-[#050505] relative cursor-default">
+        <GradientBlob className="w-[600px] h-[600px] bg-purple-900/20 bottom-0 left-0" />
+        <div className="max-w-7xl mx-auto relative z-10">
+          <div className="text-center mb-20">
+            <h2 className="text-4xl md:text-6xl font-bold mb-6">Simple pricing.</h2>
+            <p className="text-xl text-gray-400">Invest in your customized learning journey.</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              {
+                name: "Explorer",
+                price: "Free",
+                desc: "Perfect for getting started.",
+                features: ["Access to Community Forum", "Browse Mentors", "Basic Profile"],
+                cta: "Join for Free",
+                highlight: false
+              },
+              {
+                name: "Pro Learner",
+                price: "$19",
+                period: "/mo",
+                desc: "Accelerate your growth.",
+                features: ["Unlimited Mentor Messaging", "Priority Booking", "Advanced Goal Tracking", "Code Sandbox Access"],
+                cta: "Get Pro",
+                highlight: true
+              },
+              {
+                name: "Mentor Elite",
+                price: "$0",
+                period: "/mo",
+                desc: "For leaders who share.",
+                features: ["Verified Mentor Badge", "Low Platform Fees (5%)", "Analytics Dashboard", "Priority Support"],
+                cta: "Apply Now",
+                highlight: false
+              }
+            ].map((plan, i) => (
+              <div key={i} className={`relative p-8 rounded-3xl border flex flex-col ${plan.highlight ? 'bg-white/10 border-indigo-500/50 shadow-[0_0_30px_rgba(99,102,241,0.15)] scale-105 z-10' : 'bg-white/[0.03] border-white/10'}`}>
+                {plan.highlight && <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-indigo-500 text-white px-4 py-1 rounded-full text-sm font-bold tracking-wide shadow-lg">MOST POPULAR</div>}
+                <h3 className="text-2xl font-bold mb-2">{plan.name}</h3>
+                <div className="flex items-baseline mb-4">
+                  <span className="text-4xl md:text-5xl font-bold">{plan.price}</span>
+                  {plan.period && <span className="text-gray-400 ml-1">{plan.period}</span>}
+                </div>
+                <p className="text-gray-400 mb-8 border-b border-white/10 pb-8">{plan.desc}</p>
+                <ul className="space-y-4 mb-auto">
+                  {plan.features.map((feat, j) => (
+                    <li key={j} className="flex items-center gap-3 text-gray-300">
+                      <FiCheck className={`shrink-0 ${plan.highlight ? 'text-indigo-400' : 'text-gray-500'}`} />
+                      {feat}
+                    </li>
+                  ))}
+                </ul>
+                <button className={`w-full py-4 rounded-xl font-bold mt-8 transition-transform hover:scale-105 ${plan.highlight ? 'bg-indigo-600 hover:bg-indigo-700 text-white' : 'bg-white text-black hover:bg-gray-200'}`}>
+                  {plan.cta}
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Trust Stats */}
       <section className="py-24 border-t border-white/10 bg-[#0a0a0a]">
         <div className="max-w-7xl mx-auto px-6">
@@ -227,6 +466,30 @@ const SolutionsPage = () => {
                 <h4 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-white to-gray-500 mb-2">{stat.value}</h4>
                 <p className="text-gray-500 font-medium uppercase tracking-wider text-sm">{stat.label}</p>
               </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="py-24 px-6 bg-[#0a0a0a]">
+        <div className="max-w-3xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-5xl font-bold mb-4">Questions?</h2>
+          </div>
+          <div className="space-y-2">
+            {[
+              { q: "Can I upgrade my plan later?", a: "Yes, you can upgrade or downgrade your plan at any time from your account settings." },
+              { q: "How are mentors vetted?", a: "We have a rigorous application process including background checks, portfolio reviews, and interviews." },
+              { q: "What methods of payment do you accept?", a: "We accept all major credit cards, PayPal, and Apple Pay." },
+            ].map((item, i) => (
+              <AccordionItem
+                key={i}
+                question={item.q}
+                answer={item.a}
+                isOpen={openFaqIndex === i}
+                onClick={() => toggleFaq(i)}
+              />
             ))}
           </div>
         </div>
