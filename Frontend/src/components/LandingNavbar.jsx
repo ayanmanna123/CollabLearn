@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { FiChevronDown, FiMenu, FiX, FiArrowRight } from "react-icons/fi";
 import logoHat from "../assets/logo-hat.png";
@@ -8,6 +8,7 @@ const LandingNavbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
 
   // Handle scroll effect for navbar background
   useEffect(() => {
@@ -18,15 +19,24 @@ const LandingNavbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const scrollToSection = (sectionId) => {
-    // If not on home page, we might need to navigate there first
-    // For now, assuming simple scroll if on page, or handled via navigation
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth", block: "start" });
-      setIsOpen(false);
+  const handleNavClick = (e, path, sectionId) => {
+    e.preventDefault();
+    setIsOpen(false);
+
+    // If we are on the home page and targeting a section
+    if (location.pathname === "/" && sectionId) {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth", block: "start" });
+        // Optionally clean up the URL or set the hash without jumping
+        window.history.pushState(null, "", path);
+      }
+    } else {
+      // Navigate to the page (and hash)
+      navigate(path);
     }
   };
+
 
   const NavLink = ({ to, children }) => (
     <Link
@@ -38,15 +48,15 @@ const LandingNavbar = () => {
     </Link>
   );
 
-  const DropdownLink = ({ to, title, desc, onClick }) => (
-    <Link
-      to={to}
-      onClick={onClick}
-      className="block p-3 rounded-xl hover:bg-white/5 transition-colors group"
+  const DropdownLink = ({ to, title, desc, sectionId }) => (
+    <a
+      href={to}
+      onClick={(e) => handleNavClick(e, to, sectionId)}
+      className="block p-3 rounded-xl hover:bg-white/5 transition-colors group cursor-pointer"
     >
       <h4 className="text-sm font-semibold text-white group-hover:text-indigo-300 transition-colors">{title}</h4>
       <p className="text-xs text-gray-500 mt-1">{desc}</p>
-    </Link>
+    </a>
   );
 
   return (
@@ -77,16 +87,34 @@ const LandingNavbar = () => {
               <div className="absolute top-full -left-4 pt-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform group-hover:translate-y-0 translate-y-2">
                 <div className="w-64 bg-[#0a0a0a]/95 backdrop-blur-2xl border border-white/10 rounded-2xl p-2 shadow-2xl ring-1 ring-black/5">
                   <DropdownLink
-                    to="/"
+                    to="/#dashboard-section"
+                    sectionId="dashboard-section"
                     title="Personal Dashboard"
                     desc="Track your progress daily"
-                    onClick={() => scrollToSection('dashboard-section')}
                   />
                   <DropdownLink
-                    to="/"
+                    to="/#how-it-works"
+                    sectionId="how-it-works"
                     title="Connect with Mentors"
                     desc="Find your perfect guide"
-                    onClick={() => scrollToSection('connect-mentors-section')}
+                  />
+                  <DropdownLink
+                    to="/#tools-section"
+                    sectionId="tools-section"
+                    title="Platform Tools"
+                    desc="Video, AI & more"
+                  />
+                  <DropdownLink
+                    to="/#community-section"
+                    sectionId="community-section"
+                    title="Success Stories"
+                    desc="See what others say"
+                  />
+                  <DropdownLink
+                    to="/#faq-section"
+                    sectionId="faq-section"
+                    title="Common Questions"
+                    desc="We have answers"
                   />
                 </div>
               </div>
@@ -102,11 +130,13 @@ const LandingNavbar = () => {
                 <div className="w-64 bg-[#0a0a0a]/95 backdrop-blur-2xl border border-white/10 rounded-2xl p-2 shadow-2xl ring-1 ring-black/5">
                   <DropdownLink
                     to="/solutions#students"
+                    sectionId="students"
                     title="For Students"
                     desc="Accelerate your learning"
                   />
                   <DropdownLink
                     to="/solutions#mentors"
+                    sectionId="mentors"
                     title="For Mentors"
                     desc="Share and earn"
                   />
@@ -155,8 +185,60 @@ const LandingNavbar = () => {
             <div className="px-6 py-8 space-y-6">
               <div className="space-y-4">
                 <p className="text-xs font-bold text-gray-500 uppercase tracking-widest">Navigation</p>
+
                 <Link to="/" onClick={() => setIsOpen(false)} className="block text-lg font-medium text-white">Home</Link>
-                <Link to="/solutions" onClick={() => setIsOpen(false)} className="block text-lg font-medium text-white">Solutions</Link>
+
+                {/* Mobile Features Section */}
+                <div>
+                  <div className="text-lg font-medium text-white mb-2">Features</div>
+                  <div className="pl-4 border-l border-white/10 space-y-2">
+                    <a
+                      href="/#dashboard-section"
+                      onClick={(e) => handleNavClick(e, "/#dashboard-section", "dashboard-section")}
+                      className="block text-gray-400 hover:text-white transition-colors pointer-events-auto"
+                    >
+                      Personal Dashboard
+                    </a>
+                    <a
+                      href="/#how-it-works"
+                      onClick={(e) => handleNavClick(e, "/#how-it-works", "how-it-works")}
+                      className="block text-gray-400 hover:text-white transition-colors pointer-events-auto"
+                    >
+                      Connect with Mentors
+                    </a>
+                    <a
+                      href="/#tools-section"
+                      onClick={(e) => handleNavClick(e, "/#tools-section", "tools-section")}
+                      className="block text-gray-400 hover:text-white transition-colors pointer-events-auto"
+                    >
+                      Platform Tools
+                    </a>
+                    <a
+                      href="/#community-section"
+                      onClick={(e) => handleNavClick(e, "/#community-section", "community-section")}
+                      className="block text-gray-400 hover:text-white transition-colors pointer-events-auto"
+                    >
+                      Success Stories
+                    </a>
+                    <a
+                      href="/#faq-section"
+                      onClick={(e) => handleNavClick(e, "/#faq-section", "faq-section")}
+                      className="block text-gray-400 hover:text-white transition-colors pointer-events-auto"
+                    >
+                      Common Questions
+                    </a>
+                  </div>
+                </div>
+
+                {/* Mobile Solutions Section */}
+                <div>
+                  <div className="text-lg font-medium text-white mb-2">Solutions</div>
+                  <div className="pl-4 border-l border-white/10 space-y-2">
+                    <Link to="/solutions#students" onClick={() => setIsOpen(false)} className="block text-gray-400 hover:text-white transition-colors">For Students</Link>
+                    <Link to="/solutions#mentors" onClick={() => setIsOpen(false)} className="block text-gray-400 hover:text-white transition-colors">For Mentors</Link>
+                  </div>
+                </div>
+
                 <Link to="/contact-us" onClick={() => setIsOpen(false)} className="block text-lg font-medium text-white">Contact</Link>
               </div>
 

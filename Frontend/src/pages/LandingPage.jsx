@@ -1,5 +1,5 @@
-import React, { useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useRef, useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import {
   FiArrowRight, FiVideo, FiTarget, FiShield, FiCpu, FiGlobe, FiAward,
@@ -122,6 +122,20 @@ const LandingPage = () => {
   const containerRef = useRef(null);
   const [activeTab, setActiveTab] = useState('student');
   const [openFaqIndex, setOpenFaqIndex] = useState(null);
+  const { hash } = useLocation();
+
+  // Handle hash scrolling
+  useEffect(() => {
+    if (hash) {
+      const id = hash.replace('#', '');
+      const element = document.getElementById(id);
+      if (element) {
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 100);
+      }
+    }
+  }, [hash]);
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -223,7 +237,8 @@ const LandingPage = () => {
           animate={{ opacity: 1, y: 0, rotateX: 0 }}
           transition={{ duration: 1.2, delay: 0.2, ease: "easeOut" }}
           style={{ perspective: 1000 }}
-          className="relative mt-20 w-full max-w-[1400px] px-4 md:px-8"
+          className="relative mt-20 w-full max-w-[1400px] px-4 md:px-8 scroll-mt-24"
+          id="dashboard-section"
         >
           <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-white/10 bg-[#0a0a0a] group">
             <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent pointer-events-none z-10" />
@@ -241,7 +256,7 @@ const LandingPage = () => {
       </section>
 
       {/* How It Works Section */}
-      <section className="py-24 px-6 border-b border-white/5">
+      <section id="how-it-works" className="py-24 px-6 border-b border-white/5 scroll-mt-24">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-500 mb-4">
@@ -277,7 +292,7 @@ const LandingPage = () => {
       </section>
 
       {/* Bento Grid Features Section (Common for now, but titled appropriately) */}
-      <section className="py-32 px-6 bg-[#050505]">
+      <section id="tools-section" className="py-32 px-6 bg-[#050505] scroll-mt-24">
         <div className="max-w-7xl mx-auto">
           <div className="mb-24 md:pl-8 border-l-2 border-indigo-500/50">
             <ParallaxText className="text-4xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-500">
@@ -364,7 +379,7 @@ const LandingPage = () => {
       </section>
 
       {/* Testimonials Marquee Section */}
-      <section className="py-24 overflow-hidden bg-white/[0.02]">
+      <section id="community-section" className="py-24 overflow-hidden bg-white/[0.02] scroll-mt-24">
         <div className="text-center mb-12">
           <p className="text-sm font-medium text-indigo-400 tracking-widest uppercase mb-2">Community</p>
           <h2 className="text-3xl md:text-5xl font-bold">Loved by thousands.</h2>
@@ -411,7 +426,7 @@ const LandingPage = () => {
       </section>
 
       {/* FAQ Section */}
-      <section className="py-32 px-6">
+      <section id="faq-section" className="py-32 px-6 scroll-mt-24">
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-5xl font-bold mb-4">Questions?</h2>
