@@ -23,8 +23,15 @@ const LandingNavbar = () => {
     e.preventDefault();
     setIsOpen(false);
 
-    // If we are on the home page and targeting a section
-    if (location.pathname === "/" && sectionId) {
+    const targetPath = path.split('#')[0];
+    const currentPath = location.pathname;
+
+    // Normalize paths to ensure comparison works (e.g. "/" vs "")
+    const currentPathNormalized = currentPath === '/' ? '' : currentPath.replace(/\/$/, "");
+    const targetPathNormalized = targetPath === '/' ? '' : targetPath.replace(/\/$/, "");
+
+    // Check if we are targeting the same page
+    if (currentPathNormalized === targetPathNormalized && sectionId) {
       const element = document.getElementById(sectionId);
       if (element) {
         element.scrollIntoView({ behavior: "smooth", block: "start" });
