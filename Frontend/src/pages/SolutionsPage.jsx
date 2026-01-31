@@ -76,6 +76,15 @@ const SolutionsPage = () => {
   const { hash } = useLocation();
   const [openFaqIndex, setOpenFaqIndex] = useState(null);
   const [activeFeature, setActiveFeature] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+
+  useEffect(() => {
+    if (isPaused) return;
+    const interval = setInterval(() => {
+      setActiveFeature((prev) => (prev + 1) % 4);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [isPaused]);
 
   const toggleFaq = (index) => {
     setOpenFaqIndex(openFaqIndex === index ? null : index);
@@ -277,7 +286,12 @@ const SolutionsPage = () => {
                 <motion.div
                   initial={{ opacity: 0, rotateY: i % 2 === 0 ? 15 : -15 }}
                   whileInView={{ opacity: 1, rotateY: 0 }}
-                  transition={{ duration: 0.8 }}
+
+                  animate={{ y: [0, -15, 0] }}
+                  transition={{
+                    y: { repeat: Infinity, duration: 4 + i, ease: "easeInOut" },
+                    default: { duration: 0.8 }
+                  }}
                   className="relative rounded-2xl overflow-hidden shadow-2xl border border-white/10 group bg-[#0a0a0a]"
                 >
                   <div className={`absolute inset-0 bg-gradient-to-tr from-${feature.color}-500/10 to-transparent opacity-50`} />
@@ -314,11 +328,22 @@ const SolutionsPage = () => {
                   <button
                     key={index}
                     onClick={() => setActiveFeature(index)}
-                    className={`w-full text-left p-6 rounded-2xl transition-all duration-300 border flex items-start gap-6 group ${isActive
+                    onMouseEnter={() => setIsPaused(true)}
+                    onMouseLeave={() => setIsPaused(false)}
+                    className={`w-full text-left p-6 rounded-2xl transition-all duration-300 border flex items-start gap-6 group relative overflow-hidden ${isActive
                       ? 'bg-white/10 border-indigo-500/50 shadow-[0_0_30px_rgba(79,70,229,0.1)]'
                       : 'bg-transparent border-transparent hover:bg-white/5'
                       }`}
                   >
+                    {isActive && !isPaused && (
+                      <motion.div
+                        layoutId="progress"
+                        className="absolute bottom-0 left-0 h-[2px] bg-indigo-500"
+                        initial={{ width: "0%" }}
+                        animate={{ width: "100%" }}
+                        transition={{ duration: 5, ease: "linear" }}
+                      />
+                    )}
                     <div className={`mt-1 w-12 h-12 rounded-xl flex items-center justify-center shrink-0 transition-colors ${isActive ? 'bg-indigo-600 text-white' : 'bg-white/5 text-gray-400 group-hover:text-white'
                       }`}>
                       <item.icon size={24} />
@@ -406,7 +431,14 @@ const SolutionsPage = () => {
                   { feature: "Community Forum", us: true, them: true },
                   { feature: "Mobile App", us: true, them: false },
                 ].map((row, i) => (
-                  <tr key={i} className="border-b border-white/5 hover:bg-white/[0.02] transition-colors">
+                  <motion.tr
+                    key={i}
+                    initial={{ opacity: 0, x: -20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: i * 0.1 }}
+                    className="border-b border-white/5 hover:bg-white/[0.02] transition-colors"
+                  >
                     <td className="p-6 text-gray-300 font-medium">{row.feature}</td>
                     <td className="p-6 text-center bg-white/[0.02]">
                       {row.us === true ? <div className="inline-flex p-1 bg-green-500/20 rounded-full"><FiCheck className="text-green-500" /></div> : row.us}
@@ -414,7 +446,7 @@ const SolutionsPage = () => {
                     <td className="p-6 text-center text-gray-600">
                       {row.them === true ? <FiCheck className="mx-auto" /> : row.them === false ? <FiX className="mx-auto" /> : row.them}
                     </td>
-                  </tr>
+                  </motion.tr>
                 ))}
               </tbody>
             </table>
@@ -460,7 +492,14 @@ const SolutionsPage = () => {
                 highlight: false
               }
             ].map((plan, i) => (
-              <div key={i} className={`relative p-8 rounded-3xl border flex flex-col ${plan.highlight ? 'bg-white/10 border-indigo-500/50 shadow-[0_0_30px_rgba(99,102,241,0.15)] scale-105 z-10' : 'bg-white/[0.03] border-white/10'}`}>
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.15 }}
+                className={`relative p-8 rounded-3xl border flex flex-col ${plan.highlight ? 'bg-white/10 border-indigo-500/50 shadow-[0_0_30px_rgba(99,102,241,0.15)] scale-105 z-10' : 'bg-white/[0.03] border-white/10'}`}
+              >
                 {plan.highlight && <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-indigo-500 text-white px-4 py-1 rounded-full text-sm font-bold tracking-wide shadow-lg">MOST POPULAR</div>}
                 <h3 className="text-2xl font-bold mb-2">{plan.name}</h3>
                 <div className="flex items-baseline mb-4">
@@ -479,7 +518,7 @@ const SolutionsPage = () => {
                 <button className={`w-full py-4 rounded-xl font-bold mt-8 transition-transform hover:scale-105 ${plan.highlight ? 'bg-indigo-600 hover:bg-indigo-700 text-white' : 'bg-white text-black hover:bg-gray-200'}`}>
                   {plan.cta}
                 </button>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
