@@ -1,4 +1,5 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { FiMessageSquare, FiCheckCircle, FiUsers, FiTrendingUp, FiShield, FiStar, FiZap, FiActivity } from 'react-icons/fi';
 import LandingNavbar from '../components/LandingNavbar';
@@ -45,9 +46,23 @@ const SolutionsPage = () => {
     target: containerRef,
     offset: ["start start", "end end"]
   });
+  const { hash } = useLocation();
 
   const heroScale = useTransform(scrollYProgress, [0, 0.2], [1, 0.95]);
   const heroOpacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
+
+  // Handle hash scrolling
+  useEffect(() => {
+    if (hash) {
+      const id = hash.replace('#', '');
+      const element = document.getElementById(id);
+      if (element) {
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 100);
+      }
+    }
+  }, [hash]);
 
   return (
     <div ref={containerRef} className="bg-[#050505] min-h-screen text-white overflow-x-hidden selection:bg-indigo-500/30">
@@ -92,7 +107,7 @@ const SolutionsPage = () => {
       </section>
 
       {/* Student Solutions Section */}
-      <section className="py-24 px-6 bg-[#050505]">
+      <section id="students" className="py-24 px-6 bg-[#050505]">
         <div className="max-w-7xl mx-auto">
           <div className="mb-20">
             <h2 className="text-4xl md:text-5xl font-bold mb-4">For Students</h2>
@@ -157,7 +172,7 @@ const SolutionsPage = () => {
       </section>
 
       {/* Mentor Solutions Section */}
-      <section className="py-24 px-6 bg-[#050505]">
+      <section id="mentors" className="py-24 px-6 bg-[#050505]">
         <div className="max-w-7xl mx-auto">
           <div className="mb-20 text-right">
             <h2 className="text-4xl md:text-5xl font-bold mb-4">For Mentors</h2>
