@@ -1,284 +1,247 @@
-import React, { useState } from 'react';
+import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
-import { FiArrowRight, FiUsers, FiVideo, FiTarget, FiMessageSquare, FiTrendingUp, FiShield, FiCheck } from 'react-icons/fi';
+import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
+import { FiArrowRight, FiUsers, FiVideo, FiTarget, FiMessageSquare, FiTrendingUp, FiShield, FiCpu, FiGlobe, FiAward } from 'react-icons/fi';
 import LandingNavbar from '../components/LandingNavbar';
 import LandingFooter from '../components/LandingFooter';
 import studentDashboardImage from '../assets/studentdashbaordimage.png';
-import mentorDashboardImage from '../assets/MentorDahboard.png';
 
-const FeatureCard = ({ icon: Icon, title, description, delay }) => (
+// --- Components ---
+
+const BentoItem = ({ children, className, delay = 0 }) => (
   <motion.div
-    initial={{ opacity: 0, y: 20 }}
+    initial={{ opacity: 0, y: 30 }}
     whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true }}
-    transition={{ duration: 0.5, delay }}
-    className="p-6 rounded-2xl bg-gray-900/40 border border-gray-800 backdrop-blur-sm hover:bg-gray-800/60 hover:border-gray-700 transition-all duration-300 group"
+    viewport={{ once: true, margin: "-50px" }}
+    transition={{ duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] }}
+    className={`relative overflow-hidden rounded-3xl bg-white/[0.03] border border-white/10 backdrop-blur-xl p-8 hover:bg-white/[0.05] transition-colors duration-500 group ${className}`}
   >
-    <div className="w-12 h-12 rounded-lg bg-blue-600/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
-      <Icon className="w-6 h-6 text-blue-400 group-hover:text-blue-300" />
-    </div>
-    <h3 className="text-xl font-semibold text-white mb-2">{title}</h3>
-    <p className="text-gray-400 leading-relaxed">{description}</p>
+    {children}
   </motion.div>
 );
 
-const StatCard = ({ number, label }) => (
-  <div className="text-center">
-    <h4 className="text-3xl md:text-4xl font-bold text-white mb-1">{number}</h4>
-    <p className="text-sm text-gray-400 uppercase tracking-wider">{label}</p>
-  </div>
+const ParallaxText = ({ children, className }) => {
+  return (
+    <motion.h2
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.8, ease: "easeOut" }}
+      className={className}
+    >
+      {children}
+    </motion.h2>
+  );
+};
+
+const GradientBlob = ({ className }) => (
+  <div className={`absolute rounded-full mix-blend-screen filter blur-[100px] opacity-30 animate-blob ${className}`} />
 );
 
+// --- Main Page ---
+
 const LandingPage = () => {
-  const [activeTab, setActiveTab] = useState('student');
+  const containerRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end end"]
+  });
+
+  const heroScale = useTransform(scrollYProgress, [0, 0.2], [1, 0.95]);
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
+  const heroY = useTransform(scrollYProgress, [0, 0.2], [0, 100]);
 
   return (
-    <div className="min-h-screen bg-black text-white selection:bg-blue-500/30">
+    <div ref={containerRef} className="bg-[#050505] min-h-screen text-white overflow-x-hidden selection:bg-indigo-500/30">
       <LandingNavbar />
 
       {/* Hero Section */}
-      <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
-        {/* Abstract Background Gradients */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-blue-600/20 rounded-full blur-[120px] -z-10" />
-        <div className="absolute bottom-0 right-0 w-[800px] h-[600px] bg-purple-600/10 rounded-full blur-[100px] -z-10" />
+      <section className="relative min-h-[110vh] flex flex-col items-center justify-center pt-32 pb-20 overflow-hidden">
+        {/* Animated Background */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <GradientBlob className="w-[800px] h-[800px] bg-indigo-600/20 top-[-20%] left-[-10%]" />
+          <GradientBlob className="w-[600px] h-[600px] bg-purple-600/20 bottom-[-10%] right-[-10%] animation-delay-2000" />
+          <GradientBlob className="w-[500px] h-[500px] bg-blue-600/20 top-[40%] left-[30%] animation-delay-4000" />
+        </div>
 
-        <div className="max-w-7xl mx-auto px-6 text-center">
+        <motion.div
+          style={{ scale: heroScale, opacity: heroOpacity, y: heroY }}
+          className="z-10 text-center max-w-7xl mx-auto px-6"
+        >
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1, ease: "easeOut" }}
+            className="mb-8"
           >
-            <span className="inline-block py-1 px-3 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-sm font-medium mb-6">
-              🚀 The Future of Mentorship is Here
+            <span className="inline-block py-2 px-5 rounded-full bg-white/5 border border-white/10 text-sm font-medium tracking-wide text-indigo-300 backdrop-blur-md">
+              New: AI-Powered Learning Paths
             </span>
-            <h1 className="text-5xl md:text-7xl font-bold tracking-tight mb-6 leading-tight">
-              Master Your Craft with<br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400">
-                World-Class Mentors
-              </span>
-            </h1>
-            <p className="text-xl text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed">
-              Connect with industry experts, track your progress, and accelerate your career growth through personalized 1-on-1 mentorship.
-            </p>
-
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-20">
-              <Link
-                to="/student/explore"
-                className="w-full sm:w-auto px-8 py-4 rounded-full bg-blue-600 hover:bg-blue-500 text-white font-semibold transition-all hover:scale-105 flex items-center justify-center gap-2 shadow-lg shadow-blue-600/25"
-              >
-                Find a Mentor <FiArrowRight />
-              </Link>
-              <Link
-                to="/register"
-                className="w-full sm:w-auto px-8 py-4 rounded-full bg-white/5 hover:bg-white/10 text-white font-semibold backdrop-blur-sm border border-white/10 transition-all hover:scale-105 flex items-center justify-center"
-              >
-                Join as Student
-              </Link>
-            </div>
           </motion.div>
 
-          {/* Hero Dashboard Preview */}
-          <motion.div
-            initial={{ opacity: 0, y: 40, rotateX: 20 }}
-            animate={{ opacity: 1, y: 0, rotateX: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="relative mx-auto max-w-5xl perspective-1000"
-          >
-            <div className="relative rounded-xl bg-gray-900 shadow-2xl border border-gray-800 overflow-hidden transform transition-transform hover:scale-[1.01] duration-500 group">
-              <div className="absolute top-0 left-0 right-0 h-8 bg-gray-800/50 flex items-center px-4 gap-2 border-b border-gray-700">
-                <div className="w-3 h-3 rounded-full bg-red-500/80" />
-                <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
-                <div className="w-3 h-3 rounded-full bg-green-500/80" />
-              </div>
-              <img
-                src={studentDashboardImage}
-                alt="CollabLearn Dashboard"
-                className="w-full h-auto rounded-b-xl opacity-90 group-hover:opacity-100 transition-opacity"
-              />
-              {/* Overlay Gradient */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
-            </div>
-          </motion.div>
-        </div>
-      </section>
+          <h1 className="text-6xl md:text-8xl lg:text-9xl font-semibold tracking-tighter mb-8 leading-[0.9]">
+            <span className="block bg-clip-text text-transparent bg-gradient-to-b from-white to-white/60">
+              Mentorship.
+            </span>
+            <span className="block bg-clip-text text-transparent bg-gradient-to-b from-indigo-300 via-purple-300 to-indigo-300">
+              Reimagined.
+            </span>
+          </h1>
 
-      {/* Social Proof */}
-      <section className="py-10 border-y border-white/5 bg-white/[0.02]">
-        <div className="max-w-7xl mx-auto px-6">
-          <p className="text-center text-gray-500 text-sm mb-6 uppercase tracking-widest">Trusted by industry leaders from</p>
-          <div className="flex flex-wrap items-center justify-center gap-8 md:gap-16 opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
-            {/* Simple text-based logos for now */}
-            <h3 className="text-xl font-bold flex items-center gap-2 text-white"><div className="w-6 h-6 bg-white/20 rounded-full" /> TechStart</h3>
-            <h3 className="text-xl font-bold flex items-center gap-2 text-white"><div className="w-6 h-6 bg-white/20 rounded-full" /> InnovateLabs</h3>
-            <h3 className="text-xl font-bold flex items-center gap-2 text-white"><div className="w-6 h-6 bg-white/20 rounded-full" /> FutureGrow</h3>
-            <h3 className="text-xl font-bold flex items-center gap-2 text-white"><div className="w-6 h-6 bg-white/20 rounded-full" /> EduTech</h3>
-          </div>
-        </div>
-      </section>
-
-      {/* Features Grid */}
-      <section className="py-24 relative">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-5xl font-bold mb-6">Everything you need to <span className="text-blue-400">succeed</span></h2>
-            <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-              Our platform provides all the tools necessary for seamless mentorship, learning, and professional growth.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <FeatureCard
-              icon={FiVideo}
-              title="1-on-1 Video Sessions"
-              description="High-quality video calls with integrated whiteboard and screen sharing for effective learning."
-              delay={0.1}
-            />
-            <FeatureCard
-              icon={FiMessageSquare}
-              title="Real-time Chat"
-              description="Stay connected with your mentor through our instant messaging system. Never lose touch."
-              delay={0.2}
-            />
-            <FeatureCard
-              icon={FiTarget}
-              title="Goal Tracking"
-              description="Set clear milestones and track your progress with our advanced analytics dashboard."
-              delay={0.3}
-            />
-            <FeatureCard
-              icon={FiUsers}
-              title="Community Forums"
-              description="Connect with peers, share knowledge, and solve problems together in our vibrant community."
-              delay={0.4}
-            />
-            <FeatureCard
-              icon={FiTrendingUp}
-              title="Skill Analytics"
-              description="Visualize your skill growth over time and identify areas for improvement."
-              delay={0.5}
-            />
-            <FeatureCard
-              icon={FiShield}
-              title="Verified Mentors"
-              description="All mentors are vetted professionals from top companies, ensuring you get the best guidance."
-              delay={0.6}
-            />
-          </div>
-        </div>
-      </section>
-
-      {/* Dual Persona Switcher */}
-      <section className="py-24 bg-gradient-to-b from-gray-900/50 to-black">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="bg-gray-900/40 rounded-3xl border border-gray-800 p-8 md:p-12 overflow-hidden relative">
-            <div className="flex flex-col md:flex-row gap-12 items-center">
-              <div className="flex-1 space-y-8 relative z-10">
-                <div className="flex space-x-2 bg-gray-800/50 p-1 rounded-lg w-fit backdrop-blur-sm">
-                  <button
-                    onClick={() => setActiveTab('student')}
-                    className={`px-6 py-2 rounded-md text-sm font-medium transition-all ${activeTab === 'student' ? 'bg-blue-600 text-white shadow-lg' : 'text-gray-400 hover:text-white'}`}
-                  >
-                    For Students
-                  </button>
-                  <button
-                    onClick={() => setActiveTab('mentor')}
-                    className={`px-6 py-2 rounded-md text-sm font-medium transition-all ${activeTab === 'mentor' ? 'bg-purple-600 text-white shadow-lg' : 'text-gray-400 hover:text-white'}`}
-                  >
-                    For Mentors
-                  </button>
-                </div>
-
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={activeTab}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: 20 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                      {activeTab === 'student' ? "Accelerate Your Career Growth" : "Share Knowledge, Inspire Others"}
-                    </h2>
-                    <p className="text-gray-400 text-lg mb-8">
-                      {activeTab === 'student'
-                        ? "Get personalized guidance, tailored learning paths, and direct access to industry veterans who have walked the path you're on."
-                        : "Build your personal brand, earn by sharing your expertise, and help shape the next generation of tech leaders."
-                      }
-                    </p>
-                    <ul className="space-y-4 mb-8">
-                      {[
-                        activeTab === 'student' ? 'Access to 500+ Mentors' : 'Flexible Schedule Management',
-                        activeTab === 'student' ? 'Mock Interviews' : 'Set Your Own Rates',
-                        activeTab === 'student' ? 'Project Reviews' : 'Built-in Payment Processing'
-                      ].map((item, i) => (
-                        <li key={i} className="flex items-center gap-3 text-gray-300">
-                          <div className={`w-6 h-6 rounded-full flex items-center justify-center ${activeTab === 'student' ? 'bg-blue-500/20 text-blue-400' : 'bg-purple-500/20 text-purple-400'}`}>
-                            <FiCheck className="w-4 h-4" />
-                          </div>
-                          {item}
-                        </li>
-                      ))}
-                    </ul>
-                    <Link
-                      to={activeTab === 'student' ? "/register" : "/register?role=mentor"}
-                      className={`inline-flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-colors ${activeTab === 'student'
-                          ? 'bg-blue-600 hover:bg-blue-500 text-white'
-                          : 'bg-purple-600 hover:bg-purple-500 text-white'
-                        }`}
-                    >
-                      {activeTab === 'student' ? 'Start Learning' : 'Start Mentoring'} <FiArrowRight />
-                    </Link>
-                  </motion.div>
-                </AnimatePresence>
-              </div>
-
-              <div className="flex-1 w-full relative">
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 blur-3xl -z-10" />
-                <motion.img
-                  key={activeTab}
-                  src={activeTab === 'student' ? studentDashboardImage : mentorDashboardImage}
-                  alt="Dashboard Preview"
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.4 }}
-                  className="w-full rounded-xl shadow-2xl border border-gray-700/50"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Stats Section */}
-      <section className="py-20 bg-black">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            <StatCard number="10k+" label="Active Students" />
-            <StatCard number="500+" label="Expert Mentors" />
-            <StatCard number="50k+" label="Sessions Completed" />
-            <StatCard number="4.9/5" label="Average Rating" />
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-24 relative overflow-hidden">
-        <div className="absolute inset-0 bg-blue-900/10" />
-        <div className="max-w-4xl mx-auto px-6 text-center relative z-10">
-          <h2 className="text-4xl md:text-5xl font-bold mb-8">Ready to transform your journey?</h2>
-          <p className="text-xl text-gray-400 mb-10">
-            Join thousands of others who are already learning and growing with Ment2Be.
+          <p className="text-xl md:text-2xl text-gray-400 max-w-2xl mx-auto mb-12 font-light leading-relaxed">
+            The all-in-one platform for effortless learning. Connect with experts, track your growth, and achieve your dreams.
           </p>
-          <div className="flex flex-col sm:flex-row justify-center gap-4">
+
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
             <Link
-              to="/register"
-              className="px-8 py-4 rounded-full bg-white text-black font-bold text-lg hover:bg-gray-200 transition-colors shadow-xl"
+              to="/student/explore"
+              className="group relative px-8 py-4 bg-white text-black rounded-full font-semibold text-lg hover:bg-gray-100 transition-all duration-300 hover:scale-105"
             >
-              Get Started Now
+              Find a Mentor
+              <span className="absolute inset-0 rounded-full ring-2 ring-white/50 ring-offset-2 ring-offset-black opacity-0 group-hover:opacity-100 transition-opacity" />
+            </Link>
+            <Link
+              to="/login"
+              className="px-8 py-4 rounded-full text-white font-medium text-lg hover:bg-white/10 transition-all border border-white/10 backdrop-blur-sm"
+            >
+              Log In
+            </Link>
+          </div>
+        </motion.div>
+
+        {/* Hero Image / Dashboard Preview */}
+        <motion.div
+          initial={{ opacity: 0, y: 100, rotateX: 20 }}
+          animate={{ opacity: 1, y: 0, rotateX: 0 }}
+          transition={{ duration: 1.2, delay: 0.2, ease: "easeOut" }}
+          style={{ perspective: 1000 }}
+          className="relative mt-20 w-full max-w-[1400px] px-4 md:px-8"
+        >
+          <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-white/10 bg-[#0a0a0a] group">
+            {/* Glossy Overlay */}
+            <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent pointer-events-none z-10" />
+
+            <img
+              src={studentDashboardImage}
+              alt="Dashboard Interface"
+              className="w-full h-auto object-cover opacity-90 group-hover:scale-[1.01] transition-transform duration-700 ease-out"
+            />
+          </div>
+        </motion.div>
+      </section>
+
+      {/* Bento Grid Features Section */}
+      <section className="py-32 px-6 bg-[#050505]">
+        <div className="max-w-7xl mx-auto">
+          <div className="mb-24 md:pl-8 border-l-2 border-indigo-500/50">
+            <ParallaxText className="text-4xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-500">
+              Powerful tools.
+            </ParallaxText>
+            <ParallaxText className="text-4xl md:text-6xl font-bold text-gray-500">
+              Beautifully simple.
+            </ParallaxText>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[minmax(180px,auto)]">
+
+            {/* Card 1: Large Feature */}
+            <BentoItem className="md:col-span-2 min-h-[400px] flex flex-col justify-between overflow-hidden relative">
+              <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-500/10 rounded-full blur-[80px] -mr-20 -mt-20" />
+              <div className="relative z-10">
+                <div className="w-12 h-12 bg-indigo-500/20 rounded-2xl flex items-center justify-center mb-6 text-indigo-400">
+                  <FiVideo size={24} />
+                </div>
+                <h3 className="text-3xl font-semibold mb-4">Crystal Clear Video</h3>
+                <p className="text-gray-400 text-lg max-w-md">HD video calls with built-in whiteboard and code sharing. It feels like you're in the same room.</p>
+              </div>
+              {/* Decorative Abstract UI Element */}
+              <div className="mt-8 relative h-48 bg-white/5 rounded-t-xl border-t border-l border-r border-white/10 overflow-hidden">
+                <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#050505] to-transparent z-10" />
+                <div className="grid grid-cols-2 gap-4 p-4 opacity-50">
+                  <div className="h-24 bg-gray-700/50 rounded-lg animate-pulse" />
+                  <div className="h-24 bg-gray-700/50 rounded-lg animate-pulse delay-100" />
+                </div>
+              </div>
+            </BentoItem>
+
+            {/* Card 2: Tall Vertical */}
+            <BentoItem className="md:row-span-2 flex flex-col justify-between bg-gradient-to-b from-gray-900 to-black">
+              <div>
+                <div className="w-12 h-12 bg-purple-500/20 rounded-2xl flex items-center justify-center mb-6 text-purple-400">
+                  <FiCpu size={24} />
+                </div>
+                <h3 className="text-3xl font-semibold mb-4">AI Magic</h3>
+                <p className="text-gray-400">Smart matching algorithms find the perfect mentor for your unique goals.</p>
+              </div>
+              <div className="mt-10 flex justify-center">
+                <div className="relative w-48 h-48">
+                  <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500 to-purple-500 rounded-full opacity-20 blur-xl animate-pulse" />
+                  <div className="absolute inset-4 bg-[#0a0a0a] rounded-full border border-white/10 flex items-center justify-center">
+                    <span className="text-4xl">✨</span>
+                  </div>
+                </div>
+              </div>
+            </BentoItem>
+
+            {/* Card 3: Small Square */}
+            <BentoItem className="md:col-span-1 min-h-[250px] flex flex-col">
+              <FiTarget className="text-green-400 w-10 h-10 mb-auto" />
+              <div>
+                <h3 className="text-2xl font-semibold mb-2">Goal Tracking</h3>
+                <p className="text-gray-400 text-sm">Visual progress bars.</p>
+              </div>
+            </BentoItem>
+
+            {/* Card 4: Small Square */}
+            <BentoItem className="md:col-span-1 min-h-[250px] flex flex-col relative overflow-hidden group">
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-600/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <FiGlobe className="text-blue-400 w-10 h-10 mb-auto relative z-10" />
+              <div className="relative z-10">
+                <h3 className="text-2xl font-semibold mb-2">Global Network</h3>
+                <p className="text-gray-400 text-sm">Mentors from 50+ countries.</p>
+              </div>
+            </BentoItem>
+
+            {/* Card 5: Wide Bottom */}
+            <BentoItem className="md:col-span-3 flex flex-col md:flex-row items-center gap-8 bg-gradient-to-r from-gray-900 via-gray-900 to-indigo-900/20">
+              <div className="flex-1">
+                <h3 className="text-3xl font-semibold mb-4">Enterprise-Grade Security</h3>
+                <p className="text-gray-400 text-lg">Your data is encrypted and protected. Privacy first, always.</p>
+              </div>
+              <div className="flex gap-4">
+                <div className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-full border border-white/10">
+                  <FiShield className="text-green-400" />
+                  <span className="text-sm">End-to-End Encrypted</span>
+                </div>
+                <div className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-full border border-white/10">
+                  <FiAward className="text-yellow-400" />
+                  <span className="text-sm">GDPR Compliant</span>
+                </div>
+              </div>
+            </BentoItem>
+
+          </div>
+        </div>
+      </section>
+
+      {/* Parallax Section - Large Text Reveal */}
+      <section className="py-32 bg-white text-black overflow-hidden relative">
+        <div className="max-w-7xl mx-auto px-6 relative z-10">
+          <ParallaxText className="text-5xl md:text-8xl font-bold tracking-tighter mb-12">
+            Start your journey.
+          </ParallaxText>
+          <p className="text-xl md:text-3xl font-medium text-gray-500 max-w-3xl leading-relaxed">
+            Join a community of ambitious learners and world-class experts. The skills you need are one conversation away.
+          </p>
+
+          <div className="mt-16 flex gap-6">
+            <Link to="/register" className="px-10 py-5 bg-black text-white rounded-full font-bold text-xl hover:scale-105 transition-transform">
+              Get Started Free
             </Link>
           </div>
         </div>
+        {/* Background Texture */}
+        <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/3 w-[800px] h-[800px] bg-gray-100 rounded-full blur-3xl -z-0" />
       </section>
 
       <LandingFooter />

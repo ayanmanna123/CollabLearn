@@ -20,6 +20,7 @@ export default {
         'glitch': 'glitch 2s infinite',
         'float': 'float 6s ease-in-out infinite',
         'loading': 'loading 1s ease-in-out infinite',
+        blob: "blob 10s infinite",
       },
       keyframes: {
         bounceDown: {
@@ -57,8 +58,13 @@ export default {
           '0%': { transform: 'translateX(-100%)' },
           '100%': { transform: 'translateX(100%)' },
         },
+        blob: {
+          "0%": { transform: "translate(0px, 0px) scale(1)" },
+          "33%": { transform: "translate(30px, -50px) scale(1.1)" },
+          "66%": { transform: "translate(-20px, 20px) scale(0.9)" },
+          "100%": { transform: "translate(0px, 0px) scale(1)" },
+        },
       },
     },
   },
-  plugins: [],
 }
