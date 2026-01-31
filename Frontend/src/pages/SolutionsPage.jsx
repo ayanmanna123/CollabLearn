@@ -75,6 +75,7 @@ const SolutionsPage = () => {
   });
   const { hash } = useLocation();
   const [openFaqIndex, setOpenFaqIndex] = useState(null);
+  const [activeFeature, setActiveFeature] = useState(0);
 
   const toggleFaq = (index) => {
     setOpenFaqIndex(openFaqIndex === index ? null : index);
@@ -288,63 +289,95 @@ const SolutionsPage = () => {
         </div>
       </section>
 
-      {/* Ecosystem Integration Section */}
-      <section className="py-24 px-6 bg-[#050505] relative overflow-hidden">
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-indigo-900/10 rounded-full blur-[100px]" />
-        </div>
-        <div className="max-w-7xl mx-auto text-center relative z-10">
-          <span className="text-indigo-400 font-medium tracking-wider uppercase mb-4 block">The Ecosystem</span>
-          <h2 className="text-4xl md:text-6xl font-bold mb-8">Everything connected.</h2>
-          <p className="text-xl text-gray-400 max-w-2xl mx-auto mb-20">
-            A unified learning experience where your code, chats, and goals live in perfect harmony.
-          </p>
+      {/* Unified Platform Section (Tabbed Feature Showcase) */}
+      <section className="py-32 px-6 bg-[#050505] relative">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-20">
+            <span className="text-indigo-400 font-medium tracking-wider uppercase mb-4 block">The Ecosystem</span>
+            <h2 className="text-4xl md:text-6xl font-bold mb-6">Built to work together.</h2>
+            <p className="text-xl text-gray-400 max-w-2xl mx-auto">
+              Fluidly switch between learning modes without losing context.
+            </p>
+          </div>
 
-          <div className="relative h-[600px] flex items-center justify-center">
-            {/* Center Hub */}
-            <div className="relative z-20 w-32 h-32 bg-indigo-600 rounded-full flex items-center justify-center shadow-[0_0_50px_rgba(79,70,229,0.5)] border-4 border-black">
-              <span className="text-3xl">🚀</span>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            {/* Left Column: Navigation Tabs */}
+            <div className="space-y-4">
+              {[
+                { id: 'forum', icon: FiMessageSquare, title: 'Community Forum', desc: 'Real-time discussions pinned to specific lessons.' },
+                { id: 'classroom', icon: FiVideo, title: 'Live Classrooms', desc: 'HD video with built-in whiteboard and code sharing.' },
+                { id: 'ide', icon: FiCode, title: 'Cloud IDE', desc: 'Zero-setup development environment in your browser.' },
+                { id: 'planner', icon: FiCheckCircle, title: 'Smart Planner', desc: 'AI-generated schedules that adapt to your pace.' }
+              ].map((item, index) => {
+                const isActive = activeFeature === index; // We need to add state for this
+                return (
+                  <button
+                    key={index}
+                    onClick={() => setActiveFeature(index)}
+                    className={`w-full text-left p-6 rounded-2xl transition-all duration-300 border flex items-start gap-6 group ${isActive
+                      ? 'bg-white/10 border-indigo-500/50 shadow-[0_0_30px_rgba(79,70,229,0.1)]'
+                      : 'bg-transparent border-transparent hover:bg-white/5'
+                      }`}
+                  >
+                    <div className={`mt-1 w-12 h-12 rounded-xl flex items-center justify-center shrink-0 transition-colors ${isActive ? 'bg-indigo-600 text-white' : 'bg-white/5 text-gray-400 group-hover:text-white'
+                      }`}>
+                      <item.icon size={24} />
+                    </div>
+                    <div>
+                      <h4 className={`text-xl font-bold mb-2 ${isActive ? 'text-white' : 'text-gray-400 group-hover:text-gray-200'}`}>
+                        {item.title}
+                      </h4>
+                      <p className={`text-sm leading-relaxed ${isActive ? 'text-gray-300' : 'text-gray-500'}`}>
+                        {item.desc}
+                      </p>
+                    </div>
+                  </button>
+                );
+              })}
             </div>
 
-            {/* Orbiting Planets */}
-            {[
-              { icon: FiMessageSquare, label: "Forum", x: 0, y: -200, delay: 0 },
-              { icon: FiVideo, label: "Calls", x: 200, y: 0, delay: 1 },
-              { icon: FiCheckCircle, label: "Tasks", x: 0, y: 200, delay: 2 },
-              { icon: FiCode, label: "Code", x: -200, y: 0, delay: 3 },
-            ].map((item, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, scale: 0 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ delay: i * 0.1, duration: 0.5 }}
-                className="absolute flex flex-col items-center gap-4"
-                style={{ transform: `translate(${item.x}px, ${item.y}px)` }}
-              >
-                <div className="w-20 h-20 bg-[#111] rounded-2xl border border-white/10 flex items-center justify-center text-gray-300 shadow-xl z-20 hover:scale-110 hover:text-white hover:border-indigo-500/50 transition-all duration-300 cursor-pointer">
-                  <item.icon size={30} />
-                </div>
-                <span className="text-sm font-medium text-gray-400 uppercase tracking-widest">{item.label}</span>
+            {/* Right Column: Preview Area */}
+            <div className="relative h-[600px] rounded-3xl border border-white/10 bg-[#0a0a0a] overflow-hidden p-2 shadow-2xl">
+              <div className="absolute inset-0 bg-gradient-to-tr from-indigo-900/10 to-transparent" />
 
-                {/* Connection Line */}
-                <svg className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] -z-10 pointer-events-none overflow-visible">
-                  <motion.line
-                    x1="50%" y1="50%"
-                    x2={200 - item.x + (item.x > 0 ? -40 : item.x < 0 ? 40 : 0)}
-                    y2={200 - item.y + (item.y > 0 ? -40 : item.y < 0 ? 40 : 0)}
-                    stroke="rgba(255,255,255,0.1)"
-                    strokeWidth="2"
-                    initial={{ pathLength: 0 }}
-                    whileInView={{ pathLength: 1 }}
-                    transition={{ duration: 1.5, delay: 0.5 }}
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeFeature}
+                  initial={{ opacity: 0, scale: 0.95, x: 20 }}
+                  animate={{ opacity: 1, scale: 1, x: 0 }}
+                  exit={{ opacity: 0, scale: 1.05, x: -20 }}
+                  transition={{ duration: 0.4 }}
+                  className="w-full h-full rounded-2xl overflow-hidden relative"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent z-10" />
+
+                  {/* Dynamic Image Selection */}
+                  <img
+                    src={
+                      activeFeature === 0 ? studentImage :
+                        activeFeature === 1 ? mentorImage :
+                          activeFeature === 2 ? student3Image :
+                            student2Image
+                    }
+                    alt="Feature Preview"
+                    className="w-full h-full object-cover"
                   />
-                </svg>
-              </motion.div>
-            ))}
 
-            {/* Orbit Circle */}
-            <div className="absolute w-[400px] h-[400px] border border-white/5 rounded-full -z-10" />
-            <div className="absolute w-[600px] h-[600px] border border-white/5 rounded-full -z-10 opacity-50" />
+                  {/* Overlay Info (optional) */}
+                  <div className="absolute bottom-8 left-8 z-20 max-w-sm">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/20 border border-indigo-500/30 text-indigo-300 text-xs font-bold uppercase mb-4 backdrop-blur-md">
+                      <FiZap size={12} /> Live Demo
+                    </div>
+                    <h3 className="text-3xl font-bold mb-2">
+                      {activeFeature === 0 ? 'Collaborate.' :
+                        activeFeature === 1 ? 'Connect.' :
+                          activeFeature === 2 ? 'Build.' :
+                            'Achieve.'}
+                    </h3>
+                  </div>
+                </motion.div>
+              </AnimatePresence>
+            </div>
           </div>
         </div>
       </section>
