@@ -1,10 +1,36 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
-import { FiArrowRight, FiUsers, FiVideo, FiTarget, FiMessageSquare, FiTrendingUp, FiShield, FiCpu, FiGlobe, FiAward } from 'react-icons/fi';
+import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
+import {
+  FiArrowRight, FiVideo, FiTarget, FiShield, FiCpu, FiGlobe, FiAward,
+  FiUserPlus, FiSearch, FiBookOpen, FiStar, FiChevronDown, FiPlus, FiMinus
+} from 'react-icons/fi';
 import LandingNavbar from '../components/LandingNavbar';
 import LandingFooter from '../components/LandingFooter';
 import studentDashboardImage from '../assets/studentdashbaordimage.png';
+
+// --- Data ---
+const testimonials = [
+  { name: "Sarah J.", role: "Software Engineer", quote: "Ment2Be helped me break into big tech. My mentor was incredible." },
+  { name: "David L.", role: "Product Manager", quote: "The structure and goal tracking kept me accountable every week." },
+  { name: "Emily R.", role: "UX Designer", quote: "I learned more in 3 months here than 2 years of tutorials." },
+  { name: "Michael C.", role: "Data Scientist", quote: "Found a mentor who guided me through my entire career transition." },
+  { name: "Jessica K.", role: "Frontend Dev", quote: "The mock interviews were a game changer for my confidence." },
+  { name: "Alex P.", role: "Founder", quote: "Invaluable advice on scaling my startup from industry veterans." },
+];
+
+const faqData = [
+  { question: "How does the matching process work?", answer: "Our AI analyzes your goals, skills, and learning style to recommend the perfect mentors from our database of over 500+ experts." },
+  { question: "Is there a free trial?", answer: "Yes! You can browse mentors and join community discussions for free. Premium mentorship sessions start with a 14-day money-back guarantee." },
+  { question: "Can I be both a mentor and a mentee?", answer: "Absolutely. We believe everyone has something to teach and something to learn. You can easily switch between roles in your dashboard." },
+  { question: "What happens if I'm not satisfied?", answer: "If a session doesn't meet your expectations, we offer a full refund and will help you find a better match." },
+];
+
+const steps = [
+  { icon: FiUserPlus, title: "Create Profile", desc: "Tell us about your goals and what you want to learn." },
+  { icon: FiSearch, title: "Get Matched", desc: "Our AI pairs you with mentors who fit your needs perfectly." },
+  { icon: FiBookOpen, title: "Start Learning", desc: "Book 1-on-1 sessions and track your progress instantly." },
+];
 
 // --- Components ---
 
@@ -20,28 +46,55 @@ const BentoItem = ({ children, className, delay = 0 }) => (
   </motion.div>
 );
 
-const ParallaxText = ({ children, className }) => {
-  return (
-    <motion.h2
-      initial={{ opacity: 0, y: 50 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.8, ease: "easeOut" }}
-      className={className}
-    >
-      {children}
-    </motion.h2>
-  );
-};
+const ParallaxText = ({ children, className }) => (
+  <motion.h2
+    initial={{ opacity: 0, y: 50 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true }}
+    transition={{ duration: 0.8, ease: "easeOut" }}
+    className={className}
+  >
+    {children}
+  </motion.h2>
+);
 
 const GradientBlob = ({ className }) => (
   <div className={`absolute rounded-full mix-blend-screen filter blur-[100px] opacity-30 animate-blob ${className}`} />
+);
+
+const AccordionItem = ({ question, answer, isOpen, onClick }) => (
+  <div className="border-b border-white/10">
+    <button
+      onClick={onClick}
+      className="w-full py-6 flex items-center justify-between text-left focus:outline-none group"
+    >
+      <span className="text-xl font-medium text-gray-200 group-hover:text-white transition-colors">{question}</span>
+      <div className={`p-2 rounded-full bg-white/5 transition-colors group-hover:bg-white/10`}>
+        {isOpen ? <FiMinus className="w-5 h-5 text-indigo-400" /> : <FiPlus className="w-5 h-5 text-gray-400" />}
+      </div>
+    </button>
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          initial={{ height: 0, opacity: 0 }}
+          animate={{ height: "auto", opacity: 1 }}
+          exit={{ height: 0, opacity: 0 }}
+          transition={{ duration: 0.3 }}
+          className="overflow-hidden"
+        >
+          <p className="pb-6 text-gray-400 leading-relaxed">{answer}</p>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  </div>
 );
 
 // --- Main Page ---
 
 const LandingPage = () => {
   const containerRef = useRef(null);
+  const [openFaqIndex, setOpenFaqIndex] = useState(null);
+
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end end"]
@@ -51,13 +104,16 @@ const LandingPage = () => {
   const heroOpacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
   const heroY = useTransform(scrollYProgress, [0, 0.2], [0, 100]);
 
+  const toggleFaq = (index) => {
+    setOpenFaqIndex(openFaqIndex === index ? null : index);
+  };
+
   return (
     <div ref={containerRef} className="bg-[#050505] min-h-screen text-white overflow-x-hidden selection:bg-indigo-500/30">
       <LandingNavbar />
 
       {/* Hero Section */}
       <section className="relative min-h-[110vh] flex flex-col items-center justify-center pt-32 pb-20 overflow-hidden">
-        {/* Animated Background */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <GradientBlob className="w-[800px] h-[800px] bg-indigo-600/20 top-[-20%] left-[-10%]" />
           <GradientBlob className="w-[600px] h-[600px] bg-purple-600/20 bottom-[-10%] right-[-10%] animation-delay-2000" />
@@ -109,7 +165,6 @@ const LandingPage = () => {
           </div>
         </motion.div>
 
-        {/* Hero Image / Dashboard Preview */}
         <motion.div
           initial={{ opacity: 0, y: 100, rotateX: 20 }}
           animate={{ opacity: 1, y: 0, rotateX: 0 }}
@@ -118,9 +173,7 @@ const LandingPage = () => {
           className="relative mt-20 w-full max-w-[1400px] px-4 md:px-8"
         >
           <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-white/10 bg-[#0a0a0a] group">
-            {/* Glossy Overlay */}
             <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent pointer-events-none z-10" />
-
             <img
               src={studentDashboardImage}
               alt="Dashboard Interface"
@@ -128,6 +181,39 @@ const LandingPage = () => {
             />
           </div>
         </motion.div>
+      </section>
+
+      {/* How It Works Section */}
+      <section className="py-24 px-6 border-b border-white/5">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-500 mb-4">
+              Your path to mastery.
+            </h2>
+            <p className="text-gray-400 text-lg">Three simple steps to start your journey.</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {steps.map((step, idx) => (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: idx * 0.2 }}
+                className="relative p-8 rounded-3xl bg-white/[0.02] border border-white/5 hover:bg-white/[0.04] transition-colors group"
+              >
+                <div className="absolute -top-6 -left-6 w-24 h-24 bg-indigo-500/10 rounded-full blur-2xl group-hover:bg-indigo-500/20 transition-colors" />
+                <div className="relative">
+                  <div className="w-14 h-14 bg-gray-900 rounded-2xl border border-white/10 flex items-center justify-center mb-6 shadow-lg">
+                    <step.icon className="w-6 h-6 text-indigo-400" />
+                  </div>
+                  <h3 className="text-2xl font-semibold mb-3">{step.title}</h3>
+                  <p className="text-gray-400 leading-relaxed">{step.desc}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
       </section>
 
       {/* Bento Grid Features Section */}
@@ -143,8 +229,6 @@ const LandingPage = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[minmax(180px,auto)]">
-
-            {/* Card 1: Large Feature */}
             <BentoItem className="md:col-span-2 min-h-[400px] flex flex-col justify-between overflow-hidden relative">
               <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-500/10 rounded-full blur-[80px] -mr-20 -mt-20" />
               <div className="relative z-10">
@@ -154,7 +238,6 @@ const LandingPage = () => {
                 <h3 className="text-3xl font-semibold mb-4">Crystal Clear Video</h3>
                 <p className="text-gray-400 text-lg max-w-md">HD video calls with built-in whiteboard and code sharing. It feels like you're in the same room.</p>
               </div>
-              {/* Decorative Abstract UI Element */}
               <div className="mt-8 relative h-48 bg-white/5 rounded-t-xl border-t border-l border-r border-white/10 overflow-hidden">
                 <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#050505] to-transparent z-10" />
                 <div className="grid grid-cols-2 gap-4 p-4 opacity-50">
@@ -164,7 +247,6 @@ const LandingPage = () => {
               </div>
             </BentoItem>
 
-            {/* Card 2: Tall Vertical */}
             <BentoItem className="md:row-span-2 flex flex-col justify-between bg-gradient-to-b from-gray-900 to-black">
               <div>
                 <div className="w-12 h-12 bg-purple-500/20 rounded-2xl flex items-center justify-center mb-6 text-purple-400">
@@ -183,7 +265,6 @@ const LandingPage = () => {
               </div>
             </BentoItem>
 
-            {/* Card 3: Small Square */}
             <BentoItem className="md:col-span-1 min-h-[250px] flex flex-col">
               <FiTarget className="text-green-400 w-10 h-10 mb-auto" />
               <div>
@@ -192,7 +273,6 @@ const LandingPage = () => {
               </div>
             </BentoItem>
 
-            {/* Card 4: Small Square */}
             <BentoItem className="md:col-span-1 min-h-[250px] flex flex-col relative overflow-hidden group">
               <div className="absolute inset-0 bg-gradient-to-br from-blue-600/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <FiGlobe className="text-blue-400 w-10 h-10 mb-auto relative z-10" />
@@ -202,7 +282,6 @@ const LandingPage = () => {
               </div>
             </BentoItem>
 
-            {/* Card 5: Wide Bottom */}
             <BentoItem className="md:col-span-3 flex flex-col md:flex-row items-center gap-8 bg-gradient-to-r from-gray-900 via-gray-900 to-indigo-900/20">
               <div className="flex-1">
                 <h3 className="text-3xl font-semibold mb-4">Enterprise-Grade Security</h3>
@@ -219,12 +298,70 @@ const LandingPage = () => {
                 </div>
               </div>
             </BentoItem>
-
           </div>
         </div>
       </section>
 
-      {/* Parallax Section - Large Text Reveal */}
+      {/* Testimonials Marquee Section */}
+      <section className="py-24 overflow-hidden bg-white/[0.02]">
+        <div className="text-center mb-12">
+          <p className="text-sm font-medium text-indigo-400 tracking-widest uppercase mb-2">Community</p>
+          <h2 className="text-3xl md:text-5xl font-bold">Loved by thousands.</h2>
+        </div>
+
+        <div className="relative w-full overflow-hidden mask-linear-fade">
+          {/* Gradient Masks */}
+          <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#050505] to-transparent z-10" />
+          <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#050505] to-transparent z-10" />
+
+          <div className="flex gap-6 w-max animate-scroll-left hover:[animation-play-state:paused]">
+            {[...testimonials, ...testimonials].map((t, i) => (
+              <div
+                key={i}
+                className="w-[350px] p-6 rounded-2xl bg-[#0a0a0a] border border-white/10 flex-shrink-0"
+              >
+                <div className="flex gap-1 text-yellow-500 mb-4">
+                  {[...Array(5)].map((_, i) => <FiStar key={i} size={14} fill="currentColor" />)}
+                </div>
+                <p className="text-gray-300 mb-6 text-lg">"{t.quote}"</p>
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-gray-700 to-gray-600 flex items-center justify-center font-bold">
+                    {t.name[0]}
+                  </div>
+                  <div>
+                    <h4 className="font-semibold">{t.name}</h4>
+                    <p className="text-xs text-gray-500">{t.role}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="py-32 px-6">
+        <div className="max-w-3xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-5xl font-bold mb-4">Questions?</h2>
+            <p className="text-gray-400">We have answers.</p>
+          </div>
+
+          <div className="space-y-2">
+            {faqData.map((item, index) => (
+              <AccordionItem
+                key={index}
+                question={item.question}
+                answer={item.answer}
+                isOpen={openFaqIndex === index}
+                onClick={() => toggleFaq(index)}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
       <section className="py-32 bg-white text-black overflow-hidden relative">
         <div className="max-w-7xl mx-auto px-6 relative z-10">
           <ParallaxText className="text-5xl md:text-8xl font-bold tracking-tighter mb-12">
@@ -240,11 +377,21 @@ const LandingPage = () => {
             </Link>
           </div>
         </div>
-        {/* Background Texture */}
         <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/3 w-[800px] h-[800px] bg-gray-100 rounded-full blur-3xl -z-0" />
       </section>
 
       <LandingFooter />
+
+      {/* Inline Styles for marquee animation specifically */}
+      <style>{`
+        @keyframes scroll-left {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+        .animate-scroll-left {
+          animation: scroll-left 40s linear infinite;
+        }
+      `}</style>
     </div>
   );
 };
