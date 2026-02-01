@@ -17,7 +17,8 @@ export const initializeSocketIO = (server) => {
         process.env.HOSTED_FRONTEND_DOMAIN,
         ...(process.env.NODE_ENV === 'development' ? [
           "http://localhost:3000",
-          "http://localhost:5173"
+          "http://localhost:5173",
+          "https://collab-learn-ruby.vercel.app"
         ] : [])
       ].filter(Boolean),
       methods: ["GET", "POST"]
