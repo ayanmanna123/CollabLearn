@@ -62,7 +62,8 @@ app.use(cors({
         "http://localhost:5173",
         "http://localhost:5174", 
         "https://k23-dx.vercel.app",
-        "https://ment2be.arshchouhan.me"
+        "https://ment2be.arshchouhan.me",
+        "https://collab-learn-ruby.vercel.app"
       ];
       
     if (allowedOrigins.indexOf(origin) !== -1 || process.env.NODE_ENV === 'development') {
@@ -234,4 +235,10 @@ process.on('uncaughtException', (err) => {
   }
 });
 
-startServer();
+if (process.env.VERCEL) {
+  connectDB();
+} else {
+  startServer();
+}
+
+export default app;
