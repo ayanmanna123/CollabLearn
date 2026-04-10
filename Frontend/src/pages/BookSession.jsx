@@ -199,7 +199,7 @@ const BookSession = () => {
           key: keyId,
           amount: order.amount,
           currency: order.currency,
-          name: 'Ment2Be',
+          name: 'CollabLearn',
           description: 'Platform Fee',
           order_id: order.id,
           handler: async function (response) {

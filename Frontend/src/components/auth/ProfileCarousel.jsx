@@ -49,7 +49,7 @@ const ProfileCarousel = () => {
       name: "Divya Nair",
       role: "Mastering Communication Skills",
       photo: studentImages[4],
-      review: "I cannot recommend Ment2Be enough! My mentor's guidance transformed my confidence and presentation skills.",
+      review: "I cannot recommend CollabLearn enough! My mentor's guidance transformed my confidence and presentation skills.",
       rating: 5
     }
   ];

@@ -14,7 +14,7 @@ import mentorDashboardImage from '../assets/MentorDahboard.png';
 // --- Data ---
 const testimonials = {
   student: [
-    { name: "Sarah J.", role: "Software Engineer", quote: "Ment2Be helped me break into big tech. My mentor was incredible." },
+    { name: "Sarah J.", role: "Software Engineer", quote: "CollabLearn helped me break into big tech. My mentor was incredible." },
     { name: "David L.", role: "Product Manager", quote: "The structure and goal tracking kept me accountable every week." },
     { name: "Emily R.", role: "UX Designer", quote: "I learned more in 3 months here than 2 years of tutorials." },
     { name: "Michael C.", role: "Data Scientist", quote: "Found a mentor who guided me through my entire career transition." },
@@ -24,7 +24,7 @@ const testimonials = {
   mentor: [
     { name: "Dr. James W.", role: "Senior Architect", quote: "Sharing my knowledge has been incredibly rewarding. Also great side income." },
     { name: "Anita S.", role: "Ex-Google Lead", quote: "I love connecting with ambitious students. The platform makes scheduling so easy." },
-    { name: "Robert M.", role: "CTO at TechCorp", quote: "Ment2Be takes care of all the admin work so I can focus on mentoring." },
+    { name: "Robert M.", role: "CTO at TechCorp", quote: "CollabLearn takes care of all the admin work so I can focus on mentoring." },
     { name: "Lisa T.", role: "Design Director", quote: "It’s helped me refine my own leadership skills while helping others grow." },
     { name: "Kevin D.", role: "AI Researcher", quote: "The community of mentors here is top-notch. Great networking opportunity." },
     { name: "Priya G.", role: "Startup Advisor", quote: "Flexible hours mean I can mentor on weekends without disrupting my job." },

@@ -80,7 +80,7 @@ const LandingNavbar = () => {
             <div className="relative w-8 h-8 flex items-center justify-center bg-white/10 rounded-lg group-hover:bg-white/20 transition-colors">
               <img src={logoHat} alt="Logo" className="w-5 h-5 brightness-0 invert" />
             </div>
-            <span className="text-lg font-semibold tracking-tight">Ment2Be</span>
+            <span className="text-lg font-semibold tracking-tight">CollabLearn</span>
           </Link>
 
           {/* Desktop Navigation */}

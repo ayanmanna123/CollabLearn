@@ -40,13 +40,13 @@ export const sendWelcomeEmail = async (email, name, role, dashboardLink) => {
   const isMentor = role === 'mentor';
 
   const subject = isMentor
-    ? 'Welcome to Ment2Be - Mentor Dashboard Access'
-    : 'Welcome to Ment2Be - Student Dashboard Access';
+    ? 'Welcome to CollabLearn - Mentor Dashboard Access'
+    : 'Welcome to CollabLearn - Student Dashboard Access';
 
   const headline = isMentor ? 'Welcome, Mentor!' : 'Welcome, Student!';
   const intro = isMentor
-    ? 'Thanks for joining Ment2Be as a mentor. Your dashboard is ready—complete your profile and start connecting with students.'
-    : 'Thanks for joining Ment2Be as a student. Your dashboard is ready—start exploring mentors and book your first session.';
+    ? 'Thanks for joining CollabLearn as a mentor. Your dashboard is ready—complete your profile and start connecting with students.'
+    : 'Thanks for joining CollabLearn as a student. Your dashboard is ready—start exploring mentors and book your first session.';
 
   const html = `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
@@ -88,11 +88,11 @@ export const sendWelcomeEmail = async (email, name, role, dashboardLink) => {
 };
 
 export const sendPasswordResetEmail = async (email, resetToken, resetLink) => {
-  const subject = 'Password Reset Request - Ment2Be';
+  const subject = 'Password Reset Request - CollabLearn';
   const html = `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
       <h2 style="color: #333;">Password Reset Request</h2>
-      <p>You requested a password reset for your Ment2Be account.</p>
+      <p>You requested a password reset for your CollabLearn account.</p>
       <p>Click the button below to reset your password. This link will expire in 1 hour.</p>
       <div style="margin: 30px 0;">
         <a href="${resetLink}" style="background-color: #6366f1; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; display: inline-block;">
@@ -110,7 +110,7 @@ export const sendPasswordResetEmail = async (email, resetToken, resetLink) => {
   const text = `
     Password Reset Request
     
-    You requested a password reset for your Ment2Be account.
+    You requested a password reset for your CollabLearn account.
     
     Click the link below to reset your password. This link will expire in 1 hour.
     

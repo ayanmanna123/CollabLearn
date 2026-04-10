@@ -16,11 +16,11 @@ const LandingFooter = () => {
             <div className="flex items-center space-x-2 mb-4">
               <img
                 src={logoHat}
-                alt="Ment2Be Logo"
+                alt="CollabLearn Logo"
                 className="w-8 h-8 brightness-0 invert"
               />
               <span className="text-white text-lg font-semibold">
-                Ment2Be
+                CollabLearn
               </span>
             </div>
             <p className="text-gray-400 text-sm">
@@ -133,7 +133,7 @@ const LandingFooter = () => {
         {/* Bottom Bar */}
         <div className="border-t border-gray-800 pt-8 mt-8 text-center">
           <p className="text-gray-500 text-sm">
-            © 2026 Ment2Be. All rights reserved.
+            © 2026 CollabLearn. All rights reserved.
           </p>
         </div>
       </div>

@@ -52,11 +52,11 @@ const MentorNavbar = ({ userName = 'Mentor' }) => {
             <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center neumorphic">
               <img
                 src={LogoHat}
-                alt="Ment2Be"
+                alt="CollabLearn"
                 className="h-6 w-6"
               />
             </div>
-            <span className="text-xl font-bold text-white bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent hidden sm:block">Ment2Be</span>
+            <span className="text-xl font-bold text-white bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent hidden sm:block">CollabLearn</span>
           </Link>
 
           {/* Desktop Navigation Items */}

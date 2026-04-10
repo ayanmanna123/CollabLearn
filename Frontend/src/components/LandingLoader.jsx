@@ -36,7 +36,7 @@ const LandingLoader = ({ onLoadingComplete }) => {
     if (progress < 60) return 'Preparing personalized learning paths...';
     if (progress < 80) return 'Setting up your workspace...';
     if (progress < 100) return 'Almost ready...';
-    return 'Welcome to Ment2Be!';
+    return 'Welcome to CollabLearn!';
   };
 
   return (
@@ -53,7 +53,7 @@ const LandingLoader = ({ onLoadingComplete }) => {
           opacity: 0
         }}
       >
-        <p className="text-white text-sm font-medium">Welcome to Ment2Be</p>
+        <p className="text-white text-sm font-medium">Welcome to CollabLearn</p>
       </div>
 
       {/* Animated Background Elements */}
@@ -97,7 +97,7 @@ const LandingLoader = ({ onLoadingComplete }) => {
             {/* Logo */}
             <img 
               src={logo} 
-              alt="Ment2Be Logo" 
+              alt="CollabLearn Logo" 
               className="relative w-20 h-20 rounded-lg shadow-2xl"
               style={{
                 boxShadow: '0 0 40px rgba(99, 102, 241, 0.3)',
@@ -116,7 +116,7 @@ const LandingLoader = ({ onLoadingComplete }) => {
             opacity: 0
           }}
         >
-          Ment2Be
+          CollabLearn
         </h1>
 
         {/* Word Carousel Loader */}

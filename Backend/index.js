@@ -62,7 +62,7 @@ app.use(cors({
         "http://localhost:5173",
         "http://localhost:5174", 
         "https://k23-dx.vercel.app",
-        "https://ment2be.arshchouhan.me",
+        "https://collablearn.arshchouhan.me",
         "https://collab-learn-ruby.vercel.app"
       ];
       

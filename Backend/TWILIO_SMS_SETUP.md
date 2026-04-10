@@ -46,7 +46,7 @@ npm install twilio
 
 ### OTP Message Template
 ```
-Your Ment2Be verification code is: 123456. This code will expire in 5 minutes. Do not share this code with anyone.
+Your CollabLearn verification code is: 123456. This code will expire in 5 minutes. Do not share this code with anyone.
 ```
 
 ## Testing

@@ -22,7 +22,7 @@ const TermsOfService = () => {
             Terms of Service
           </h1>
           <p className="mt-4 text-gray-400">
-            Please read these terms carefully before using Ment2Be.
+            Please read these terms carefully before using CollabLearn.
           </p>
         </div>
 
@@ -30,12 +30,12 @@ const TermsOfService = () => {
         <div className="backdrop-blur-xl bg-white/5 border border-white/10 rounded-2xl shadow-2xl p-8 space-y-8">
 
           <Section title="1. Acceptance of Terms">
-            By accessing or using Ment2Be, you agree to be bound by these Terms of
+            By accessing or using CollabLearn, you agree to be bound by these Terms of
             Service. If you do not agree, please do not use the platform.
           </Section>
 
           <Section title="2. Description of Service">
-            Ment2Be is a mentorship platform that connects mentors and mentees.
+            CollabLearn is a mentorship platform that connects mentors and mentees.
             We do not guarantee outcomes, career success, or mentorship quality.
           </Section>
 
@@ -54,23 +54,23 @@ const TermsOfService = () => {
           </Section>
 
           <Section title="5. Content & Intellectual Property">
-            All platform content, branding, and features belong to Ment2Be.
+            All platform content, branding, and features belong to CollabLearn.
             User-generated content remains owned by the user but may be used to
             operate and improve the service.
           </Section>
 
           <Section title="6. Termination">
-            Ment2Be reserves the right to suspend or terminate accounts that
+            CollabLearn reserves the right to suspend or terminate accounts that
             violate these terms or misuse the platform.
           </Section>
 
           <Section title="7. Disclaimer">
             The service is provided “as is” without warranties of any kind.
-            Ment2Be is not responsible for mentorship outcomes or user decisions.
+            CollabLearn is not responsible for mentorship outcomes or user decisions.
           </Section>
 
           <Section title="8. Limitation of Liability">
-            Ment2Be shall not be liable for any indirect, incidental, or
+            CollabLearn shall not be liable for any indirect, incidental, or
             consequential damages arising from the use of the platform.
           </Section>
 
@@ -81,19 +81,19 @@ const TermsOfService = () => {
 
           <Section title="10. Governing Law">
             These Terms shall be governed in accordance with applicable laws of
-            the jurisdiction in which Ment2Be operates.
+            the jurisdiction in which CollabLearn operates.
           </Section>
 
           <Section title="11. Contact">
             For any questions regarding these Terms of Service, please contact
-            the Ment2Be team through official channels.
+            the CollabLearn team through official channels.
           </Section>
 
         </div>
 
         {/* Footer */}
         <p className="text-center text-sm text-gray-500 mt-10">
-          © {new Date().getFullYear()} Ment2Be. All rights reserved.
+          © {new Date().getFullYear()} CollabLearn. All rights reserved.
         </p>
 
       </div>

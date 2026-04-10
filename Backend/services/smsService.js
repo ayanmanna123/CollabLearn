@@ -27,7 +27,7 @@ class SMSService {
    * @returns {Promise<boolean>} Success status
    */
   async sendOTP(phoneNumber, otp) {
-    const message = `Your Ment2Be verification code is: ${otp}. This code will expire in 5 minutes. Do not share this code with anyone.`;
+    const message = `Your CollabLearn verification code is: ${otp}. This code will expire in 5 minutes. Do not share this code with anyone.`;
 
     // If Twilio is not configured, log to console (development mode)
     if (!this.isConfigured) {

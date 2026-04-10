@@ -51,7 +51,7 @@ const Navbar = ({ userName = 'Student' }) => {
           {/* Logo and Branding */}
           <Link to="/student/dashboard" className="flex items-center gap-2 hover:opacity-80 transition-all duration-300 pl-4 group">
             <div className="p-1.5 rounded-xl bg-gradient-to-br from-gray-800 to-gray-900 group-hover:from-gray-700 group-hover:to-gray-800 transition-all duration-300 shadow-lg">
-              <img src={LogoHat} alt="Ment2Be" className="h-8 w-8" />
+              <img src={LogoHat} alt="CollabLearn" className="h-8 w-8" />
             </div>
           </Link>
 

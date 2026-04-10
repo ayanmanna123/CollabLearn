@@ -24,7 +24,7 @@ export const submitContactForm = async (req, res) => {
 
     const to = 'arshchouhan004@gmail.com';
 
-    const mailSubject = `[Ment2Be Contact] ${subject}`;
+    const mailSubject = `[CollabLearn Contact] ${subject}`;
 
     const text = [
       'New Contact Us submission:',
