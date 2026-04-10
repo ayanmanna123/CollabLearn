@@ -20,7 +20,7 @@ const MentorMenteesPage = () => {
   const [currentSessionIndex, setCurrentSessionIndex] = useState(0);
   const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;
 
-  const fetchMentorBookings = async () => {
+  const fetchMentorBookings = async (showLoading = true) => {
     const token = localStorage.getItem("token");
     if (!token) {
       navigate("/login");
@@ -28,7 +28,7 @@ const MentorMenteesPage = () => {
     }
 
     try {
-      setLoading(true);
+      if (showLoading) setLoading(true);
       setError(null);
 
       const response = await fetch(`${API_BASE_URL}/bookings/mentor`, {
@@ -55,7 +55,7 @@ const MentorMenteesPage = () => {
       console.error('Error fetching mentor bookings:', err);
       setError(err.message || 'Failed to fetch bookings');
     } finally {
-      setLoading(false);
+      if (showLoading) setLoading(false);
     }
   };
 
@@ -423,13 +423,16 @@ const MentorMenteesPage = () => {
       if (response.ok) {
         console.log('Session confirmed successfully! Student has been notified.');
         // Refresh the bookings to update the UI
-        fetchMentorBookings();
+        fetchMentorBookings(false);
       } else {
         const errorData = await response.json();
-        console.error(errorData.message || 'Failed to confirm session. Please try again.');
+        const errorMessage = errorData.message || 'Failed to confirm session. Please try again.';
+        console.error(errorMessage);
+        alert(errorMessage);
       }
     } catch (error) {
       console.error('Error confirming session:', error);
+      alert('Error confirming session. Please check your connection and try again.');
     }
   };
 
@@ -453,7 +456,7 @@ const MentorMenteesPage = () => {
       if (response.ok) {
         alert('Session rejected. Student has been notified.');
         // Refresh the bookings to update the UI
-        fetchMentorBookings();
+        fetchMentorBookings(false);
       } else {
         const errorData = await response.json();
         alert(errorData.message || 'Failed to reject session. Please try again.');
@@ -485,7 +488,7 @@ const MentorMenteesPage = () => {
         if (response.ok) {
           alert('Session cancelled. Student has been notified.');
           // Refresh the bookings to update the UI
-          fetchMentorBookings();
+          fetchMentorBookings(false);
         } else {
           const errorData = await response.json();
           alert(errorData.message || 'Failed to cancel session. Please try again.');

@@ -5,6 +5,9 @@ import mongoose from 'mongoose';
 import { v4 as uuidv4 } from 'uuid';
 import { getMentorRatingsMap } from '../services/mentorRatingService.js';
 import { checkAchievements } from './achievement.controller.js';
+import Notification from '../models/notification.model.js';
+import { getIO } from '../config/socket.js';
+import { sendBookingConfirmationEmail, sendBookingCancellationEmail } from '../services/emailService.js';
 
 // Create a new booking
 const createBooking = async (req, res) => {
@@ -335,6 +338,8 @@ const updateBookingStatus = async (req, res) => {
     const { status, reason, meetingLink } = req.body;
     const userId = req.user.id;
 
+    console.log(`[StatusUpdate] Request received for booking ${bookingId} to status "${status}" by user ${userId}`);
+
     if (!mongoose.Types.ObjectId.isValid(bookingId)) {
       return res.status(400).json({
         success: false,
@@ -406,6 +411,7 @@ const updateBookingStatus = async (req, res) => {
 
     booking.status = status;
     await booking.save();
+    console.log(`[StatusUpdate] Booking ${bookingId} saved with new status "${status}"`);
 
     // TRIGGER ACHIEVEMENT CHECK
     if (status === 'completed') {
@@ -435,11 +441,13 @@ const updateBookingStatus = async (req, res) => {
 
       // Send real-time notification via Socket.IO
       if (io) {
+        console.log(`[StatusUpdate] Emitting socket notification to user_${booking.student._id}`);
         io.to(`user_${booking.student._id}`).emit('notification', studentNotification);
       }
 
       // Send email notification
       try {
+        console.log(`[StatusUpdate] Attempting to send confirmation email to ${booking.student.email}`);
         await sendBookingConfirmationEmail(
           booking.student.email,
           booking.student.name,
@@ -450,8 +458,9 @@ const updateBookingStatus = async (req, res) => {
         );
         studentNotification.isEmailSent = true;
         await studentNotification.save();
+        console.log(`[StatusUpdate] Confirmation email sent successfully`);
       } catch (emailError) {
-        console.error('Failed to send booking confirmation email:', emailError);
+        console.error('[StatusUpdate] Failed to send booking confirmation email:', emailError.message);
       }
 
       console.log(`✅ Notification sent: Session confirmed by mentor ${booking.mentor.name} for student ${booking.student.name}`);

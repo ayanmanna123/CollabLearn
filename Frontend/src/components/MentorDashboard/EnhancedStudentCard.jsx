@@ -43,6 +43,17 @@ export const EnhancedStudentCard = ({
   const handleConfirmWithKarma = (session) => {
     setShowKarmaAnimation(true);
     onConfirmSession(session);
+    
+    // Show success toast
+    setToastMessage(`Session confirmed! Student has been notified.`);
+    setShowToast(true);
+    setToastProgress(100);
+    
+    // Hide toast after 3 seconds
+    setTimeout(() => {
+      setShowToast(false);
+    }, 3000);
+
     // Hide animation after 2 seconds
     setTimeout(() => {
       setShowKarmaAnimation(false);

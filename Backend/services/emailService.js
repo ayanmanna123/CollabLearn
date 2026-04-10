@@ -1,29 +1,49 @@
 import nodemailer from 'nodemailer';
 
 const getTransporter = () => {
-  const host = process.env.SMTP_HOST;
-  const port = process.env.SMTP_PORT ? Number(process.env.SMTP_PORT) : undefined;
-  const user = process.env.SMTP_USER;
-  const pass = process.env.SMTP_PASS;
+  // Try to use EMAIL_USER/EMAIL_PASS from .env
+  const emailUser = process.env.EMAIL_USER;
+  const emailPass = process.env.EMAIL_PASS;
+  
+  // Also keep support for SMTP_* variables if present
+  const smtpHost = process.env.SMTP_HOST;
+  const smtpPort = process.env.SMTP_PORT ? Number(process.env.SMTP_PORT) : 587;
+  const smtpUser = process.env.SMTP_USER;
+  const smtpPass = process.env.SMTP_PASS;
 
-  if (!host || !port || !user || !pass) {
-    throw new Error('Missing SMTP configuration (SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS)');
+  // Case 1: Use EMAIL_USER/PASS with Gmail service (most likely case for this project)
+  if (emailUser && emailPass) {
+    return nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: emailUser,
+        pass: emailPass
+      }
+    });
   }
 
-  return nodemailer.createTransport({
-    host,
-    port,
-    secure: port === 465,
-    auth: { user, pass }
-  });
+  // Case 2: Use specific SMTP configuration
+  if (smtpHost && smtpUser && smtpPass) {
+    return nodemailer.createTransport({
+      host: smtpHost,
+      port: smtpPort,
+      secure: smtpPort === 465,
+      auth: {
+        user: smtpUser,
+        pass: smtpPass
+      }
+    });
+  }
+
+  throw new Error('Missing email configuration. Please set EMAIL_USER/EMAIL_PASS or SMTP_HOST/SMTP_PORT/SMTP_USER/SMTP_PASS in .env');
 };
 
 export const sendEmail = async ({ to, subject, text, html }) => {
   const transporter = getTransporter();
-  const from = process.env.EMAIL_FROM || process.env.SMTP_USER;
+  const from = process.env.EMAIL_FROM || process.env.EMAIL_USER || process.env.SMTP_USER;
 
   if (!from) {
-    throw new Error('Missing EMAIL_FROM (or SMTP_USER)');
+    throw new Error('Missing EMAIL_FROM (or EMAIL_USER/SMTP_USER)');
   }
 
   return transporter.sendMail({
@@ -117,6 +137,81 @@ export const sendPasswordResetEmail = async (email, resetToken, resetLink) => {
     ${resetLink}
     
     If you didn't request this, please ignore this email.
+  `;
+
+  return sendEmail({
+    to: email,
+    subject,
+    text,
+    html
+  });
+};
+
+export const sendBookingConfirmationEmail = async (email, studentName, mentorName, sessionTitle, sessionDate, sessionTime) => {
+  const subject = `Booking Confirmed: ${sessionTitle}`;
+  const html = `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+      <h2 style="color: #333;">Booking Confirmed!</h2>
+      <p>Hi ${studentName},</p>
+      <p>Your session "<strong>${sessionTitle}</strong>" with ${mentorName} has been confirmed.</p>
+      <p><strong>Date:</strong> ${new Date(sessionDate).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })}</p>
+      <p><strong>Time:</strong> ${sessionTime}</p>
+      <div style="margin: 30px 0;">
+        <p>Please log in to your CollabLearn dashboard to join the session at the scheduled time.</p>
+      </div>
+      <p style="color: #999; font-size: 12px; margin-top: 30px;">
+        CollabLearn Team
+      </p>
+    </div>
+  `;
+
+  const text = `
+    Booking Confirmed!
+    
+    Hi ${studentName},
+    
+    Your session "${sessionTitle}" with ${mentorName} has been confirmed.
+    
+    Date: ${new Date(sessionDate).toLocaleDateString('en-US')}
+    Time: ${sessionTime}
+    
+    Please log in to your CollabLearn dashboard to join the session at the scheduled time.
+  `;
+
+  return sendEmail({
+    to: email,
+    subject,
+    text,
+    html
+  });
+};
+
+export const sendBookingCancellationEmail = async (email, recipientName, sessionTitle, cancelledByName, reason) => {
+  const subject = `Booking Cancelled: ${sessionTitle}`;
+  const html = `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+      <h2 style="color: #333;">Booking Cancelled</h2>
+      <p>Hi ${recipientName},</p>
+      <p>Your session "<strong>${sessionTitle}</strong>" has been cancelled by ${cancelledByName}.</p>
+      ${reason ? `<p><strong>Reason:</strong> ${reason}</p>` : ''}
+      <div style="margin: 30px 0;">
+        <p>Please log in to your CollabLearn dashboard to view details or book another session.</p>
+      </div>
+      <p style="color: #999; font-size: 12px; margin-top: 30px;">
+        CollabLearn Team
+      </p>
+    </div>
+  `;
+
+  const text = `
+    Booking Cancelled
+    
+    Hi ${recipientName},
+    
+    Your session "${sessionTitle}" has been cancelled by ${cancelledByName}.
+    ${reason ? `Reason: ${reason}` : ''}
+    
+    Please log in to your CollabLearn dashboard to view details.
   `;
 
   return sendEmail({
