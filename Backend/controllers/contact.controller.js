@@ -22,7 +22,7 @@ export const submitContactForm = async (req, res) => {
 
     const { name, email, subject, message } = parsed.data;
 
-    const to = 'arshchouhan004@gmail.com';
+    const to = 'mannayan777@gmail.com';
 
     const mailSubject = `[CollabLearn Contact] ${subject}`;
 

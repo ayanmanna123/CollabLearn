@@ -275,7 +275,7 @@ RAZORPAY_KEY_ID=your_razorpay_key
 RAZORPAY_KEY_SECRET=your_razorpay_secret
 
 # Email Service
-EMAIL_USER=your_email@gmail.com
+EMAIL_USER=mannayan777@gmail.com
 EMAIL_PASS=your_app_password
 
 # Stream Chat
@@ -761,7 +761,7 @@ This project is licensed under the ISC License.
 **Arsh Chauhan**
 
 - GitHub: [@arshchouhan](https://github.com/arshchouhan)
-- Email: arshchouhan004@gmail.com
+- Email: mannayan777@gmail.com
 
 ---
 
@@ -783,6 +783,6 @@ This project is licensed under the ISC License.
   
   <img src="Frontend/src/assets/connect4.png" alt="Success" width="400"/>
   
-  **Made with ❤️ by Arsh Chauhan**
+  **Made with ❤️ by Manna Ayan**
   
 </div>

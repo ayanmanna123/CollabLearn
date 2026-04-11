@@ -23,7 +23,7 @@ const addPhoneNumbers = async () => {
     
     // Add phone numbers to existing users
     const phoneUpdates = [
-      { email: 'arshchouhan004@gmail.com', phoneNumber: '+919876543210' },
+      { email: 'mannayan777@gmail.com', phoneNumber: '+919907072795' },
       { email: 'student@example.com', phoneNumber: '+919876543211' },
       { email: 'mentor@example.com', phoneNumber: '+919876543212' },
       { email: 'john@example.com', phoneNumber: '+919876543213' },

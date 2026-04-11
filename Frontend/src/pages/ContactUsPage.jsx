@@ -109,15 +109,15 @@ const ContactUsPage = () => {
               <ContactCard
                 icon={FiMail}
                 title="Email Us"
-                value="arshchouhan004@gmail.com"
-                href="mailto:arshchouhan004@gmail.com"
+                value="mannayan777@gmail.com"
+                href="mailto:mannayan777@gmail.com"
                 delay={0.2}
               />
               <ContactCard
                 icon={FiPhone}
                 title="Call Us"
-                value="+91 8544758216"
-                href="tel:+918544758216"
+                value="+91 9907072795"
+                href="tel:+919907072795"
                 delay={0.3}
               />
               <ContactCard
