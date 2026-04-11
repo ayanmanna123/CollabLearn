@@ -433,6 +433,7 @@ export function MentorshipChat() {
         content: sentMessage.text,
         sender: 'mentor', // Current user is mentor
         type: sentMessage.type || MessageTypes.NORMAL,
+        custom_type: sentMessage.custom_type || selectedType,
         timestamp: new Date(sentMessage.created_at),
         senderName: currentUser.name,
         receiverName: activeParticipant.name

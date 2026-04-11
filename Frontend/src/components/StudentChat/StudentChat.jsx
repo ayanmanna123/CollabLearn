@@ -6,6 +6,7 @@ import { StudentContextSidebar } from "./StudentContextSidebar";
 import { MentorList } from "./MentorList";
 import { messageService } from "../../services/messageService";
 import * as streamChatClient from "../../services/streamChatClient";
+import { MessageTypes } from "../../lib/types";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -16,7 +17,7 @@ export function StudentChat() {
   const [mentors, setMentors] = useState(initialMentors);
   const [activeMentorId, setActiveMentorId] = useState(null);
   const [messagesByMentor, setMessagesByMentor] = useState(initialMessages);
-  const [selectedType, setSelectedType] = useState("normal");
+  const [selectedType, setSelectedType] = useState(MessageTypes.NORMAL);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingMessages, setIsLoadingMessages] = useState(false);
   const [error, setError] = useState(null);
@@ -301,7 +302,7 @@ export function StudentChat() {
           text: m.text,
           sender: m.user.id === userId ? 'me' : 'mentor',
           type: m.type || '',
-          custom_type: m.custom_type || 'normal',
+          custom_type: m.custom_type || MessageTypes.NORMAL,
           timestamp: new Date(m.created_at),
           created_at: m.created_at,
           status: 'delivered'
@@ -329,7 +330,7 @@ export function StudentChat() {
                 text: message.text,
                 sender: message.user.id === userId ? 'me' : 'mentor',
                 type: message.type || '',
-                custom_type: message.custom_type || 'normal',
+                custom_type: message.custom_type || MessageTypes.NORMAL,
                 timestamp: new Date(message.created_at),
                 created_at: message.created_at,
                 status: 'delivered'
@@ -429,7 +430,8 @@ export function StudentChat() {
                 id: sentMessage.id,
                 content: sentMessage.text,
                 sender: 'me',
-                type: sentMessage.type || 'normal',
+                type: sentMessage.type || MessageTypes.NORMAL,
+                custom_type: sentMessage.custom_type || selectedType,
                 status: 'delivered',
                 timestamp: new Date(sentMessage.created_at)
               } 
@@ -463,7 +465,7 @@ export function StudentChat() {
       );
       console.log('Step 4 Success: Mentor list updated');
 
-      setSelectedType("normal");
+      setSelectedType(MessageTypes.NORMAL);
       console.log('✓ Message sent successfully!');
     } catch (err) {
       console.error("Send error:", {

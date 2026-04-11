@@ -1,6 +1,7 @@
 // Message types for different kinds of communication
 export const MessageTypes = {
   NORMAL: "normal",
+  REGULAR: "regular", // Default for Stream Chat
   QUESTION: "question", 
   INSIGHT: "insight",
   ADVICE: "advice",

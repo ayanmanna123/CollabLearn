@@ -9,6 +9,11 @@ const typeConfig = {
     label: "Message",
     className: "bg-transparent",
   },
+  [MessageTypes.REGULAR]: {
+    icon: MessageSquare,
+    label: "Message",
+    className: "bg-transparent",
+  },
   [MessageTypes.QUESTION]: {
     icon: HelpCircle,
     label: "Question",
@@ -54,7 +59,15 @@ export function StudentMessageBubble({ message = {} }) {
   // Use text from Stream Chat if content is empty
   const messageContent = (content || text || '').trim();
   // Use custom_type if type is empty (Stream Chat sends type as '')
-  const messageType = (type && type !== '') ? type : custom_type;
+  // Determine final message type - prioritize custom_type for special tags
+  const isSpecial = (t) => [
+    MessageTypes.QUESTION, 
+    MessageTypes.INSIGHT, 
+    MessageTypes.ADVICE, 
+    MessageTypes.ACTION
+  ].includes(t);
+  
+  const messageType = isSpecial(custom_type) ? custom_type : (type || MessageTypes.NORMAL);
   // Use created_at if timestamp is not a valid date
   const messageTime = timestamp instanceof Date && !isNaN(timestamp.getTime()) ? timestamp : new Date(created_at);
 
@@ -102,8 +115,8 @@ export function StudentMessageBubble({ message = {} }) {
             "hover:shadow-lg hover:shadow-gray-900/30"
           )}
         >
-          {/* Message type indicator */}
-          {messageType !== MessageTypes.NORMAL && (
+          {/* Message type indicator - Only show for explicit special types */}
+          {[MessageTypes.QUESTION, MessageTypes.INSIGHT, MessageTypes.ADVICE, MessageTypes.ACTION].includes(messageType) && (
             <div className={cn("flex items-center mb-1 text-xs font-bold", isMentor ? 'text-gray-400' : 'text-blue-200')}>
               <Icon className="w-3.5 h-3.5 mr-1" />
               <span>{config.label}</span>
