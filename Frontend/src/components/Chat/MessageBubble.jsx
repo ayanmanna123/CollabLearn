@@ -8,37 +8,44 @@ const typeConfig = {
     icon: MessageSquare,
     label: "Message",
     className: "bg-transparent",
+    bubbleClass: "",
   },
   [MessageTypes.REGULAR]: {
     icon: MessageSquare,
     label: "Message",
     className: "bg-transparent",
+    bubbleClass: "",
   },
   [MessageTypes.QUESTION]: {
     icon: HelpCircle,
     label: "Question",
-    className: "bg-[#2a2d32] text-white",
+    className: "text-blue-300",
+    bubbleClass: "bg-blue-500/10 border-blue-500/30 ring-1 ring-blue-500/20",
   },
   [MessageTypes.INSIGHT]: {
     icon: Lightbulb,
     label: "Insight",
-    className: "bg-[#2a2d32] text-white",
+    className: "text-yellow-300",
+    bubbleClass: "bg-yellow-500/10 border-yellow-500/30 ring-1 ring-yellow-500/20",
   },
   [MessageTypes.ADVICE]: {
     icon: BookOpen,
     label: "Advice",
-    className: "bg-[#2a2d32] text-white",
+    className: "text-green-300",
+    bubbleClass: "bg-green-500/10 border-green-500/30 ring-1 ring-green-500/20",
   },
   [MessageTypes.ACTION]: {
     icon: CheckSquare,
     label: "Action Item",
-    className: "bg-[#2a2d32] text-white",
+    className: "text-purple-300",
+    bubbleClass: "bg-purple-500/10 border-purple-500/30 ring-1 ring-purple-500/20",
   },
   // Fallback for unknown message types
   unknown: {
     icon: AlertCircle,
     label: "Unknown",
-    className: "bg-[#2a2d32] text-white",
+    className: "text-gray-300",
+    bubbleClass: "bg-gray-500/10 border-gray-500/30",
   },
 };
 
@@ -119,16 +126,17 @@ export function MessageBubble({ message = {} }) {
         
         <div 
           className={cn(
-            "rounded-2xl px-4 py-2 text-sm transition-all duration-200",
+            "rounded-2xl px-4 py-2 text-sm transition-all duration-200 shadow-lg",
             isMentor 
               ? "bg-[#2a2d32] text-white border border-[#535353]/30 rounded-tr-none" 
               : "bg-[#212121] text-white border border-[#535353]/30 rounded-tl-none",
+            config.bubbleClass,
             "hover:shadow-lg hover:shadow-gray-900/20"
           )}
         >
           {/* Message type indicator - Only show for explicit special types */}
           {[MessageTypes.QUESTION, MessageTypes.INSIGHT, MessageTypes.ADVICE, MessageTypes.ACTION].includes(messageType) && (
-            <div className={cn("flex items-center mb-1 text-xs font-medium", isMentor ? 'text-white' : 'text-gray-300')}>
+            <div className={cn("flex items-center mb-1 text-xs font-bold", config.className)}>
               <Icon className="w-3.5 h-3.5 mr-1" />
               <span>{config.label}</span>
             </div>

@@ -8,37 +8,44 @@ const typeConfig = {
     icon: MessageSquare,
     label: "Message",
     className: "bg-transparent",
+    bubbleClass: "",
   },
   [MessageTypes.REGULAR]: {
     icon: MessageSquare,
     label: "Message",
     className: "bg-transparent",
+    bubbleClass: "",
   },
   [MessageTypes.QUESTION]: {
     icon: HelpCircle,
     label: "Question",
-    className: "bg-gradient-to-br from-blue-500/20 to-indigo-500/20 text-blue-300",
+    className: "text-blue-200",
+    bubbleClass: "bg-blue-500/10 border-blue-500/30 ring-1 ring-blue-500/20",
   },
   [MessageTypes.INSIGHT]: {
     icon: Lightbulb,
     label: "Insight",
-    className: "bg-gradient-to-br from-yellow-500/20 to-orange-500/20 text-yellow-300",
+    className: "text-yellow-200",
+    bubbleClass: "bg-yellow-500/10 border-yellow-500/30 ring-1 ring-yellow-500/20",
   },
   [MessageTypes.ADVICE]: {
     icon: BookOpen,
     label: "Advice",
-    className: "bg-gradient-to-br from-green-500/20 to-emerald-500/20 text-green-300",
+    className: "text-green-200",
+    bubbleClass: "bg-green-500/10 border-green-500/30 ring-1 ring-green-500/20",
   },
   [MessageTypes.ACTION]: {
     icon: CheckSquare,
     label: "Action Item",
-    className: "bg-gradient-to-br from-purple-500/20 to-pink-500/20 text-purple-300",
+    className: "text-purple-200",
+    bubbleClass: "bg-purple-500/10 border-purple-500/30 ring-1 ring-purple-500/20",
   },
   // Fallback for unknown message types
   unknown: {
     icon: AlertCircle,
     label: "Unknown",
-    className: "bg-gradient-to-br from-gray-700/30 to-gray-800/30 text-gray-300",
+    className: "text-gray-300",
+    bubbleClass: "bg-gray-500/10 border-gray-500/30",
   },
 };
 
@@ -108,16 +115,17 @@ export function StudentMessageBubble({ message = {} }) {
         
         <div 
           className={cn(
-            "rounded-2xl px-4 py-2 text-sm transition-all duration-300 glass-card hover-lift",
+            "rounded-2xl px-4 py-2 text-sm transition-all duration-300 glass-card hover-lift shadow-lg",
             isMentor 
               ? "bg-gradient-to-br from-gray-800/40 to-gray-900/40 text-gray-200 rounded-tl-none border border-gray-700/30" 
               : "bg-gradient-to-br from-blue-500/30 to-indigo-500/30 text-white rounded-tr-none border border-blue-400/30",
+            config.bubbleClass,
             "hover:shadow-lg hover:shadow-gray-900/30"
           )}
         >
           {/* Message type indicator - Only show for explicit special types */}
           {[MessageTypes.QUESTION, MessageTypes.INSIGHT, MessageTypes.ADVICE, MessageTypes.ACTION].includes(messageType) && (
-            <div className={cn("flex items-center mb-1 text-xs font-bold", isMentor ? 'text-gray-400' : 'text-blue-200')}>
+            <div className={cn("flex items-center mb-1 text-xs font-bold", config.className)}>
               <Icon className="w-3.5 h-3.5 mr-1" />
               <span>{config.label}</span>
             </div>
