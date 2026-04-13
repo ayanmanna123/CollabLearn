@@ -10,6 +10,7 @@ const GradientBlob = ({ className }) => (
 );
 
 const ContactCard = ({ icon: Icon, title, value, href, delay }) => (
+  
   <motion.a
     href={href}
     initial={{ opacity: 0, y: 20 }}
